@@ -98,6 +98,10 @@ class CognitiveKernel:
     def submit_observation(self, observation: dict) -> None:
         self._emit("observation.received", dict(observation))
 
+    def subscribe(self, pattern: str, handler) -> str:
+        """Subscribe a handler to kernel events (fnmatch pattern)."""
+        return self._bus.subscribe(pattern, handler)
+
     def publish_event(self, event: Event) -> None:
         """Publish an externally-constructed event through the kernel."""
         self._clock.update(event.logical_time)
