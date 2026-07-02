@@ -447,8 +447,8 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 |-------------|------------------------------|------------------------|-----------|
 | Ch 5 Ontology (Goal/Capability/Env/Evidence) | `planner/requirements.py`, `tools/registry.py`, `verification/evidence_law.py` | Goal object, Environment type, Belief type, Strategy type | 25% |
 | Ch 6 Cognitive Architecture (3 layers) | `planner/requirements.py` (Understanding), `planner/operator_planner.py` (Reasoning), `executor.py` (Operation) | Clean separation; continuous loop | 30% |
-| Ch 7 Intent Analysis | `planner/requirements.py`, `planner/goal_parser.py` | Intent Object, assumption spectrum, clarification policy, complexity | 35% |
-| Ch 8 Problem Classification | `planner/operator_planner.py::_generic_capabilities` (shadow) | Problem classes, Problem Graph, reclassification | 5% |
+| Ch 7 Intent Analysis | `intent/{intent,analyzer}.py` (M5: immutable Intent, Assumption spectrum, clarification policy, complexity estimate, kernel-event-driven IntentAnalyzer); `planner/requirements.py`, `planner/goal_parser.py` | LLM-backed analysis behind the same interface | 60% |
+| Ch 8 Problem Classification | `intent/classifier.py` (M5: weighted multi-class ProblemClassifier with reclassify(); deterministic, app-agnostic signals) | Problem Graph; evidence-driven reclassification triggers | 45% |
 | Ch 9 World Model | `world/{belief,objects,worlds,world_model}.py` (M2: beliefs with confidence/decay/expiry, object graph, Observed/Predicted/Desired worlds, kernel-event-fed WorldModel); legacy `perception/world_state.py` kept for the pipeline until M6 | Predictive modelling; pipeline migration (M6) | 55% |
 | Ch 10 Deliberation | `deliberation/{candidate,utility,deliberator}.py` (M4: CandidateAction with PredictedOutcome, deterministic UtilityFunction, Deliberator); `planner/operator_planner.py` | LLM-backed candidate generation; next-action model | 50% |
 | Ch 11 Operation | `executor.py`, `actions/primitives.py`, `actions/adapters/*` | Interruptible, event-driven, observe-between-actions | 55% |
