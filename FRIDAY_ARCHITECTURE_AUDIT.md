@@ -457,11 +457,11 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 14 Memory | `memory/{controller,working,episodic,procedural,semantic,stores,interfaces}.py` | Wiring to Kernel/Reflection; behavioural formation | 30% |
 | Ch 15 Learning | `learning/__init__.py` (empty) | Entire subsystem | 2% |
 | Ch 16 Capabilities | `tools/registry.py`, `actions/primitives.py`, `actions/adapters/*` | Capability contract, handlers, confidence, versioning, sandbox | 25% |
-| Ch 17 Persistent Runtime | — (legacy `main.py` blocked) | Entire runtime | 0% |
+| Ch 17 Persistent Runtime | `kernel/scheduler.py`, `kernel/checkpoint.py` (M1: continuous tick loop + checkpoint/restore) | Goal execution on the runtime; session continuity across reboots | 40% |
 | Ch 18 Goal Lifecycle | `planner/requirements.py` (RequirementSet) | Goal object, state machine, persistence, suspension | 15% |
 | Ch 19 Goal Graph | — | Entire graph | 0% |
-| Ch 20 Cognitive Kernel | — | Entire kernel | 0% |
-| Ch 21 Event System | `operator.py` (trace list only) | Event bus, schema, causality, replay, persistence | 0% |
+| Ch 20 Cognitive Kernel | `kernel/kernel.py`, `kernel/clock.py`, `kernel/contracts/*`, `kernel/echo_runtime.py` (M1) | World Model/Goal Graph ownership (M2/M3); capability dispatch (M7) | 45% |
+| Ch 21 Event System | `events/event.py`, `events/bus.py`, `events/store.py` (M1: immutable signed events, pattern bus, append-only store, replay, checkpoints) | Async handler queues; cross-process event transport | 55% |
 | Ch 22 Decision Architecture | `executor.py` (implicit) | Candidate sets, utility, decision records, hard boundaries | 20% |
 | Ch 23 Environment Architecture | `actions/browser_strategy.py`, `actions/browser_factory.py` | Environment contract, graph, nesting, discovery | 35% |
 | Ch 24 Interaction Architecture | `actions/adapters/resolver.py` + adapters | Per-interaction prediction/verification | 45% |

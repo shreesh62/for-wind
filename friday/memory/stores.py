@@ -93,8 +93,9 @@ class JSONFileStore(MemoryStore):
         return False
 
     def list_recent(self, limit: int = 10) -> List[MemoryEntry]:
-        valid = [e for e in self._entries if not e.expired]
-        return sorted(valid, key=lambda e: e.timestamp, reverse=True)[:limit]
+        valid = [(i, e) for i, e in enumerate(self._entries) if not e.expired]
+        ordered = sorted(valid, key=lambda pair: (pair[1].timestamp, pair[0]), reverse=True)
+        return [e for _, e in ordered[:limit]]
 
     def count(self) -> int:
         return len(self._entries)
