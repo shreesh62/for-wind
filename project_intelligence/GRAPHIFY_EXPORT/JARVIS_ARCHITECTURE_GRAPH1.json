@@ -1,0 +1,305 @@
+{
+  "graph_name": "JARVIS_ARCHITECTURE_GRAPH1",
+  "metadata": {
+    "generated_at": "2026-06-01T06:59:09Z",
+    "repo_root": "C:\\Projects\\JARVIS\\for wind"
+  },
+  "nodes": [
+    {
+      "id": "repo:root",
+      "type": "repository",
+      "name": "for wind",
+      "props": {
+        "path": "C:\\Projects\\JARVIS\\for wind"
+      }
+    },
+    {
+      "id": "component:entrypoint",
+      "type": "component",
+      "name": "Entrypoint (main.py)",
+      "props": {
+        "file": "main.py"
+      }
+    },
+    {
+      "id": "component:assistant_orchestrator",
+      "type": "component",
+      "name": "AssistantOrchestrator",
+      "props": {
+        "file": "core/assistant.py"
+      }
+    },
+    {
+      "id": "component:capability_dispatch",
+      "type": "component",
+      "name": "Capability Dispatch",
+      "props": {
+        "file": "core/capability_dispatcher.py"
+      }
+    },
+    {
+      "id": "component:automation_services",
+      "type": "component",
+      "name": "AutomationServices",
+      "props": {
+        "file": "automation/services.py"
+      }
+    },
+    {
+      "id": "component:cognitive_loop",
+      "type": "component",
+      "name": "CognitiveLoop",
+      "props": {
+        "file": "automation/cognitive_loop.py"
+      }
+    },
+    {
+      "id": "component:awareness",
+      "type": "component",
+      "name": "Awareness/Perception",
+      "props": {
+        "folder": "awareness/"
+      }
+    },
+    {
+      "id": "component:memory",
+      "type": "component",
+      "name": "Memory",
+      "props": {
+        "folder": "memory/"
+      }
+    },
+    {
+      "id": "component:security",
+      "type": "component",
+      "name": "Security",
+      "props": {
+        "folder": "security/"
+      }
+    },
+    {
+      "id": "component:remote_server",
+      "type": "component",
+      "name": "RemoteServer (FastAPI)",
+      "props": {
+        "folder": "server/"
+      }
+    },
+    {
+      "id": "component:ui_ipc",
+      "type": "component",
+      "name": "UI IPC/WebSocket",
+      "props": {
+        "folder": "ui/"
+      }
+    },
+    {
+      "id": "component:desktop_app",
+      "type": "component",
+      "name": "Desktop Shell (Electron)",
+      "props": {
+        "folder": "desktop_app/"
+      }
+    },
+    {
+      "id": "component:mobile_dashboard",
+      "type": "component",
+      "name": "Mobile Dashboard",
+      "props": {
+        "folder": "mobile_dashboard/"
+      }
+    },
+    {
+      "id": "component:plugins",
+      "type": "component",
+      "name": "Plugins",
+      "props": {
+        "folder": "plugins/"
+      }
+    },
+    {
+      "id": "component:services",
+      "type": "component",
+      "name": "External Services",
+      "props": {
+        "folder": "services/"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:repo_has_component:component:entrypoint",
+      "from": "repo:root",
+      "to": "component:entrypoint",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:assistant_orchestrator",
+      "from": "repo:root",
+      "to": "component:assistant_orchestrator",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:capability_dispatch",
+      "from": "repo:root",
+      "to": "component:capability_dispatch",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:automation_services",
+      "from": "repo:root",
+      "to": "component:automation_services",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:cognitive_loop",
+      "from": "repo:root",
+      "to": "component:cognitive_loop",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:awareness",
+      "from": "repo:root",
+      "to": "component:awareness",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:memory",
+      "from": "repo:root",
+      "to": "component:memory",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:security",
+      "from": "repo:root",
+      "to": "component:security",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:remote_server",
+      "from": "repo:root",
+      "to": "component:remote_server",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:ui_ipc",
+      "from": "repo:root",
+      "to": "component:ui_ipc",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:desktop_app",
+      "from": "repo:root",
+      "to": "component:desktop_app",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:mobile_dashboard",
+      "from": "repo:root",
+      "to": "component:mobile_dashboard",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:plugins",
+      "from": "repo:root",
+      "to": "component:plugins",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:repo_has_component:component:services",
+      "from": "repo:root",
+      "to": "component:services",
+      "type": "has_component"
+    },
+    {
+      "id": "edge:arch:component:entrypoint:initializes:component:assistant_orchestrator",
+      "from": "component:entrypoint",
+      "to": "component:assistant_orchestrator",
+      "type": "initializes",
+      "metadata": {
+        "note": "JarvisAssistant builds AssistantOrchestrator"
+      }
+    },
+    {
+      "id": "edge:arch:component:assistant_orchestrator:uses:component:capability_dispatch",
+      "from": "component:assistant_orchestrator",
+      "to": "component:capability_dispatch",
+      "type": "uses",
+      "metadata": {
+        "note": "Routes commands through dispatcher registry"
+      }
+    },
+    {
+      "id": "edge:arch:component:assistant_orchestrator:uses:component:automation_services",
+      "from": "component:assistant_orchestrator",
+      "to": "component:automation_services",
+      "type": "uses",
+      "metadata": {
+        "note": "Planner/cognitive loop call into automation services"
+      }
+    },
+    {
+      "id": "edge:arch:component:assistant_orchestrator:optional_uses:component:cognitive_loop",
+      "from": "component:assistant_orchestrator",
+      "to": "component:cognitive_loop",
+      "type": "optional_uses",
+      "metadata": {
+        "note": "Enabled when COGNITIVE_MODE=1"
+      }
+    },
+    {
+      "id": "edge:arch:component:assistant_orchestrator:uses:component:awareness",
+      "from": "component:assistant_orchestrator",
+      "to": "component:awareness",
+      "type": "uses",
+      "metadata": {
+        "note": "Uses StateCache snapshots / redaction"
+      }
+    },
+    {
+      "id": "edge:arch:component:assistant_orchestrator:uses:component:memory",
+      "from": "component:assistant_orchestrator",
+      "to": "component:memory",
+      "type": "uses",
+      "metadata": {
+        "note": "MemoryController stores turns"
+      }
+    },
+    {
+      "id": "edge:arch:component:remote_server:controls:component:assistant_orchestrator",
+      "from": "component:remote_server",
+      "to": "component:assistant_orchestrator",
+      "type": "controls",
+      "metadata": {
+        "note": "Remote /execute forwards text commands"
+      }
+    },
+    {
+      "id": "edge:arch:component:desktop_app:bundles:component:ui_ipc",
+      "from": "component:desktop_app",
+      "to": "component:ui_ipc",
+      "type": "bundles",
+      "metadata": {
+        "note": "Electron bundles ui/ via extraResources"
+      }
+    },
+    {
+      "id": "edge:arch:component:mobile_dashboard:calls:component:remote_server",
+      "from": "component:mobile_dashboard",
+      "to": "component:remote_server",
+      "type": "calls",
+      "metadata": {
+        "note": "HTTP polling + command submission"
+      }
+    },
+    {
+      "id": "edge:arch:component:plugins:extends:component:capability_dispatch",
+      "from": "component:plugins",
+      "to": "component:capability_dispatch",
+      "type": "extends",
+      "metadata": {
+        "note": "PluginLoader registers handlers"
+      }
+    }
+  ]
+}

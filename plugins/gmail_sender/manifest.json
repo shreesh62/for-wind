@@ -1,0 +1,19 @@
+{
+  "name": "Gmail Sender",
+  "version": "0.1.0",
+  "capabilities": [
+    {
+      "key": "gmail_send_email",
+      "definition": {
+        "name": "Gmail Send Email",
+        "description": "Compose and send an email via Gmail web interface.",
+        "status": "available",
+        "patterns": [
+          "\\b(send|compose)\\b.*\\b(email|mail)\\b",
+          "\\bemail\\b.*\\b(to|for)\\b"
+        ]
+      },
+      "handler": "handle_gmail_send"
+    }
+  ]
+}

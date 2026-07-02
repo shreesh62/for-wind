@@ -1,0 +1,209 @@
+{
+  "qa_general": {
+    "name": "General Q&A",
+    "description": "Answer questions and explain things clearly.",
+    "status": "available",
+    "patterns": [
+      "\\b(what|how|why|explain|tell me|could you|should i|can you)\\b"
+    ]
+  },
+  "personal_memory": {
+    "name": "Personal Memory",
+    "description": "Remember and forget facts on request.",
+    "status": "available",
+    "patterns": [
+      "\\bremember\\b",
+      "\\bsave this\\b",
+      "\\bstore this\\b",
+      "\\bforget\\b"
+    ]
+  },
+  "self_describe": {
+    "name": "Self Description",
+    "description": "Describe exactly what I can do right now.",
+    "status": "available",
+    "patterns": [
+      "\\b(what can you do|your capabilities|how can you help|what are you capable)\\b"
+    ]
+  },
+  "weather_check": {
+    "name": "Weather",
+    "description": "Tell current weather for a place.",
+    "status": "available",
+    "patterns": [
+      "\\b(weather|forecast|temperature|rain|sunny|cloudy)\\b"
+    ]
+  },
+  "maps_distance": {
+    "name": "Maps: Distance",
+    "description": "Estimate distance between two places.",
+    "status": "available",
+    "patterns": [
+      "\\b(distance|how far)\\b.*\\b(from|between|to)\\b",
+      "\\bhow far (?:is|from)\\b"
+    ]
+  },
+  "maps_travel_time": {
+    "name": "Maps: Travel Time",
+    "description": "Estimated travel time between two places.",
+    "status": "available",
+    "patterns": [
+      "\\b(travel time|time to|get to|how long).*(from|between|to)\\b",
+      "\\bhow long (?:will it take|does it take)\\b"
+    ]
+  },
+  "send_email": {
+    "name": "Email",
+    "description": "Draft and send emails.",
+    "status": "planned",
+    "patterns": [
+      "\\bsend (an )?email\\b",
+      "\\bemail (to|someone)\\b"
+    ]
+  },
+  "open_browser": {
+    "name": "Open Browser / Websites",
+    "description": "Open sites or urls.",
+    "status": "planned",
+    "patterns": [
+      "\\bopen\\b.*\\b(browser|website|url|link)\\b"
+    ]
+  },
+  "play_music": {
+    "name": "Play Music",
+    "description": "Play songs or playlists.",
+    "status": "planned",
+    "patterns": [
+      "\\b(play|start)\\b.*\\b(music|song|songs|playlist)\\b"
+    ]
+  },
+  "whatsapp_message": {
+    "name": "WhatsApp Messaging",
+    "description": "Send a WhatsApp message via automation.",
+    "status": "available",
+    "patterns": [
+      "\\b(send|message|text)\\b.*\\bwhatsapp\\b",
+      "\\bwhatsapp\\b.*\\b(send|message|text)\\b",
+      "\\bwhatsapp\\b.*\\b(to|:)\\b"
+    ]
+  },
+  "instagram_dm": {
+    "name": "Instagram DM",
+    "description": "Send an Instagram direct message via automation.",
+    "status": "available",
+    "patterns": [
+      "\\b(send|message|dm)\\b.*\\b(instagram|ig)\\b",
+      "\\b(instagram|ig)\\b.*\\b(dm|message)\\b",
+      "\\bdm\\s+@?[^\\s]+\\b"
+    ]
+  },
+  "amazon_shopping": {
+    "name": "Amazon Shopping",
+    "description": "Search for products on Amazon using the desktop browser.",
+    "status": "available",
+    "patterns": [
+      "\\bsearch\\b.*\\bamazon\\b",
+      "\\bfind\\b.*\\b(on amazon|amazon)\\b",
+      "\\bbuy\\b.*\\b(on amazon|amazon)\\b"
+    ]
+  },
+  "browser_summarize": {
+    "name": "Browser Summary",
+    "description": "Summarize the active Chrome tab via DevTools.",
+    "status": "available",
+    "patterns": [
+      "\\b(what|describe|summarize|tell me)\\b.*\\b(browser|tab|chrome|web page|webpage)\\b"
+    ]
+  },
+  "desktop_screenshot": {
+    "name": "Desktop Screenshot",
+    "description": "Capture a screenshot of the current desktop view.",
+    "status": "available",
+    "patterns": [
+      "\\b(take|grab|capture)\\b.*\\b(screen ?shot|screenshot|screen)\\b"
+    ]
+  },
+  "desktop_focus": {
+    "name": "Focus Window",
+    "description": "Bring a specified application window to the foreground.",
+    "status": "available",
+    "patterns": [
+      "\\b(focus|switch to|bring up|activate)\\b.*\\b(window|app|application|chrome|browser)\\b"
+    ]
+  },
+  "desktop_click": {
+    "name": "Desktop Click",
+    "description": "Click on the desktop using coordinates or a perceived element.",
+    "status": "available",
+    "patterns": [
+      "\\bclick\\s+\\d+\\s+\\d+\\b",
+      "\\bdouble\\s+click\\s+\\d+\\s+\\d+\\b",
+      "\\bclick\\s+element\\b",
+      "\\bclick\\s+text\\b"
+    ]
+  },
+  "desktop_scroll": {
+    "name": "Desktop Scroll",
+    "description": "Scroll the active window up/down by a specified amount.",
+    "status": "available",
+    "patterns": [
+      "\\bscroll\\s+(up|down)\\s+\\d+\\b",
+      "\\bpage\\s+(up|down)\\b"
+    ]
+  },
+  "desktop_type": {
+    "name": "Type Text",
+    "description": "Type provided text into the active window.",
+    "status": "available",
+    "patterns": [
+      "\\b(type|enter|write|input)\\b.*"
+    ]
+  },
+  "desktop_ocr": {
+    "name": "Desktop OCR",
+    "description": "Read text from a region of the screen using OCR.",
+    "status": "available",
+    "patterns": [
+      "\\b(ocr|read)\\b.*\\b(region|screen)\\b",
+      "\\bocr\\s+region\\b",
+      "\\bread\\s+region\\b"
+    ]
+  },
+  "news_brief": {
+    "name": "News Brief",
+    "description": "Fetch recent headlines for a topic.",
+    "status": "available",
+    "patterns": [
+      "\\b(news|headlines|updates)\\b"
+    ]
+  },
+  "app_launch": {
+    "name": "Launch Application",
+    "description": "Open a desktop application like Spotify or Chrome.",
+    "status": "available",
+    "patterns": [
+      "\\b(open|launch|start|play|run)\\b.*\\b(app|application|spotify|chrome|notepad|calculator|terminal)\\b"
+    ]
+  },
+  "web_navigate": {
+    "name": "Open Website",
+    "description": "Navigate to a website or URL in the browser.",
+    "status": "available",
+    "patterns": [
+      "\\b(open|launch|go to|navigate to|visit|take me to|head to|browse to)\\b.*\\b(youtube|gmail|netflix|google|github|linkedin)\\b",
+      "\\bhttps?://\\S+",
+      "\\bwww\\.\\S+",
+      "\\b(open|launch|go to|navigate to|visit|take me to|head to|browse to)\\b.*\\b\\w+\\.(com|in|org|net|io|co)\\b"
+    ]
+  },
+  "youtube_search": {
+    "name": "YouTube Search",
+    "description": "Search for a query on YouTube.",
+    "status": "available",
+    "patterns": [
+      "\\bsearch\\b.*\\bon\\b.*\\byoutube\\b",
+      "\\byoutube\\b.*\\bsearch\\b",
+      "\\b(play|put on)\\b.*\\byoutube\\b"
+    ]
+  }
+}

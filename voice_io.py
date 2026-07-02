@@ -1,22 +1,27 @@
 import speech_recognition as sr
-import pyttsx3
 
-recognizer = sr.Recognizer()
-tts = pyttsx3.init()
-tts.setProperty('rate', 170)
+def listen_command(timeout=5, phrase_time_limit=10):
+    recognizer = sr.Recognizer()
+    recognizer.energy_threshold = 200
+    recognizer.dynamic_energy_threshold = True
 
-def listen_command():
     with sr.Microphone() as source:
-        print("Listening...")
-        audio = recognizer.listen(source)
-    try:
-        return recognizer.recognize_google(audio)
-    except sr.UnknownValueError:
-        return "Sorry, I didn't catch that."
-    except sr.RequestError:
-        return "Service unavailable."
+        print("🎤 Listening... Speak now.")
+        recognizer.adjust_for_ambient_noise(source, duration=1.2)
 
-def speak(text):
-    print("JARVIS:", text)
-    tts.say(text)
-    tts.runAndWait()
+        try:
+            audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=phrase_time_limit)
+        except sr.WaitTimeoutError:
+            print("🕒 No speech detected.")
+            return ""
+
+    try:
+        command = recognizer.recognize_google(audio)
+        print(f"🗣️ You said: {command}")
+        return command
+    except sr.UnknownValueError:
+        print("❌ Didn't catch that.")
+        return ""
+    except sr.RequestError:
+        print("🌐 Speech recognition API down.")
+        return "[Speech service error]"

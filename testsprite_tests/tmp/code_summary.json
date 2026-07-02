@@ -1,0 +1,224 @@
+{
+  "tech_stack": [
+    "Python",
+    "FastAPI",
+    "Playwright",
+    "Electron",
+    "React",
+    "Node.js"
+  ],
+  "features": [
+    {
+      "name": "Remote Control API",
+      "description": "Exposes health, status, command queueing, and persona management endpoints for the Jarvis assistant.",
+      "files": [
+        "server/app.py"
+      ],
+      "api_doc": {
+        "openapi": "3.0.1",
+        "info": {
+          "title": "Jarvis Remote Control API",
+          "version": "0.1.0",
+          "description": "API for monitoring Jarvis status, enqueuing commands, and updating persona settings."
+        },
+        "servers": [
+          {
+            "url": "http://127.0.0.1:8801",
+            "description": "Local Jarvis backend"
+          }
+        ],
+        "components": {
+          "securitySchemes": {
+            "ApiKeyAuth": {
+              "type": "apiKey",
+              "in": "header",
+              "name": "X-API-Key"
+            }
+          },
+          "schemas": {
+            "CommandRequest": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Command text to enqueue"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            },
+            "PersonaRequest": {
+              "type": "object",
+              "properties": {
+                "persona": {
+                  "type": "string",
+                  "description": "Persona identifier to activate"
+                }
+              },
+              "required": [
+                "persona"
+              ]
+            },
+            "StatusResponse": {
+              "type": "object",
+              "description": "Free-form status payload returned by the assistant",
+              "additionalProperties": true
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "paths": {
+          "/health": {
+            "get": {
+              "summary": "Health check",
+              "security": [
+                {
+                  "ApiKeyAuth": []
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Service is healthy",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/status": {
+            "get": {
+              "summary": "Fetch assistant status snapshot",
+              "security": [
+                {
+                  "ApiKeyAuth": []
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Current assistant status",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/StatusResponse"
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Status provider error"
+                }
+              }
+            }
+          },
+          "/commands": {
+            "post": {
+              "summary": "Enqueue a command for Jarvis",
+              "security": [
+                {
+                  "ApiKeyAuth": []
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/CommandRequest"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Command accepted",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "queued": {
+                            "type": "boolean"
+                          },
+                          "text": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "Validation error"
+                }
+              }
+            }
+          },
+          "/persona": {
+            "post": {
+              "summary": "Update active persona",
+              "security": [
+                {
+                  "ApiKeyAuth": []
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/PersonaRequest"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Persona updated",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "updated": {
+                            "type": "boolean"
+                          },
+                          "persona": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Persona not available"
+                },
+                "422": {
+                  "description": "Invalid payload"
+                },
+                "503": {
+                  "description": "Persona control unavailable"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

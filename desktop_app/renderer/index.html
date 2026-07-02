@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jarvis Desktop Shell</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="top-bar">
+        <div class="status">
+          <span class="logo">JARVIS</span>
+          <span id="connection">Connecting…</span>
+        </div>
+        <div class="time" id="clock"></div>
+      </header>
+
+      <main class="grid">
+      <div id="onboarding" class="modal hidden">
+        <div class="modal-content">
+          <h2>Welcome to Jarvis</h2>
+          <p>Enter your API keys to get started.</p>
+          <form id="onboarding-form" class="form">
+            <label>
+              Remote API Key
+              <input type="password" id="onboarding-remote" placeholder="REMOTE_API_KEY" required />
+            </label>
+            <label>
+              Groq API Key
+              <input type="password" id="onboarding-groq" placeholder="GROQ_API_KEY" />
+            </label>
+            <label>
+              Weather API Key
+              <input type="password" id="onboarding-weather" placeholder="WEATHER_API_KEY" />
+            </label>
+            <div class="modal-actions">
+              <button type="submit">Save & Continue</button>
+            </div>
+          </form>
+          <button id="onboarding-skip" class="link-button">Skip for now</button>
+        </div>
+      </div>
+        <section class="orb">
+          <div class="orb-outer">
+            <div class="orb-inner" id="orb"></div>
+          </div>
+          <p id="assistant-state">Listening for wake word…</p>
+        </section>
+
+        <section class="panel conversation">
+          <h2>Conversation</h2>
+          <ul id="transcript"></ul>
+        </section>
+
+        <section class="panel persona">
+          <h2>Persona</h2>
+          <p class="muted">Choose how Jarvis should sound.</p>
+          <select id="persona-select">
+            <option value="classic">Classic</option>
+            <option value="friendly">Friendly</option>
+            <option value="deadpan">Deadpan</option>
+          </select>
+          <div class="muted" style="margin-top: 12px;">
+            <div>Current tone: <span id="persona-tone">formal</span></div>
+            <div>Pause style: <span id="persona-pause">short</span></div>
+          </div>
+        </section>
+
+        <section class="panel system">
+          <h2>Environment</h2>
+          <div class="tile-list">
+            <div class="tile">
+              <h3>System Status</h3>
+              <p id="system-status">No data yet.</p>
+            </div>
+            <div class="tile">
+              <h3>Active Window</h3>
+              <p id="window-info">Window info pending…</p>
+            </div>
+            <div class="tile">
+              <h3>Browser Tab</h3>
+              <p id="browser-info">Browser summary not available.</p>
+            </div>
+            <div class="tile">
+              <h3>Weather</h3>
+              <p id="weather">Weather data not available.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel alerts">
+          <h2>Alerts</h2>
+          <ul id="alerts"></ul>
+        </section>
+
+        <section class="panel commands">
+          <h2>Manual Control</h2>
+          <form id="manual-form" class="command-form">
+            <input type="text" id="manual-input" placeholder="Type a command" />
+            <button type="submit">Send</button>
+          </form>
+          <p id="manual-result"></p>
+          <div class="quick-actions">
+            <h3>Quick Actions</h3>
+            <button data-command="summarize the browser tab">Summarize Tab</button>
+            <button data-command="take a screenshot">Screenshot</button>
+            <button data-command="focus the chrome window">Focus Chrome</button>
+            <button data-command="what's the weather in Mumbai">Weather Mumbai</button>
+          </div>
+          <div class="remote-status">
+            <h3>Remote Access</h3>
+            <p id="remote-status">Awaiting configuration.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

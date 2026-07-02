@@ -1,0 +1,471 @@
+{
+  "graph_name": "JARVIS_FEATURE_STATUS_GRAPH1",
+  "metadata": {
+    "generated_at": "2026-06-01T06:59:09Z",
+    "repo_root": "C:\\Projects\\JARVIS\\for wind"
+  },
+  "nodes": [
+    {
+      "id": "feature:Automation: Browser + Desktop",
+      "type": "feature",
+      "name": "Automation: Browser + Desktop",
+      "props": {
+        "feature": "Automation: Browser + Desktop",
+        "status": "Working",
+        "completion_pct": 70,
+        "stability": "Medium-High",
+        "dependencies": [
+          "automation/*",
+          "playwright",
+          "pyautogui",
+          "pywinauto",
+          "uiautomation"
+        ],
+        "notes": "AutomationServices facade; planner + cognitive loop exist."
+      }
+    },
+    {
+      "id": "feature:Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+      "type": "feature",
+      "name": "Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+      "props": {
+        "feature": "Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+        "status": "Partial",
+        "completion_pct": 65,
+        "stability": "Medium",
+        "dependencies": [
+          "automation/cognitive_loop.py",
+          "awareness/world_state.py",
+          "core/self_repair.py",
+          "memory/ui_memory.json"
+        ],
+        "notes": "Phase-coded; integrated behind COGNITIVE_MODE=1."
+      }
+    },
+    {
+      "id": "feature:Credential Vault + Training Mode",
+      "type": "feature",
+      "name": "Credential Vault + Training Mode",
+      "props": {
+        "feature": "Credential Vault + Training Mode",
+        "status": "Partial",
+        "completion_pct": 60,
+        "stability": "Medium",
+        "dependencies": [
+          "core/training_controller.py",
+          "security/*"
+        ],
+        "notes": "DPAPI vault; training mode mentioned in COGNITIVE_SYSTEM_COMPLETE.md."
+      }
+    },
+    {
+      "id": "feature:Desktop UI (Electron + WebSocket IPC)",
+      "type": "feature",
+      "name": "Desktop UI (Electron + WebSocket IPC)",
+      "props": {
+        "feature": "Desktop UI (Electron + WebSocket IPC)",
+        "status": "Working",
+        "completion_pct": 70,
+        "stability": "Medium",
+        "dependencies": [
+          "desktop_app/*",
+          "ui/*",
+          "websockets"
+        ],
+        "notes": "Electron bundles ui/ as extraResources; IPC server in Python."
+      }
+    },
+    {
+      "id": "feature:LLM Reasoning via Groq",
+      "type": "feature",
+      "name": "LLM Reasoning via Groq",
+      "props": {
+        "feature": "LLM Reasoning via Groq",
+        "status": "Working",
+        "completion_pct": 70,
+        "stability": "Medium",
+        "dependencies": [
+          "groq",
+          ".env:GROQ_API_KEY",
+          "groq_llm.py"
+        ],
+        "notes": "Used as llm_callable for assistant reasoning and automation planning."
+      }
+    },
+    {
+      "id": "feature:OCR (Tesseract)",
+      "type": "feature",
+      "name": "OCR (Tesseract)",
+      "props": {
+        "feature": "OCR (Tesseract)",
+        "status": "Experimental",
+        "completion_pct": 35,
+        "stability": "Low-Medium",
+        "dependencies": [
+          "awareness/*",
+          "ocr_test*.py",
+          "pillow",
+          "pytesseract"
+        ],
+        "notes": "OCR experiments exist; unclear if integrated into main flow."
+      }
+    },
+    {
+      "id": "feature:Remote Control API (FastAPI)",
+      "type": "feature",
+      "name": "Remote Control API (FastAPI)",
+      "props": {
+        "feature": "Remote Control API (FastAPI)",
+        "status": "Working",
+        "completion_pct": 75,
+        "stability": "Medium",
+        "dependencies": [
+          "fastapi",
+          "uvicorn",
+          "server/app.py",
+          ".env:REMOTE_API_KEY"
+        ],
+        "notes": "API-key protected endpoints plus static dashboard."
+      }
+    },
+    {
+      "id": "feature:Wake Word (Porcupine)",
+      "type": "feature",
+      "name": "Wake Word (Porcupine)",
+      "props": {
+        "feature": "Wake Word (Porcupine)",
+        "status": "Working",
+        "completion_pct": 80,
+        "stability": "Medium",
+        "dependencies": [
+          "pvporcupine",
+          "PyAudio",
+          "wake_words/*.ppn",
+          ".env:PORCUPINE_ACCESS_KEY"
+        ],
+        "notes": "Wake word optional via DISABLE_WAKE_WORD; falls back when deps missing."
+      }
+    },
+    {
+      "id": "dep:automation/*",
+      "type": "dependency",
+      "name": "automation/*"
+    },
+    {
+      "id": "dep:playwright",
+      "type": "dependency",
+      "name": "playwright"
+    },
+    {
+      "id": "dep:pyautogui",
+      "type": "dependency",
+      "name": "pyautogui"
+    },
+    {
+      "id": "dep:pywinauto",
+      "type": "dependency",
+      "name": "pywinauto"
+    },
+    {
+      "id": "dep:uiautomation",
+      "type": "dependency",
+      "name": "uiautomation"
+    },
+    {
+      "id": "dep:automation/cognitive_loop.py",
+      "type": "dependency",
+      "name": "automation/cognitive_loop.py"
+    },
+    {
+      "id": "dep:awareness/world_state.py",
+      "type": "dependency",
+      "name": "awareness/world_state.py"
+    },
+    {
+      "id": "dep:core/self_repair.py",
+      "type": "dependency",
+      "name": "core/self_repair.py"
+    },
+    {
+      "id": "dep:memory/ui_memory.json",
+      "type": "dependency",
+      "name": "memory/ui_memory.json"
+    },
+    {
+      "id": "dep:core/training_controller.py",
+      "type": "dependency",
+      "name": "core/training_controller.py"
+    },
+    {
+      "id": "dep:security/*",
+      "type": "dependency",
+      "name": "security/*"
+    },
+    {
+      "id": "dep:desktop_app/*",
+      "type": "dependency",
+      "name": "desktop_app/*"
+    },
+    {
+      "id": "dep:ui/*",
+      "type": "dependency",
+      "name": "ui/*"
+    },
+    {
+      "id": "dep:websockets",
+      "type": "dependency",
+      "name": "websockets"
+    },
+    {
+      "id": "dep:groq",
+      "type": "dependency",
+      "name": "groq"
+    },
+    {
+      "id": "dep:.env:GROQ_API_KEY",
+      "type": "dependency",
+      "name": ".env:GROQ_API_KEY"
+    },
+    {
+      "id": "dep:groq_llm.py",
+      "type": "dependency",
+      "name": "groq_llm.py"
+    },
+    {
+      "id": "dep:awareness/*",
+      "type": "dependency",
+      "name": "awareness/*"
+    },
+    {
+      "id": "dep:ocr_test*.py",
+      "type": "dependency",
+      "name": "ocr_test*.py"
+    },
+    {
+      "id": "dep:pillow",
+      "type": "dependency",
+      "name": "pillow"
+    },
+    {
+      "id": "dep:pytesseract",
+      "type": "dependency",
+      "name": "pytesseract"
+    },
+    {
+      "id": "dep:fastapi",
+      "type": "dependency",
+      "name": "fastapi"
+    },
+    {
+      "id": "dep:uvicorn",
+      "type": "dependency",
+      "name": "uvicorn"
+    },
+    {
+      "id": "dep:server/app.py",
+      "type": "dependency",
+      "name": "server/app.py"
+    },
+    {
+      "id": "dep:.env:REMOTE_API_KEY",
+      "type": "dependency",
+      "name": ".env:REMOTE_API_KEY"
+    },
+    {
+      "id": "dep:pvporcupine",
+      "type": "dependency",
+      "name": "pvporcupine"
+    },
+    {
+      "id": "dep:PyAudio",
+      "type": "dependency",
+      "name": "PyAudio"
+    },
+    {
+      "id": "dep:wake_words/*.ppn",
+      "type": "dependency",
+      "name": "wake_words/*.ppn"
+    },
+    {
+      "id": "dep:.env:PORCUPINE_ACCESS_KEY",
+      "type": "dependency",
+      "name": ".env:PORCUPINE_ACCESS_KEY"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:feature_dep:Automation: Browser + Desktop:automation/*",
+      "from": "feature:Automation: Browser + Desktop",
+      "to": "dep:automation/*",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Automation: Browser + Desktop:playwright",
+      "from": "feature:Automation: Browser + Desktop",
+      "to": "dep:playwright",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Automation: Browser + Desktop:pyautogui",
+      "from": "feature:Automation: Browser + Desktop",
+      "to": "dep:pyautogui",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Automation: Browser + Desktop:pywinauto",
+      "from": "feature:Automation: Browser + Desktop",
+      "to": "dep:pywinauto",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Automation: Browser + Desktop:uiautomation",
+      "from": "feature:Automation: Browser + Desktop",
+      "to": "dep:uiautomation",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Cognitive Loop (Perceive-Plan-Act-Verify-Repair):automation/cognitive_loop.py",
+      "from": "feature:Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+      "to": "dep:automation/cognitive_loop.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Cognitive Loop (Perceive-Plan-Act-Verify-Repair):awareness/world_state.py",
+      "from": "feature:Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+      "to": "dep:awareness/world_state.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Cognitive Loop (Perceive-Plan-Act-Verify-Repair):core/self_repair.py",
+      "from": "feature:Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+      "to": "dep:core/self_repair.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Cognitive Loop (Perceive-Plan-Act-Verify-Repair):memory/ui_memory.json",
+      "from": "feature:Cognitive Loop (Perceive-Plan-Act-Verify-Repair)",
+      "to": "dep:memory/ui_memory.json",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Credential Vault + Training Mode:core/training_controller.py",
+      "from": "feature:Credential Vault + Training Mode",
+      "to": "dep:core/training_controller.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Credential Vault + Training Mode:security/*",
+      "from": "feature:Credential Vault + Training Mode",
+      "to": "dep:security/*",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Desktop UI (Electron + WebSocket IPC):desktop_app/*",
+      "from": "feature:Desktop UI (Electron + WebSocket IPC)",
+      "to": "dep:desktop_app/*",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Desktop UI (Electron + WebSocket IPC):ui/*",
+      "from": "feature:Desktop UI (Electron + WebSocket IPC)",
+      "to": "dep:ui/*",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Desktop UI (Electron + WebSocket IPC):websockets",
+      "from": "feature:Desktop UI (Electron + WebSocket IPC)",
+      "to": "dep:websockets",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:LLM Reasoning via Groq:groq",
+      "from": "feature:LLM Reasoning via Groq",
+      "to": "dep:groq",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:LLM Reasoning via Groq:.env:GROQ_API_KEY",
+      "from": "feature:LLM Reasoning via Groq",
+      "to": "dep:.env:GROQ_API_KEY",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:LLM Reasoning via Groq:groq_llm.py",
+      "from": "feature:LLM Reasoning via Groq",
+      "to": "dep:groq_llm.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:OCR (Tesseract):awareness/*",
+      "from": "feature:OCR (Tesseract)",
+      "to": "dep:awareness/*",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:OCR (Tesseract):ocr_test*.py",
+      "from": "feature:OCR (Tesseract)",
+      "to": "dep:ocr_test*.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:OCR (Tesseract):pillow",
+      "from": "feature:OCR (Tesseract)",
+      "to": "dep:pillow",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:OCR (Tesseract):pytesseract",
+      "from": "feature:OCR (Tesseract)",
+      "to": "dep:pytesseract",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Remote Control API (FastAPI):fastapi",
+      "from": "feature:Remote Control API (FastAPI)",
+      "to": "dep:fastapi",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Remote Control API (FastAPI):uvicorn",
+      "from": "feature:Remote Control API (FastAPI)",
+      "to": "dep:uvicorn",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Remote Control API (FastAPI):server/app.py",
+      "from": "feature:Remote Control API (FastAPI)",
+      "to": "dep:server/app.py",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Remote Control API (FastAPI):.env:REMOTE_API_KEY",
+      "from": "feature:Remote Control API (FastAPI)",
+      "to": "dep:.env:REMOTE_API_KEY",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Wake Word (Porcupine):pvporcupine",
+      "from": "feature:Wake Word (Porcupine)",
+      "to": "dep:pvporcupine",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Wake Word (Porcupine):PyAudio",
+      "from": "feature:Wake Word (Porcupine)",
+      "to": "dep:PyAudio",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Wake Word (Porcupine):wake_words/*.ppn",
+      "from": "feature:Wake Word (Porcupine)",
+      "to": "dep:wake_words/*.ppn",
+      "type": "depends_on"
+    },
+    {
+      "id": "edge:feature_dep:Wake Word (Porcupine):.env:PORCUPINE_ACCESS_KEY",
+      "from": "feature:Wake Word (Porcupine)",
+      "to": "dep:.env:PORCUPINE_ACCESS_KEY",
+      "type": "depends_on"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "TC001",
+    "title": "health check endpoint returns service status",
+    "description": "Verify that the GET /health endpoint returns HTTP 200 with a JSON object containing the service status string when provided with a valid API key."
+  },
+  {
+    "id": "TC002",
+    "title": "status endpoint returns current assistant state",
+    "description": "Verify that the GET /status endpoint returns HTTP 200 with a JSON object representing the current assistant status when provided with a valid API key, and returns HTTP 500 if the status provider encounters an error."
+  },
+  {
+    "id": "TC003",
+    "title": "commands endpoint enqueues valid command",
+    "description": "Verify that the POST /commands endpoint accepts a valid command text in the request body, enqueues the command, and returns HTTP 200 with confirmation including queued status and command text. Also verify that invalid payloads return HTTP 422 validation error."
+  },
+  {
+    "id": "TC004",
+    "title": "persona endpoint updates active persona",
+    "description": "Verify that the POST /persona endpoint updates the active persona when provided with a valid persona identifier, returning HTTP 200 with confirmation. Verify that invalid persona identifiers return HTTP 400, invalid payloads return HTTP 422, and service unavailability returns HTTP 503."
+  }
+]

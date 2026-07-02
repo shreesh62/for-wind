@@ -1,0 +1,109 @@
+.page {
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #11172a, #06080f 70%);
+  color: #f5f7ff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.header input[type="password"] {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(77, 212, 255, 0.2);
+  background: rgba(8, 12, 22, 0.6);
+  color: inherit;
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.card {
+  background: rgba(12, 16, 28, 0.68);
+  border-radius: 18px;
+  border: 1px solid rgba(77, 212, 255, 0.12);
+  padding: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 30px rgba(4, 6, 12, 0.5);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.4px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list li {
+  background: rgba(6, 9, 18, 0.8);
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(77, 212, 255, 0.1);
+}
+
+.form {
+  display: flex;
+  gap: 12px;
+}
+
+.form input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(77, 212, 255, 0.2);
+  background: rgba(5, 8, 14, 0.6);
+  color: inherit;
+}
+
+.form button {
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #4dd4ff, #3b8dff);
+  color: #04101e;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.muted {
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form {
+    flex-direction: column;
+  }
+
+  .form button {
+    width: 100%;
+  }
+}

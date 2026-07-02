@@ -1,0 +1,269 @@
+{
+  "graph_name": "JARVIS_RUNTIME_FLOW_GRAPH1",
+  "metadata": {
+    "generated_at": "2026-06-01T06:59:09Z",
+    "repo_root": "C:\\Projects\\JARVIS\\for wind",
+    "confidence": "Medium"
+  },
+  "nodes": [
+    {
+      "id": "repo:root",
+      "type": "repository",
+      "name": "for wind",
+      "props": {
+        "path": "C:\\Projects\\JARVIS\\for wind"
+      }
+    },
+    {
+      "id": "runtime:startup",
+      "type": "runtime_step",
+      "name": "Startup"
+    },
+    {
+      "id": "runtime:load_env",
+      "type": "runtime_step",
+      "name": "Load settings (.env -> config.get_settings)"
+    },
+    {
+      "id": "runtime:init_awareness",
+      "type": "runtime_step",
+      "name": "Init awareness controller/monitors"
+    },
+    {
+      "id": "runtime:init_automation",
+      "type": "runtime_step",
+      "name": "Init AutomationServices + planner/cognitive loop"
+    },
+    {
+      "id": "runtime:init_ui",
+      "type": "runtime_step",
+      "name": "Init UI IPC/WebSocket server"
+    },
+    {
+      "id": "runtime:init_remote",
+      "type": "runtime_step",
+      "name": "Init RemoteServer (FastAPI)"
+    },
+    {
+      "id": "runtime:voice_loop",
+      "type": "runtime_step",
+      "name": "Wake-word + mic -> command loop"
+    },
+    {
+      "id": "runtime:reasoning",
+      "type": "runtime_step",
+      "name": "Reason about command"
+    },
+    {
+      "id": "runtime:dispatch",
+      "type": "runtime_step",
+      "name": "Dispatch capability / automation"
+    },
+    {
+      "id": "runtime:automation_execute",
+      "type": "runtime_step",
+      "name": "Perform automation"
+    },
+    {
+      "id": "runtime:verify",
+      "type": "runtime_step",
+      "name": "Verify outcome via awareness snapshots"
+    },
+    {
+      "id": "runtime:memory_write",
+      "type": "runtime_step",
+      "name": "Write memory + telemetry"
+    },
+    {
+      "id": "runtime:tts",
+      "type": "runtime_step",
+      "name": "TTS output"
+    },
+    {
+      "id": "runtime:shutdown",
+      "type": "runtime_step",
+      "name": "Shutdown services"
+    },
+    {
+      "id": "runtime:remote_execute",
+      "type": "runtime_step",
+      "name": "Remote /execute -> process_command"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:rt_has:runtime:startup",
+      "from": "repo:root",
+      "to": "runtime:startup",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:load_env",
+      "from": "repo:root",
+      "to": "runtime:load_env",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:init_awareness",
+      "from": "repo:root",
+      "to": "runtime:init_awareness",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:init_automation",
+      "from": "repo:root",
+      "to": "runtime:init_automation",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:init_ui",
+      "from": "repo:root",
+      "to": "runtime:init_ui",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:init_remote",
+      "from": "repo:root",
+      "to": "runtime:init_remote",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:voice_loop",
+      "from": "repo:root",
+      "to": "runtime:voice_loop",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:reasoning",
+      "from": "repo:root",
+      "to": "runtime:reasoning",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:dispatch",
+      "from": "repo:root",
+      "to": "runtime:dispatch",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:automation_execute",
+      "from": "repo:root",
+      "to": "runtime:automation_execute",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:verify",
+      "from": "repo:root",
+      "to": "runtime:verify",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:memory_write",
+      "from": "repo:root",
+      "to": "runtime:memory_write",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:tts",
+      "from": "repo:root",
+      "to": "runtime:tts",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_has:runtime:shutdown",
+      "from": "repo:root",
+      "to": "runtime:shutdown",
+      "type": "has_runtime_step"
+    },
+    {
+      "id": "edge:rt_next:runtime:startup:runtime:load_env",
+      "from": "runtime:startup",
+      "to": "runtime:load_env",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:load_env:runtime:init_awareness",
+      "from": "runtime:load_env",
+      "to": "runtime:init_awareness",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:init_awareness:runtime:init_automation",
+      "from": "runtime:init_awareness",
+      "to": "runtime:init_automation",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:init_automation:runtime:init_ui",
+      "from": "runtime:init_automation",
+      "to": "runtime:init_ui",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:init_ui:runtime:init_remote",
+      "from": "runtime:init_ui",
+      "to": "runtime:init_remote",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:init_remote:runtime:voice_loop",
+      "from": "runtime:init_remote",
+      "to": "runtime:voice_loop",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:voice_loop:runtime:reasoning",
+      "from": "runtime:voice_loop",
+      "to": "runtime:reasoning",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:reasoning:runtime:dispatch",
+      "from": "runtime:reasoning",
+      "to": "runtime:dispatch",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:dispatch:runtime:automation_execute",
+      "from": "runtime:dispatch",
+      "to": "runtime:automation_execute",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:automation_execute:runtime:verify",
+      "from": "runtime:automation_execute",
+      "to": "runtime:verify",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:verify:runtime:memory_write",
+      "from": "runtime:verify",
+      "to": "runtime:memory_write",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:memory_write:runtime:tts",
+      "from": "runtime:memory_write",
+      "to": "runtime:tts",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_next:runtime:tts:runtime:shutdown",
+      "from": "runtime:tts",
+      "to": "runtime:shutdown",
+      "type": "next"
+    },
+    {
+      "id": "edge:rt_alt:remote",
+      "from": "runtime:init_remote",
+      "to": "runtime:remote_execute",
+      "type": "enables"
+    },
+    {
+      "id": "edge:rt_alt:remote2",
+      "from": "runtime:remote_execute",
+      "to": "runtime:reasoning",
+      "type": "calls"
+    }
+  ]
+}

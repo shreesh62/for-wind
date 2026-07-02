@@ -1,9 +1,217 @@
 {
-    "facts": [
-        "remember my birthday is on 1st September",
-        "remember my friends name is Om",
-        "remember I have a sister",
-        "remember my mother's name is kan",
-        "remember my mother's name is Kanchan not Kan"
-    ]
+  "name": "You're Shreesh.",
+  "location": "You live in thane, Maharashtra, India.",
+  "birthday": "Your birthday is on September 1st.",
+  "age": "You're 15 years old.",
+  "studies": "You're a student learning Global Studies at Allen and did a social media marketing course from Youvah, backed by IIMA/IIMB, currently in vidyalankar classes and shubham raje collage for 11th standard",
+  "interests": "You enjoy movies, playing piano, cooking, collecting Hot Wheels, and you're building your own AI assistant.",
+  "goals": "You want to be successful, wealthy, and create cool futuristic tech.",
+  "jarvis_project": "You're building a JARVIS-like assistant with voice, memory, automation, and web skills.",
+  "jarvis_setup": "You’re starting on your laptop and may later shift it to a Raspberry Pi. Your system has AMD Ryzen, 16GB RAM.",
+  "demo_day": "You pitched Hakkdar at Slay Nights Demo Day on May 31st, 2025, at Sahara Star Hotel.",
+  "pratigya": "Pratigya was my gf but we had issues due to mahak so we broke up .",
+  "mahak": "Mahak was close, but things got messed up. There was pain and betrayal,she i strying to make things better but i no longer feel interested.",
+  "tanmayi": "Tanmayi was my good friend ,caused you confusion and hurt.i hate her for what she did and how she is, i no longer talk to her.",
+  "yojit": "yjit is my very good friend, we talk about a lot of things , same as me he has interest in business, and we try to do things together",
+  "tripti": "tripti is my really good friend she is like my sister, i share her everything and she does it too",
+  "15": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T16:57:56.579517+00:00"
+  },
+  "16": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T17:00:33.691624+00:00"
+  },
+  "17": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T17:01:23.727707+00:00"
+  },
+  "18": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T17:03:40.882666+00:00"
+  },
+  "19": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T18:03:12.874860+00:00"
+  },
+  "20": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T18:07:54.452171+00:00"
+  },
+  "21": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-09T18:09:58.013261+00:00"
+  },
+  "22": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T15:07:38.368878+00:00"
+  },
+  "23": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T15:09:29.656299+00:00"
+  },
+  "24": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T15:11:01.427761+00:00"
+  },
+  "25": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T15:15:22.747645+00:00"
+  },
+  "26": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T16:42:18.403208+00:00"
+  },
+  "27": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T16:56:17.036423+00:00"
+  },
+  "28": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T16:58:04.857609+00:00"
+  },
+  "29": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T17:31:53.166181+00:00"
+  },
+  "30": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-10T17:40:34.481824+00:00"
+  },
+  "31": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-20T09:21:01.595051+00:00"
+  },
+  "32": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-20T09:50:46.632521+00:00"
+  },
+  "33": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2025-12-20T10:14:06.829080+00:00"
+  },
+  "34": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T05:23:22.825316+00:00"
+  },
+  "35": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T05:25:48.393460+00:00"
+  },
+  "36": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T05:38:11.460508+00:00"
+  },
+  "37": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T05:38:57.043621+00:00"
+  },
+  "38": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T16:31:07.590564+00:00"
+  },
+  "39": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T16:48:43.886721+00:00"
+  },
+  "40": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T16:50:35.414857+00:00"
+  },
+  "41": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T17:27:21.613442+00:00"
+  },
+  "42": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T17:43:51.774695+00:00"
+  },
+  "43": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T17:51:36.756115+00:00"
+  },
+  "44": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T18:10:28.748110+00:00"
+  },
+  "45": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T18:35:44.458513+00:00"
+  },
+  "46": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T18:37:33.359621+00:00"
+  },
+  "47": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T18:39:37.926168+00:00"
+  },
+  "48": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-02T19:21:10.789741+00:00"
+  },
+  "49": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-03T16:58:40.201766+00:00"
+  },
+  "50": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-03T17:03:15.208229+00:00"
+  },
+  "51": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-04T17:40:43.089336+00:00"
+  },
+  "52": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-01-04T18:03:08.955102+00:00"
+  },
+  "54": {
+    "text": "my test key is 123",
+    "salience": "low",
+    "ts": "2026-01-04T18:07:16.417804+00:00"
+  },
+  "55": {
+    "text": "I live in Thane",
+    "salience": "low",
+    "ts": "2026-06-18T16:49:52.382871+00:00"
+  }
 }

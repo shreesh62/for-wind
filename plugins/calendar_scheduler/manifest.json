@@ -1,0 +1,19 @@
+{
+  "name": "Calendar Scheduler",
+  "version": "0.1.0",
+  "capabilities": [
+    {
+      "key": "calendar_create_event",
+      "definition": {
+        "name": "Create Calendar Event",
+        "description": "Schedule or draft events using Google Calendar automation.",
+        "status": "available",
+        "patterns": [
+          "\\b(schedule|create|add)\\b.*\\b(event|meeting|call|appointment)\\b",
+          "\\bput\\b.*\\bcalendar\\b"
+        ]
+      },
+      "handler": "handle_calendar_create_event"
+    }
+  ]
+}
