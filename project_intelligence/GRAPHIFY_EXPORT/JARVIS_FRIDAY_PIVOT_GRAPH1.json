@@ -1,0 +1,164 @@
+{
+  "graph_name": "JARVIS_FRIDAY_PIVOT_GRAPH1",
+  "metadata": {
+    "generated_at": "2026-06-01T06:59:09Z",
+    "repo_root": "C:\\Projects\\JARVIS\\for wind",
+    "confidence": "Low"
+  },
+  "nodes": [
+    {
+      "id": "repo:root",
+      "type": "repository",
+      "name": "for wind",
+      "props": {
+        "path": "C:\\Projects\\JARVIS\\for wind"
+      }
+    },
+    {
+      "id": "friday:vision",
+      "type": "layer",
+      "name": "Vision Layer"
+    },
+    {
+      "id": "friday:reasoning",
+      "type": "layer",
+      "name": "Reasoning Layer"
+    },
+    {
+      "id": "friday:action",
+      "type": "layer",
+      "name": "Action Layer"
+    },
+    {
+      "id": "friday:feedback",
+      "type": "layer",
+      "name": "Feedback Layer"
+    },
+    {
+      "id": "friday_evidence:screen_capture",
+      "type": "evidence",
+      "name": "Screen capture (PIL.ImageGrab)",
+      "props": {
+        "file_hint": "automation/services.py"
+      }
+    },
+    {
+      "id": "friday_evidence:uia",
+      "type": "evidence",
+      "name": "UI Automation monitor (UIA)",
+      "props": {
+        "file_hint": "awareness/windows/*"
+      }
+    },
+    {
+      "id": "friday_evidence:ocr",
+      "type": "evidence",
+      "name": "OCR + ROI change tests",
+      "props": {
+        "file_hint": "ocr_test.py / roi_change_ocr.py"
+      }
+    },
+    {
+      "id": "friday_evidence:cognitive_loop",
+      "type": "evidence",
+      "name": "Closed-loop control",
+      "props": {
+        "file_hint": "automation/cognitive_loop.py"
+      }
+    },
+    {
+      "id": "friday_evidence:verification",
+      "type": "evidence",
+      "name": "Semantic verification",
+      "props": {
+        "file_hint": "automation/verification.py"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:repo_has_layer:friday:vision",
+      "from": "repo:root",
+      "to": "friday:vision",
+      "type": "has_layer"
+    },
+    {
+      "id": "edge:repo_has_layer:friday:reasoning",
+      "from": "repo:root",
+      "to": "friday:reasoning",
+      "type": "has_layer"
+    },
+    {
+      "id": "edge:repo_has_layer:friday:action",
+      "from": "repo:root",
+      "to": "friday:action",
+      "type": "has_layer"
+    },
+    {
+      "id": "edge:repo_has_layer:friday:feedback",
+      "from": "repo:root",
+      "to": "friday:feedback",
+      "type": "has_layer"
+    },
+    {
+      "id": "edge:repo_has_evidence:friday_evidence:screen_capture",
+      "from": "repo:root",
+      "to": "friday_evidence:screen_capture",
+      "type": "has_evidence"
+    },
+    {
+      "id": "edge:repo_has_evidence:friday_evidence:uia",
+      "from": "repo:root",
+      "to": "friday_evidence:uia",
+      "type": "has_evidence"
+    },
+    {
+      "id": "edge:repo_has_evidence:friday_evidence:ocr",
+      "from": "repo:root",
+      "to": "friday_evidence:ocr",
+      "type": "has_evidence"
+    },
+    {
+      "id": "edge:repo_has_evidence:friday_evidence:cognitive_loop",
+      "from": "repo:root",
+      "to": "friday_evidence:cognitive_loop",
+      "type": "has_evidence"
+    },
+    {
+      "id": "edge:repo_has_evidence:friday_evidence:verification",
+      "from": "repo:root",
+      "to": "friday_evidence:verification",
+      "type": "has_evidence"
+    },
+    {
+      "id": "edge:fr_assign:vision_screen",
+      "from": "friday:vision",
+      "to": "friday_evidence:screen_capture",
+      "type": "implemented_by"
+    },
+    {
+      "id": "edge:fr_assign:vision_uia",
+      "from": "friday:vision",
+      "to": "friday_evidence:uia",
+      "type": "implemented_by"
+    },
+    {
+      "id": "edge:fr_assign:vision_ocr",
+      "from": "friday:vision",
+      "to": "friday_evidence:ocr",
+      "type": "experimental"
+    },
+    {
+      "id": "edge:fr_assign:reasoning_cog",
+      "from": "friday:reasoning",
+      "to": "friday_evidence:cognitive_loop",
+      "type": "implemented_by"
+    },
+    {
+      "id": "edge:fr_assign:feedback_verify",
+      "from": "friday:feedback",
+      "to": "friday_evidence:verification",
+      "type": "implemented_by"
+    }
+  ]
+}

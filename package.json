@@ -1,0 +1,17 @@
+{
+  "name": "for-wind",
+  "version": "1.0.0",
+  "description": "A full-stack Jarvis-style AI assistant featuring voice interaction, automation plugins, proactive routines, remote APIs, and desktop/mobile dashboards. This document explains how to set up the development environment, run the system, package deliverables, and understand the architecture for future contributions.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0"
+  }
+}

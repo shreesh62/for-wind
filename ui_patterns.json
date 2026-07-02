@@ -1,0 +1,11 @@
+[
+  {
+    "ui_hash": "9a31170910aaede0",
+    "goal_intent": "chrome_extension__unlock_login",
+    "successful_action": "type_text",
+    "element_text": "login_form",
+    "element_type": "Form",
+    "timestamp": 1767633901.9929216,
+    "success_count": 1
+  }
+]

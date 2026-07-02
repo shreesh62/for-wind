@@ -1,0 +1,1989 @@
+{
+  "graph_name": "JARVIS_ROADMAP_GRAPH1",
+  "metadata": {
+    "generated_at": "2026-06-01T06:59:09Z",
+    "repo_root": "C:\\Projects\\JARVIS\\for wind",
+    "confidence": "Medium"
+  },
+  "nodes": [
+    {
+      "id": "repo:root",
+      "type": "repository",
+      "name": "for wind",
+      "props": {
+        "path": "C:\\Projects\\JARVIS\\for wind"
+      }
+    },
+    {
+      "id": "file:.env",
+      "type": "file",
+      "name": ".env",
+      "props": {
+        "path": ".env",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:.env.example",
+      "type": "file",
+      "name": ".env.example",
+      "props": {
+        "path": ".env.example",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:.gitignore",
+      "type": "file",
+      "name": ".gitignore",
+      "props": {
+        "path": ".gitignore",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:automation/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "automation/__init__.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/action_planner.py",
+      "type": "file",
+      "name": "action_planner.py",
+      "props": {
+        "path": "automation/action_planner.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/amazon_shopping.py",
+      "type": "file",
+      "name": "amazon_shopping.py",
+      "props": {
+        "path": "automation/amazon_shopping.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/browser_state_tracker.py",
+      "type": "file",
+      "name": "browser_state_tracker.py",
+      "props": {
+        "path": "automation/browser_state_tracker.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/chrome_pipeline.py",
+      "type": "file",
+      "name": "chrome_pipeline.py",
+      "props": {
+        "path": "automation/chrome_pipeline.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/cognitive_loop.py",
+      "type": "file",
+      "name": "cognitive_loop.py",
+      "props": {
+        "path": "automation/cognitive_loop.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/cognitive_loop_task_graph.py",
+      "type": "file",
+      "name": "cognitive_loop_task_graph.py",
+      "props": {
+        "path": "automation/cognitive_loop_task_graph.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/desktop_actions.py",
+      "type": "file",
+      "name": "desktop_actions.py",
+      "props": {
+        "path": "automation/desktop_actions.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/devtools_bridge.py",
+      "type": "file",
+      "name": "devtools_bridge.py",
+      "props": {
+        "path": "automation/devtools_bridge.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/element_resolver.py",
+      "type": "file",
+      "name": "element_resolver.py",
+      "props": {
+        "path": "automation/element_resolver.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/error_models.py",
+      "type": "file",
+      "name": "error_models.py",
+      "props": {
+        "path": "automation/error_models.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/gmail_actions.py",
+      "type": "file",
+      "name": "gmail_actions.py",
+      "props": {
+        "path": "automation/gmail_actions.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/goal_parser.py",
+      "type": "file",
+      "name": "goal_parser.py",
+      "props": {
+        "path": "automation/goal_parser.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/goal_schema.py",
+      "type": "file",
+      "name": "goal_schema.py",
+      "props": {
+        "path": "automation/goal_schema.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/planner.py",
+      "type": "file",
+      "name": "planner.py",
+      "props": {
+        "path": "automation/planner.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/playwright_manager.py",
+      "type": "file",
+      "name": "playwright_manager.py",
+      "props": {
+        "path": "automation/playwright_manager.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/quick_actions.py",
+      "type": "file",
+      "name": "quick_actions.py",
+      "props": {
+        "path": "automation/quick_actions.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/semantic_actions.py",
+      "type": "file",
+      "name": "semantic_actions.py",
+      "props": {
+        "path": "automation/semantic_actions.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/services.py",
+      "type": "file",
+      "name": "services.py",
+      "props": {
+        "path": "automation/services.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/state_gap_analyzer.py",
+      "type": "file",
+      "name": "state_gap_analyzer.py",
+      "props": {
+        "path": "automation/state_gap_analyzer.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/storage/google_calendar.json",
+      "type": "file",
+      "name": "google_calendar.json",
+      "props": {
+        "path": "automation/storage/google_calendar.json",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/task_graph.py",
+      "type": "file",
+      "name": "task_graph.py",
+      "props": {
+        "path": "automation/task_graph.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/taskbar_locator.py",
+      "type": "file",
+      "name": "taskbar_locator.py",
+      "props": {
+        "path": "automation/taskbar_locator.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/taskbar_trainer.py",
+      "type": "file",
+      "name": "taskbar_trainer.py",
+      "props": {
+        "path": "automation/taskbar_trainer.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/timing.py",
+      "type": "file",
+      "name": "timing.py",
+      "props": {
+        "path": "automation/timing.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/ui_pattern_memory.py",
+      "type": "file",
+      "name": "ui_pattern_memory.py",
+      "props": {
+        "path": "automation/ui_pattern_memory.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:automation/verification.py",
+      "type": "file",
+      "name": "verification.py",
+      "props": {
+        "path": "automation/verification.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "awareness/__init__.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/controller.py",
+      "type": "file",
+      "name": "controller.py",
+      "props": {
+        "path": "awareness/controller.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/event_dispatcher.py",
+      "type": "file",
+      "name": "event_dispatcher.py",
+      "props": {
+        "path": "awareness/event_dispatcher.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/perception_snapshot.py",
+      "type": "file",
+      "name": "perception_snapshot.py",
+      "props": {
+        "path": "awareness/perception_snapshot.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/process_watcher.py",
+      "type": "file",
+      "name": "process_watcher.py",
+      "props": {
+        "path": "awareness/process_watcher.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/snapshot.py",
+      "type": "file",
+      "name": "snapshot.py",
+      "props": {
+        "path": "awareness/snapshot.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/state_cache.py",
+      "type": "file",
+      "name": "state_cache.py",
+      "props": {
+        "path": "awareness/state_cache.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/system_monitor.py",
+      "type": "file",
+      "name": "system_monitor.py",
+      "props": {
+        "path": "awareness/system_monitor.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/types.py",
+      "type": "file",
+      "name": "types.py",
+      "props": {
+        "path": "awareness/types.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/windows/uia_monitor.py",
+      "type": "file",
+      "name": "uia_monitor.py",
+      "props": {
+        "path": "awareness/windows/uia_monitor.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/windows_accessibility.py",
+      "type": "file",
+      "name": "windows_accessibility.py",
+      "props": {
+        "path": "awareness/windows_accessibility.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:awareness/world_state.py",
+      "type": "file",
+      "name": "world_state.py",
+      "props": {
+        "path": "awareness/world_state.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:capabilities.py",
+      "type": "file",
+      "name": "capabilities.py",
+      "props": {
+        "path": "capabilities.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:clip_test.py",
+      "type": "file",
+      "name": "clip_test.py",
+      "props": {
+        "path": "clip_test.py",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:COGNITIVE_SYSTEM_COMPLETE.md",
+      "type": "file",
+      "name": "COGNITIVE_SYSTEM_COMPLETE.md",
+      "props": {
+        "path": "COGNITIVE_SYSTEM_COMPLETE.md",
+        "status": "Working",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:config.py",
+      "type": "file",
+      "name": "config.py",
+      "props": {
+        "path": "config.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:config/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "config/__init__.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:config/capabilities.json",
+      "type": "file",
+      "name": "capabilities.json",
+      "props": {
+        "path": "config/capabilities.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:core/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "core/__init__.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/assistant.py",
+      "type": "file",
+      "name": "assistant.py",
+      "props": {
+        "path": "core/assistant.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/capability_dispatcher.py",
+      "type": "file",
+      "name": "capability_dispatcher.py",
+      "props": {
+        "path": "core/capability_dispatcher.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/focus_watcher.py",
+      "type": "file",
+      "name": "focus_watcher.py",
+      "props": {
+        "path": "core/focus_watcher.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/intent_parser.py",
+      "type": "file",
+      "name": "intent_parser.py",
+      "props": {
+        "path": "core/intent_parser.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/llm_sanitizer.py",
+      "type": "file",
+      "name": "llm_sanitizer.py",
+      "props": {
+        "path": "core/llm_sanitizer.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/reasoner.py",
+      "type": "file",
+      "name": "reasoner.py",
+      "props": {
+        "path": "core/reasoner.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/repair_diagnostics.py",
+      "type": "file",
+      "name": "repair_diagnostics.py",
+      "props": {
+        "path": "core/repair_diagnostics.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/repair_strategies.py",
+      "type": "file",
+      "name": "repair_strategies.py",
+      "props": {
+        "path": "core/repair_strategies.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/repair_telemetry.py",
+      "type": "file",
+      "name": "repair_telemetry.py",
+      "props": {
+        "path": "core/repair_telemetry.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/routine_scheduler.py",
+      "type": "file",
+      "name": "routine_scheduler.py",
+      "props": {
+        "path": "core/routine_scheduler.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/self_repair.py",
+      "type": "file",
+      "name": "self_repair.py",
+      "props": {
+        "path": "core/self_repair.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/telemetry.py",
+      "type": "file",
+      "name": "telemetry.py",
+      "props": {
+        "path": "core/telemetry.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:core/training_controller.py",
+      "type": "file",
+      "name": "training_controller.py",
+      "props": {
+        "path": "core/training_controller.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:desktop_app/main.js",
+      "type": "file",
+      "name": "main.js",
+      "props": {
+        "path": "desktop_app/main.js",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:desktop_app/package-lock.json",
+      "type": "file",
+      "name": "package-lock.json",
+      "props": {
+        "path": "desktop_app/package-lock.json",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:desktop_app/package.json",
+      "type": "file",
+      "name": "package.json",
+      "props": {
+        "path": "desktop_app/package.json",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:desktop_app/renderer/index.html",
+      "type": "file",
+      "name": "index.html",
+      "props": {
+        "path": "desktop_app/renderer/index.html",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:desktop_app/renderer/renderer.js",
+      "type": "file",
+      "name": "renderer.js",
+      "props": {
+        "path": "desktop_app/renderer/renderer.js",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:desktop_app/renderer/style.css",
+      "type": "file",
+      "name": "style.css",
+      "props": {
+        "path": "desktop_app/renderer/style.css",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:e2e/example.spec.ts",
+      "type": "file",
+      "name": "example.spec.ts",
+      "props": {
+        "path": "e2e/example.spec.ts",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:edge_temp.wav",
+      "type": "file",
+      "name": "edge_temp.wav",
+      "props": {
+        "path": "edge_temp.wav",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:edge_tts_alt.py",
+      "type": "file",
+      "name": "edge_tts_alt.py",
+      "props": {
+        "path": "edge_tts_alt.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:edge_tts_voice.py",
+      "type": "file",
+      "name": "edge_tts_voice.py",
+      "props": {
+        "path": "edge_tts_voice.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:groq_jarvis.py",
+      "type": "file",
+      "name": "groq_jarvis.py",
+      "props": {
+        "path": "groq_jarvis.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:groq_llm.py",
+      "type": "file",
+      "name": "groq_llm.py",
+      "props": {
+        "path": "groq_llm.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:interaction_log.json",
+      "type": "file",
+      "name": "interaction_log.json",
+      "props": {
+        "path": "interaction_log.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:jarvis_ai/.gitattributes",
+      "type": "file",
+      "name": ".gitattributes",
+      "props": {
+        "path": "jarvis_ai/.gitattributes",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:jarvis_ai/README.md",
+      "type": "file",
+      "name": "README.md",
+      "props": {
+        "path": "jarvis_ai/README.md",
+        "status": "Working",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:jarvis_backend.spec",
+      "type": "file",
+      "name": "jarvis_backend.spec",
+      "props": {
+        "path": "jarvis_backend.spec",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:jarvis_io.py",
+      "type": "file",
+      "name": "jarvis_io.py",
+      "props": {
+        "path": "jarvis_io.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:jarvis_memory/chroma.sqlite3",
+      "type": "file",
+      "name": "chroma.sqlite3",
+      "props": {
+        "path": "jarvis_memory/chroma.sqlite3",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:main.py",
+      "type": "file",
+      "name": "main.py",
+      "props": {
+        "path": "main.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory.index",
+      "type": "file",
+      "name": "memory.index",
+      "props": {
+        "path": "memory.index",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory.json",
+      "type": "file",
+      "name": "memory.json",
+      "props": {
+        "path": "memory.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:memory/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "memory/__init__.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory/memory_controller.py",
+      "type": "file",
+      "name": "memory_controller.py",
+      "props": {
+        "path": "memory/memory_controller.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory/short_term_buffer.py",
+      "type": "file",
+      "name": "short_term_buffer.py",
+      "props": {
+        "path": "memory/short_term_buffer.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory/taskbar_anchors.json",
+      "type": "file",
+      "name": "taskbar_anchors.json",
+      "props": {
+        "path": "memory/taskbar_anchors.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:memory/taskbar_chrome_template.png",
+      "type": "file",
+      "name": "taskbar_chrome_template.png",
+      "props": {
+        "path": "memory/taskbar_chrome_template.png",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory/ui_memory.json",
+      "type": "file",
+      "name": "ui_memory.json",
+      "props": {
+        "path": "memory/ui_memory.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:memory_core.py",
+      "type": "file",
+      "name": "memory_core.py",
+      "props": {
+        "path": "memory_core.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory_store/metadata.npy",
+      "type": "file",
+      "name": "metadata.npy",
+      "props": {
+        "path": "memory_store/metadata.npy",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:memory_store/vector.index",
+      "type": "file",
+      "name": "vector.index",
+      "props": {
+        "path": "memory_store/vector.index",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:mobile_dashboard/package.json",
+      "type": "file",
+      "name": "package.json",
+      "props": {
+        "path": "mobile_dashboard/package.json",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:mobile_dashboard/src/App.jsx",
+      "type": "file",
+      "name": "App.jsx",
+      "props": {
+        "path": "mobile_dashboard/src/App.jsx",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:mobile_dashboard/src/main.jsx",
+      "type": "file",
+      "name": "main.jsx",
+      "props": {
+        "path": "mobile_dashboard/src/main.jsx",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:mobile_dashboard/src/styles.css",
+      "type": "file",
+      "name": "styles.css",
+      "props": {
+        "path": "mobile_dashboard/src/styles.css",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:mobile_dashboard/vite.config.js",
+      "type": "file",
+      "name": "vite.config.js",
+      "props": {
+        "path": "mobile_dashboard/vite.config.js",
+        "status": "Unknown",
+        "risk": "Medium"
+      }
+    },
+    {
+      "id": "file:New Text Document.txt",
+      "type": "file",
+      "name": "New Text Document.txt",
+      "props": {
+        "path": "New Text Document.txt",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:ocr_roi_test.py",
+      "type": "file",
+      "name": "ocr_roi_test.py",
+      "props": {
+        "path": "ocr_roi_test.py",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:ocr_test.py",
+      "type": "file",
+      "name": "ocr_test.py",
+      "props": {
+        "path": "ocr_test.py",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:package-lock.json",
+      "type": "file",
+      "name": "package-lock.json",
+      "props": {
+        "path": "package-lock.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:package.json",
+      "type": "file",
+      "name": "package.json",
+      "props": {
+        "path": "package.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:personality.py",
+      "type": "file",
+      "name": "personality.py",
+      "props": {
+        "path": "personality.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:playwright.config.ts",
+      "type": "file",
+      "name": "playwright.config.ts",
+      "props": {
+        "path": "playwright.config.ts",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:plugins/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "plugins/__init__.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:plugins/calendar_scheduler/manifest.json",
+      "type": "file",
+      "name": "manifest.json",
+      "props": {
+        "path": "plugins/calendar_scheduler/manifest.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:plugins/calendar_scheduler/module.py",
+      "type": "file",
+      "name": "module.py",
+      "props": {
+        "path": "plugins/calendar_scheduler/module.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:plugins/gmail_sender/manifest.json",
+      "type": "file",
+      "name": "manifest.json",
+      "props": {
+        "path": "plugins/gmail_sender/manifest.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:plugins/gmail_sender/module.py",
+      "type": "file",
+      "name": "module.py",
+      "props": {
+        "path": "plugins/gmail_sender/module.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:plugins/loader.py",
+      "type": "file",
+      "name": "loader.py",
+      "props": {
+        "path": "plugins/loader.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:plugins/status_monitor/manifest.json",
+      "type": "file",
+      "name": "manifest.json",
+      "props": {
+        "path": "plugins/status_monitor/manifest.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:plugins/status_monitor/module.py",
+      "type": "file",
+      "name": "module.py",
+      "props": {
+        "path": "plugins/status_monitor/module.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:project_intelligence/_test.txt",
+      "type": "file",
+      "name": "_test.txt",
+      "props": {
+        "path": "project_intelligence/_test.txt",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:project_intelligence/extract_intelligence.py",
+      "type": "file",
+      "name": "extract_intelligence.py",
+      "props": {
+        "path": "project_intelligence/extract_intelligence.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:project_intelligence/small.py",
+      "type": "file",
+      "name": "small.py",
+      "props": {
+        "path": "project_intelligence/small.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:pytest - Copy.ini",
+      "type": "file",
+      "name": "pytest - Copy.ini",
+      "props": {
+        "path": "pytest - Copy.ini",
+        "status": "Deprecated",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:pytest.ini",
+      "type": "file",
+      "name": "pytest.ini",
+      "props": {
+        "path": "pytest.ini",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:quick_test_maps.py",
+      "type": "file",
+      "name": "quick_test_maps.py",
+      "props": {
+        "path": "quick_test_maps.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:README.md",
+      "type": "file",
+      "name": "README.md",
+      "props": {
+        "path": "README.md",
+        "status": "Working",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:remote/telegram_relay.py",
+      "type": "file",
+      "name": "telegram_relay.py",
+      "props": {
+        "path": "remote/telegram_relay.py",
+        "status": "Unknown",
+        "risk": "Medium-High"
+      }
+    },
+    {
+      "id": "file:remote/webhook_server.py",
+      "type": "file",
+      "name": "webhook_server.py",
+      "props": {
+        "path": "remote/webhook_server.py",
+        "status": "Unknown",
+        "risk": "Medium-High"
+      }
+    },
+    {
+      "id": "file:requirements-312.txt",
+      "type": "file",
+      "name": "requirements-312.txt",
+      "props": {
+        "path": "requirements-312.txt",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:requirements-dev.txt",
+      "type": "file",
+      "name": "requirements-dev.txt",
+      "props": {
+        "path": "requirements-dev.txt",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:requirements.txt",
+      "type": "file",
+      "name": "requirements.txt",
+      "props": {
+        "path": "requirements.txt",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:roi_change_ocr.py",
+      "type": "file",
+      "name": "roi_change_ocr.py",
+      "props": {
+        "path": "roi_change_ocr.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:roi_changes_test.py",
+      "type": "file",
+      "name": "roi_changes_test.py",
+      "props": {
+        "path": "roi_changes_test.py",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:scripts/reality_check.ps1",
+      "type": "file",
+      "name": "reality_check.ps1",
+      "props": {
+        "path": "scripts/reality_check.ps1",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:scripts/run_mock_and_tests.ps1",
+      "type": "file",
+      "name": "run_mock_and_tests.ps1",
+      "props": {
+        "path": "scripts/run_mock_and_tests.ps1",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:scripts/self_repair_test.ps1",
+      "type": "file",
+      "name": "self_repair_test.ps1",
+      "props": {
+        "path": "scripts/self_repair_test.ps1",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:scripts/setup_dev_env.ps1",
+      "type": "file",
+      "name": "setup_dev_env.ps1",
+      "props": {
+        "path": "scripts/setup_dev_env.ps1",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:scripts/start_telegram_relay.ps1",
+      "type": "file",
+      "name": "start_telegram_relay.ps1",
+      "props": {
+        "path": "scripts/start_telegram_relay.ps1",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:scripts/taskbar_debug_run.py",
+      "type": "file",
+      "name": "taskbar_debug_run.py",
+      "props": {
+        "path": "scripts/taskbar_debug_run.py",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:scripts/test_open_chrome.ps1",
+      "type": "file",
+      "name": "test_open_chrome.ps1",
+      "props": {
+        "path": "scripts/test_open_chrome.ps1",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:security/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "security/__init__.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:security/credential_vault.py",
+      "type": "file",
+      "name": "credential_vault.py",
+      "props": {
+        "path": "security/credential_vault.py",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:security/credentials.dat",
+      "type": "file",
+      "name": "credentials.dat",
+      "props": {
+        "path": "security/credentials.dat",
+        "status": "Unknown",
+        "risk": "High"
+      }
+    },
+    {
+      "id": "file:server/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "server/__init__.py",
+        "status": "Unknown",
+        "risk": "Medium-High"
+      }
+    },
+    {
+      "id": "file:server/app.py",
+      "type": "file",
+      "name": "app.py",
+      "props": {
+        "path": "server/app.py",
+        "status": "Unknown",
+        "risk": "Medium-High"
+      }
+    },
+    {
+      "id": "file:server/static/index.html",
+      "type": "file",
+      "name": "index.html",
+      "props": {
+        "path": "server/static/index.html",
+        "status": "Unknown",
+        "risk": "Medium-High"
+      }
+    },
+    {
+      "id": "file:services/distancematrix_service.py",
+      "type": "file",
+      "name": "distancematrix_service.py",
+      "props": {
+        "path": "services/distancematrix_service.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:services/maps_service.py",
+      "type": "file",
+      "name": "maps_service.py",
+      "props": {
+        "path": "services/maps_service.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:services/market_service.py",
+      "type": "file",
+      "name": "market_service.py",
+      "props": {
+        "path": "services/market_service.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:services/news_service.py",
+      "type": "file",
+      "name": "news_service.py",
+      "props": {
+        "path": "services/news_service.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:services/search_service.py",
+      "type": "file",
+      "name": "search_service.py",
+      "props": {
+        "path": "services/search_service.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:services/weather_service.py",
+      "type": "file",
+      "name": "weather_service.py",
+      "props": {
+        "path": "services/weather_service.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:start_remote_server.py",
+      "type": "file",
+      "name": "start_remote_server.py",
+      "props": {
+        "path": "start_remote_server.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:test.png",
+      "type": "file",
+      "name": "test.png",
+      "props": {
+        "path": "test.png",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:test_pydantic_ai.py",
+      "type": "file",
+      "name": "test_pydantic_ai.py",
+      "props": {
+        "path": "test_pydantic_ai.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:test_runtime_fixes.ps1",
+      "type": "file",
+      "name": "test_runtime_fixes.ps1",
+      "props": {
+        "path": "test_runtime_fixes.ps1",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:tests/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "tests/__init__.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/mocks/mock_api.py",
+      "type": "file",
+      "name": "mock_api.py",
+      "props": {
+        "path": "tests/mocks/mock_api.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_automation_components.py",
+      "type": "file",
+      "name": "test_automation_components.py",
+      "props": {
+        "path": "tests/test_automation_components.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_awareness.py",
+      "type": "file",
+      "name": "test_awareness.py",
+      "props": {
+        "path": "tests/test_awareness.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_awareness_state_cache.py",
+      "type": "file",
+      "name": "test_awareness_state_cache.py",
+      "props": {
+        "path": "tests/test_awareness_state_cache.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_capabilities.py",
+      "type": "file",
+      "name": "test_capabilities.py",
+      "props": {
+        "path": "tests/test_capabilities.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_capability_priority_edge_cases.py",
+      "type": "file",
+      "name": "test_capability_priority_edge_cases.py",
+      "props": {
+        "path": "tests/test_capability_priority_edge_cases.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_distancematrix.py",
+      "type": "file",
+      "name": "test_distancematrix.py",
+      "props": {
+        "path": "tests/test_distancematrix.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_maps_distance.py",
+      "type": "file",
+      "name": "test_maps_distance.py",
+      "props": {
+        "path": "tests/test_maps_distance.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_planner.py",
+      "type": "file",
+      "name": "test_planner.py",
+      "props": {
+        "path": "tests/test_planner.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_planner_recovery.py",
+      "type": "file",
+      "name": "test_planner_recovery.py",
+      "props": {
+        "path": "tests/test_planner_recovery.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_planner_reload.py",
+      "type": "file",
+      "name": "test_planner_reload.py",
+      "props": {
+        "path": "tests/test_planner_reload.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_prompt_builder.py",
+      "type": "file",
+      "name": "test_prompt_builder.py",
+      "props": {
+        "path": "tests/test_prompt_builder.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_remote_execute.py",
+      "type": "file",
+      "name": "test_remote_execute.py",
+      "props": {
+        "path": "tests/test_remote_execute.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_remote_reload.py",
+      "type": "file",
+      "name": "test_remote_reload.py",
+      "props": {
+        "path": "tests/test_remote_reload.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_state_cache_ocr.py",
+      "type": "file",
+      "name": "test_state_cache_ocr.py",
+      "props": {
+        "path": "tests/test_state_cache_ocr.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_taskbar_utils.py",
+      "type": "file",
+      "name": "test_taskbar_utils.py",
+      "props": {
+        "path": "tests/test_taskbar_utils.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tests/test_webhook_hmac.py",
+      "type": "file",
+      "name": "test_webhook_hmac.py",
+      "props": {
+        "path": "tests/test_webhook_hmac.py",
+        "status": "Experimental",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "props": {
+        "path": "testsprite_tests/.gitkeep",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/standard_prd.json",
+      "type": "file",
+      "name": "standard_prd.json",
+      "props": {
+        "path": "testsprite_tests/standard_prd.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/testsprite_backend_test_plan.json",
+      "type": "file",
+      "name": "testsprite_backend_test_plan.json",
+      "props": {
+        "path": "testsprite_tests/testsprite_backend_test_plan.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/tmp/code_summary.json",
+      "type": "file",
+      "name": "code_summary.json",
+      "props": {
+        "path": "testsprite_tests/tmp/code_summary.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/tmp/config.json",
+      "type": "file",
+      "name": "config.json",
+      "props": {
+        "path": "testsprite_tests/tmp/config.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/tmp/prd_files/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "props": {
+        "path": "testsprite_tests/tmp/prd_files/.gitkeep",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:testsprite_tests/tmp/prd_files/README.md",
+      "type": "file",
+      "name": "README.md",
+      "props": {
+        "path": "testsprite_tests/tmp/prd_files/README.md",
+        "status": "Working",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:tts_formatter.py",
+      "type": "file",
+      "name": "tts_formatter.py",
+      "props": {
+        "path": "tts_formatter.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:ui/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "props": {
+        "path": "ui/__init__.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:ui/ipc_server.py",
+      "type": "file",
+      "name": "ipc_server.py",
+      "props": {
+        "path": "ui/ipc_server.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:ui/web_client/index.html",
+      "type": "file",
+      "name": "index.html",
+      "props": {
+        "path": "ui/web_client/index.html",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:ui_patterns.json",
+      "type": "file",
+      "name": "ui_patterns.json",
+      "props": {
+        "path": "ui_patterns.json",
+        "status": "Unknown",
+        "risk": "Low-Medium"
+      }
+    },
+    {
+      "id": "file:vector_memory.py",
+      "type": "file",
+      "name": "vector_memory.py",
+      "props": {
+        "path": "vector_memory.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:voice_io.py",
+      "type": "file",
+      "name": "voice_io.py",
+      "props": {
+        "path": "voice_io.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:wake_word_listener.py",
+      "type": "file",
+      "name": "wake_word_listener.py",
+      "props": {
+        "path": "wake_word_listener.py",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:wake_words/jarvis_en_windows.ppn",
+      "type": "file",
+      "name": "jarvis_en_windows.ppn",
+      "props": {
+        "path": "wake_words/jarvis_en_windows.ppn",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:wake_words/listen_en_windows.ppn",
+      "type": "file",
+      "name": "listen_en_windows.ppn",
+      "props": {
+        "path": "wake_words/listen_en_windows.ppn",
+        "status": "Unknown",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "file:win_action_test.py",
+      "type": "file",
+      "name": "win_action_test.py",
+      "props": {
+        "path": "win_action_test.py",
+        "status": "Experimental",
+        "risk": "Unknown"
+      }
+    },
+    {
+      "id": "roadmap:phase7",
+      "type": "roadmap_item",
+      "name": "Phase 7 - cognitive routing"
+    },
+    {
+      "id": "roadmap:phase8",
+      "type": "roadmap_item",
+      "name": "Phase 8 - force real perception after actions"
+    },
+    {
+      "id": "roadmap:phase9",
+      "type": "roadmap_item",
+      "name": "Phase 9 - persistent UI memory"
+    },
+    {
+      "id": "roadmap:phase10",
+      "type": "roadmap_item",
+      "name": "Phase 10 - credential-aware element resolution"
+    },
+    {
+      "id": "roadmap:phase11",
+      "type": "roadmap_item",
+      "name": "Phase 11 - kill illusion paths"
+    },
+    {
+      "id": "roadmap:phase12",
+      "type": "roadmap_item",
+      "name": "Phase 12 - reality test harness"
+    },
+    {
+      "id": "roadmap:phase13",
+      "type": "roadmap_item",
+      "name": "Phase 13 - cognitive-only strict mode"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase7",
+      "from": "repo:root",
+      "to": "roadmap:phase7",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase8",
+      "from": "repo:root",
+      "to": "roadmap:phase8",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase9",
+      "from": "repo:root",
+      "to": "roadmap:phase9",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase10",
+      "from": "repo:root",
+      "to": "roadmap:phase10",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase11",
+      "from": "repo:root",
+      "to": "roadmap:phase11",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase12",
+      "from": "repo:root",
+      "to": "roadmap:phase12",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:repo_has_roadmap:roadmap:phase13",
+      "from": "repo:root",
+      "to": "roadmap:phase13",
+      "type": "has_roadmap_item"
+    },
+    {
+      "id": "edge:roadmap_order:roadmap:phase7:roadmap:phase8",
+      "from": "roadmap:phase7",
+      "to": "roadmap:phase8",
+      "type": "suggested_order"
+    },
+    {
+      "id": "edge:roadmap_order:roadmap:phase8:roadmap:phase9",
+      "from": "roadmap:phase8",
+      "to": "roadmap:phase9",
+      "type": "suggested_order"
+    },
+    {
+      "id": "edge:roadmap_order:roadmap:phase9:roadmap:phase10",
+      "from": "roadmap:phase9",
+      "to": "roadmap:phase10",
+      "type": "suggested_order"
+    },
+    {
+      "id": "edge:roadmap_order:roadmap:phase10:roadmap:phase11",
+      "from": "roadmap:phase10",
+      "to": "roadmap:phase11",
+      "type": "suggested_order"
+    },
+    {
+      "id": "edge:roadmap_order:roadmap:phase11:roadmap:phase12",
+      "from": "roadmap:phase11",
+      "to": "roadmap:phase12",
+      "type": "suggested_order"
+    },
+    {
+      "id": "edge:roadmap_order:roadmap:phase12:roadmap:phase13",
+      "from": "roadmap:phase12",
+      "to": "roadmap:phase13",
+      "type": "suggested_order"
+    },
+    {
+      "id": "edge:roadmap_doc",
+      "from": "roadmap:phase7",
+      "to": "file:COGNITIVE_SYSTEM_COMPLETE.md",
+      "type": "documented_in"
+    }
+  ]
+}

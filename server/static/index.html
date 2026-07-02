@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jarvis Remote Dashboard</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Inter", "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: radial-gradient(circle at top, #1b2238, #050710 70%);
+        color: #f5f7ff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 32px;
+        gap: 24px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      #api-key {
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(77, 212, 255, 0.25);
+        background: rgba(5, 8, 13, 0.6);
+        width: 280px;
+        color: inherit;
+      }
+
+      #connect-btn {
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, #4dd4ff, #5278ff);
+        color: #061220;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      #connect-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 22px rgba(77, 212, 255, 0.35);
+      }
+
+      main {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .button-grid button {
+        border-radius: 14px;
+        padding: 12px 16px;
+        border: 1px solid rgba(77, 212, 255, 0.2);
+        background: rgba(9, 14, 22, 0.9);
+        color: inherit;
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .button-grid button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(77, 212, 255, 0.5);
+      }
+
+      .card {
+        background: rgba(12, 16, 28, 0.72);
+        border-radius: 18px;
+        padding: 20px;
+        border: 1px solid rgba(77, 212, 255, 0.12);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 36px rgba(3, 5, 10, 0.5);
+        min-height: 220px;
+      }
+
+      .card h2 {
+        margin-top: 0;
+        font-size: 1.2rem;
+        letter-spacing: 0.5px;
+      }
+
+      .list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .list li {
+        background: rgba(6, 9, 18, 0.8);
+        border-radius: 12px;
+        padding: 12px 14px;
+        border: 1px solid rgba(77, 212, 255, 0.1);
+      }
+
+      .label {
+        font-size: 0.72rem;
+        opacity: 0.6;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        display: inline-block;
+      }
+
+      #manual-command {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      #manual-command input {
+        flex: 1;
+        padding: 12px 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(77, 212, 255, 0.2);
+        background: rgba(5, 8, 14, 0.6);
+        color: inherit;
+      }
+
+      #manual-command button {
+        padding: 12px 24px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, #4dd4ff, #3b8dff);
+        color: #04101e;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .muted {
+        opacity: 0.65;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Jarvis Remote Dashboard</h1>
+        <p id="status" class="muted">Enter API key to connect.</p>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <input id="api-key" type="password" placeholder="API Key" />
+        <button id="connect-btn">Connect</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Recent Conversation</h2>
+        <ul id="conversation" class="list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Environment</h2>
+        <p id="system" class="muted">No data yet.</p>
+        <p id="window" class="muted"></p>
+        <p id="browser" class="muted"></p>
+        <p id="weather" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <h2>Alerts</h2>
+        <ul id="alerts" class="list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Send Command</h2>
+        <form id="manual-command">
+          <input type="text" id="command-text" placeholder="e.g. Run status report" />
+          <button type="submit">Queue</button>
+        </form>
+        <p class="muted" id="command-result"></p>
+        <div class="button-grid" id="quick-actions">
+          <button data-command="summarize the browser tab">Summarize Tab</button>
+          <button data-command="take a screenshot">Screenshot</button>
+          <button data-command="focus the chrome window">Focus Chrome</button>
+          <button data-command="what's the weather in Mumbai">Weather Mumbai</button>
+          <button data-command="reload page">Reload</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Pending Commands</h2>
+        <ul id="pending-commands" class="list"></ul>
+      </section>
+    </main>
+
+    <script>
+      const connectBtn = document.getElementById("connect-btn");
+      const apiKeyInput = document.getElementById("api-key");
+      const statusLabel = document.getElementById("status");
+      const conversationList = document.getElementById("conversation");
+      const systemText = document.getElementById("system");
+      const windowText = document.getElementById("window");
+      const browserText = document.getElementById("browser");
+      const weatherText = document.getElementById("weather");
+      const alertsList = document.getElementById("alerts");
+      const commandForm = document.getElementById("manual-command");
+      const commandInput = document.getElementById("command-text");
+      const commandResult = document.getElementById("command-result");
+      const pendingList = document.getElementById("pending-commands");
+      const quickActions = document.querySelectorAll("#quick-actions button");
+
+      const API_BASE = "";
+      let pollInterval;
+
+      function clearLists() {
+        conversationList.innerHTML = "";
+        alertsList.innerHTML = "";
+        pendingList.innerHTML = "";
+      }
+
+      function renderConversation(items = []) {
+        conversationList.innerHTML = "";
+        items.forEach((item) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <span class="label">${new Date(item.timestamp * 1000).toLocaleTimeString()}</span>
+            <div><strong>You:</strong> ${item.user || ""}</div>
+            <div><strong>Jarvis:</strong> ${item.assistant || ""}</div>
+          `;
+          conversationList.appendChild(li);
+        });
+      }
+
+      function renderAlerts(items = []) {
+        alertsList.innerHTML = "";
+        items.forEach((item) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <span class="label">${new Date(item.timestamp * 1000).toLocaleTimeString()}</span>
+            <div>${item.message}</div>
+          `;
+          alertsList.appendChild(li);
+        });
+      }
+
+      function renderPending(list = []) {
+        pendingList.innerHTML = "";
+        if (!list.length) {
+          const li = document.createElement("li");
+          li.innerHTML = `<div>No queued commands.</div>`;
+          pendingList.appendChild(li);
+          return;
+        }
+        list.forEach((command) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<span class="label">Queued</span><div>${command}</div>`;
+          pendingList.appendChild(li);
+        });
+      }
+
+      async function fetchStatus() {
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) return;
+        try {
+          const res = await fetch(`${API_BASE}/status`, {
+            headers: { "X-API-Key": apiKey },
+          });
+          if (!res.ok) {
+            statusLabel.textContent = `Status error: ${res.status}`;
+            clearLists();
+            return;
+          }
+          const data = await res.json();
+          statusLabel.textContent = "Connected";
+          renderConversation(data.recent_conversation || []);
+          renderAlerts(data.alerts || []);
+          systemText.textContent = data.system?.description || "System telemetry unavailable.";
+          windowText.textContent = data.window?.title
+            ? `Window: ${data.window.title}`
+            : "Window: Unknown";
+          browserText.textContent = data.browser?.title
+            ? `Browser: ${data.browser.title} (${data.browser.url || "no url"})`
+            : "Browser: Unknown";
+          weatherText.textContent = data.weather?.message
+            ? `Weather: ${data.weather.message}`
+            : "Weather: Not available";
+          renderPending(data.pending_manual_commands || []);
+        } catch (error) {
+          statusLabel.textContent = `Status error: ${error.message}`;
+          clearLists();
+        }
+      }
+
+      async function sendCommand(text) {
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) return;
+        try {
+          const res = await fetch(`${API_BASE}/commands`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-Key": apiKey,
+            },
+            body: JSON.stringify({ text }),
+          });
+
+          if (!res.ok) {
+            const payload = await res.json().catch(() => ({}));
+            throw new Error(payload.detail || `HTTP ${res.status}`);
+          }
+
+          const payload = await res.json();
+          commandResult.textContent = `Queued: "${payload.text}"`;
+          commandResult.style.color = "#4dd4ff";
+          fetchStatus();
+        } catch (error) {
+          commandResult.textContent = `Error: ${error.message}`;
+          commandResult.style.color = "#ff6b6b";
+        }
+      }
+
+      connectBtn.addEventListener("click", () => {
+        if (pollInterval) {
+          clearInterval(pollInterval);
+        }
+        fetchStatus();
+        pollInterval = setInterval(fetchStatus, 5000);
+      });
+
+      commandForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const value = commandInput.value.trim();
+        if (!value) return;
+        sendCommand(value);
+        commandInput.value = "";
+      });
+
+      quickActions.forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.dataset.command;
+          if (!value) return;
+          commandInput.value = value;
+          sendCommand(value);
+        });
+      });
+
+      const savedKey = localStorage.getItem("REMOTE_API_KEY");
+      if (savedKey) {
+        apiKeyInput.value = savedKey;
+        statusLabel.textContent = "Connecting with saved API key…";
+        connectBtn.click();
+      }
+
+      apiKeyInput.addEventListener("change", () => {
+        const value = apiKeyInput.value.trim();
+        if (value) {
+          localStorage.setItem("REMOTE_API_KEY", value);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6547 @@
+{
+  "graph_name": "JARVIS_DEPENDENCY_GRAPH1",
+  "metadata": {
+    "generated_at": "2026-06-01T06:59:09Z",
+    "repo_root": "C:\\Projects\\JARVIS\\for wind"
+  },
+  "nodes": [
+    {
+      "id": "repo:root",
+      "type": "repository",
+      "name": "for wind",
+      "props": {
+        "path": "C:\\Projects\\JARVIS\\for wind"
+      }
+    },
+    {
+      "id": "py_req:python-dotenv==1.0.1",
+      "type": "python_requirement",
+      "name": "python-dotenv==1.0.1",
+      "props": {
+        "file": "requirements-dev.txt"
+      }
+    },
+    {
+      "id": "py_req:requests==2.32.5",
+      "type": "python_requirement",
+      "name": "requests==2.32.5",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:fastapi==0.115.2",
+      "type": "python_requirement",
+      "name": "fastapi==0.115.2",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:uvicorn==0.30.6",
+      "type": "python_requirement",
+      "name": "uvicorn==0.30.6",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pydantic==2.12.4",
+      "type": "python_requirement",
+      "name": "pydantic==2.12.4",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:websockets==12.0",
+      "type": "python_requirement",
+      "name": "websockets==12.0",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:playwright==1.55.0",
+      "type": "python_requirement",
+      "name": "playwright==1.55.0",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:edge-tts==7.2.3",
+      "type": "python_requirement",
+      "name": "edge-tts==7.2.3",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:playsound==1.2.2",
+      "type": "python_requirement",
+      "name": "playsound==1.2.2",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pvporcupine==3.0.5",
+      "type": "python_requirement",
+      "name": "pvporcupine==3.0.5",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:PyAudio==0.2.14",
+      "type": "python_requirement",
+      "name": "PyAudio==0.2.14",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pyttsx3==2.99",
+      "type": "python_requirement",
+      "name": "pyttsx3==2.99",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:SpeechRecognition==3.10.4",
+      "type": "python_requirement",
+      "name": "SpeechRecognition==3.10.4",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:groq==0.33.0",
+      "type": "python_requirement",
+      "name": "groq==0.33.0",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:numpy==2.1.3",
+      "type": "python_requirement",
+      "name": "numpy==2.1.3",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:faiss-cpu==1.13.1; platform_system != \"Windows\"",
+      "type": "python_requirement",
+      "name": "faiss-cpu==1.13.1; platform_system != \"Windows\"",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:sentence-transformers==2.7.0; platform_system != \"Windows\"",
+      "type": "python_requirement",
+      "name": "sentence-transformers==2.7.0; platform_system != \"Windows\"",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:psutil==5.9.8",
+      "type": "python_requirement",
+      "name": "psutil==5.9.8",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pyautogui==0.9.54",
+      "type": "python_requirement",
+      "name": "pyautogui==0.9.54",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pywinauto==0.6.8",
+      "type": "python_requirement",
+      "name": "pywinauto==0.6.8",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pillow==10.4.0",
+      "type": "python_requirement",
+      "name": "pillow==10.4.0",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:uiautomation==2.0.18",
+      "type": "python_requirement",
+      "name": "uiautomation==2.0.18",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pytesseract==0.3.10",
+      "type": "python_requirement",
+      "name": "pytesseract==0.3.10",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "py_req:pytest==8.3.4",
+      "type": "python_requirement",
+      "name": "pytest==8.3.4",
+      "props": {
+        "file": "requirements-dev.txt"
+      }
+    },
+    {
+      "id": "py_req:flask==3.0.3",
+      "type": "python_requirement",
+      "name": "flask==3.0.3",
+      "props": {
+        "file": "requirements-dev.txt"
+      }
+    },
+    {
+      "id": "py_req:httpx==0.25.2",
+      "type": "python_requirement",
+      "name": "httpx==0.25.2",
+      "props": {
+        "file": "requirements-dev.txt"
+      }
+    },
+    {
+      "id": "py_req:python-telegram-bot==20.6",
+      "type": "python_requirement",
+      "name": "python-telegram-bot==20.6",
+      "props": {
+        "file": "requirements-dev.txt"
+      }
+    },
+    {
+      "id": "py_req:\ufeffpython-dotenv==1.0.1",
+      "type": "python_requirement",
+      "name": "\ufeffpython-dotenv==1.0.1",
+      "props": {
+        "file": "requirements-312.txt"
+      }
+    },
+    {
+      "id": "js_dep:@playwright/test",
+      "type": "js_dependency",
+      "name": "@playwright/test",
+      "props": {
+        "version": "^1.56.1",
+        "scope": "devDependencies",
+        "file": "package.json"
+      }
+    },
+    {
+      "id": "js_dep:@types/node",
+      "type": "js_dependency",
+      "name": "@types/node",
+      "props": {
+        "version": "^24.10.0",
+        "scope": "devDependencies",
+        "file": "package.json"
+      }
+    },
+    {
+      "id": "js_dep:electron",
+      "type": "js_dependency",
+      "name": "electron",
+      "props": {
+        "version": "^38.2.2",
+        "scope": "dependencies",
+        "file": "desktop_app/package.json"
+      }
+    },
+    {
+      "id": "js_dep:cross-env",
+      "type": "js_dependency",
+      "name": "cross-env",
+      "props": {
+        "version": "^7.0.3",
+        "scope": "devDependencies",
+        "file": "desktop_app/package.json"
+      }
+    },
+    {
+      "id": "js_dep:electron-builder",
+      "type": "js_dependency",
+      "name": "electron-builder",
+      "props": {
+        "version": "^24.6.4",
+        "scope": "devDependencies",
+        "file": "desktop_app/package.json"
+      }
+    },
+    {
+      "id": "js_dep:eslint",
+      "type": "js_dependency",
+      "name": "eslint",
+      "props": {
+        "version": "^8.56.0",
+        "scope": "devDependencies",
+        "file": "desktop_app/package.json"
+      }
+    },
+    {
+      "id": "js_dep:react",
+      "type": "js_dependency",
+      "name": "react",
+      "props": {
+        "version": "^18.3.1",
+        "scope": "dependencies",
+        "file": "mobile_dashboard/package.json"
+      }
+    },
+    {
+      "id": "js_dep:react-dom",
+      "type": "js_dependency",
+      "name": "react-dom",
+      "props": {
+        "version": "^18.3.1",
+        "scope": "dependencies",
+        "file": "mobile_dashboard/package.json"
+      }
+    },
+    {
+      "id": "js_dep:@vitejs/plugin-react",
+      "type": "js_dependency",
+      "name": "@vitejs/plugin-react",
+      "props": {
+        "version": "^4.2.0",
+        "scope": "devDependencies",
+        "file": "mobile_dashboard/package.json"
+      }
+    },
+    {
+      "id": "js_dep:vite",
+      "type": "js_dependency",
+      "name": "vite",
+      "props": {
+        "version": "^5.2.0",
+        "scope": "devDependencies",
+        "file": "mobile_dashboard/package.json"
+      }
+    },
+    {
+      "id": "py_module:automation",
+      "type": "py_module",
+      "name": "automation",
+      "props": {
+        "path": "automation/__init__.py"
+      }
+    },
+    {
+      "id": "py_module:automation.action_planner",
+      "type": "py_module",
+      "name": "automation.action_planner",
+      "props": {
+        "path": "automation/action_planner.py"
+      }
+    },
+    {
+      "id": "py_import:__future__",
+      "type": "py_import",
+      "name": "__future__"
+    },
+    {
+      "id": "py_import:awareness.world_state",
+      "type": "py_import",
+      "name": "awareness.world_state"
+    },
+    {
+      "id": "py_import:semantic_actions",
+      "type": "py_import",
+      "name": "semantic_actions"
+    },
+    {
+      "id": "py_import:typing",
+      "type": "py_import",
+      "name": "typing"
+    },
+    {
+      "id": "py_import:ui_pattern_memory",
+      "type": "py_import",
+      "name": "ui_pattern_memory"
+    },
+    {
+      "id": "py_module:automation.amazon_shopping",
+      "type": "py_module",
+      "name": "automation.amazon_shopping",
+      "props": {
+        "path": "automation/amazon_shopping.py"
+      }
+    },
+    {
+      "id": "py_import:asyncio",
+      "type": "py_import",
+      "name": "asyncio"
+    },
+    {
+      "id": "py_import:playwright_manager",
+      "type": "py_import",
+      "name": "playwright_manager"
+    },
+    {
+      "id": "py_import:quick_actions",
+      "type": "py_import",
+      "name": "quick_actions"
+    },
+    {
+      "id": "py_module:automation.browser_state_tracker",
+      "type": "py_module",
+      "name": "automation.browser_state_tracker",
+      "props": {
+        "path": "automation/browser_state_tracker.py"
+      }
+    },
+    {
+      "id": "py_import:awareness.event_dispatcher",
+      "type": "py_import",
+      "name": "awareness.event_dispatcher"
+    },
+    {
+      "id": "py_import:awareness.types",
+      "type": "py_import",
+      "name": "awareness.types"
+    },
+    {
+      "id": "py_import:devtools_bridge",
+      "type": "py_import",
+      "name": "devtools_bridge"
+    },
+    {
+      "id": "py_import:os",
+      "type": "py_import",
+      "name": "os"
+    },
+    {
+      "id": "py_import:threading",
+      "type": "py_import",
+      "name": "threading"
+    },
+    {
+      "id": "py_import:time",
+      "type": "py_import",
+      "name": "time"
+    },
+    {
+      "id": "py_module:automation.chrome_pipeline",
+      "type": "py_module",
+      "name": "automation.chrome_pipeline",
+      "props": {
+        "path": "automation/chrome_pipeline.py"
+      }
+    },
+    {
+      "id": "py_import:PIL",
+      "type": "py_import",
+      "name": "PIL"
+    },
+    {
+      "id": "py_import:automation.taskbar_locator",
+      "type": "py_import",
+      "name": "automation.taskbar_locator"
+    },
+    {
+      "id": "py_import:cv2",
+      "type": "py_import",
+      "name": "cv2"
+    },
+    {
+      "id": "py_import:getpass",
+      "type": "py_import",
+      "name": "getpass"
+    },
+    {
+      "id": "py_import:numpy",
+      "type": "py_import",
+      "name": "numpy"
+    },
+    {
+      "id": "py_import:pyautogui",
+      "type": "py_import",
+      "name": "pyautogui"
+    },
+    {
+      "id": "py_import:pytesseract",
+      "type": "py_import",
+      "name": "pytesseract"
+    },
+    {
+      "id": "py_import:security.credential_vault",
+      "type": "py_import",
+      "name": "security.credential_vault"
+    },
+    {
+      "id": "py_module:automation.cognitive_loop",
+      "type": "py_module",
+      "name": "automation.cognitive_loop",
+      "props": {
+        "path": "automation/cognitive_loop.py"
+      }
+    },
+    {
+      "id": "py_import:action_planner",
+      "type": "py_import",
+      "name": "action_planner"
+    },
+    {
+      "id": "py_import:automation.chrome_pipeline",
+      "type": "py_import",
+      "name": "automation.chrome_pipeline"
+    },
+    {
+      "id": "py_import:awareness.perception_snapshot",
+      "type": "py_import",
+      "name": "awareness.perception_snapshot"
+    },
+    {
+      "id": "py_import:cognitive_loop_task_graph",
+      "type": "py_import",
+      "name": "cognitive_loop_task_graph"
+    },
+    {
+      "id": "py_import:core.repair_diagnostics",
+      "type": "py_import",
+      "name": "core.repair_diagnostics"
+    },
+    {
+      "id": "py_import:core.repair_strategies",
+      "type": "py_import",
+      "name": "core.repair_strategies"
+    },
+    {
+      "id": "py_import:core.self_repair",
+      "type": "py_import",
+      "name": "core.self_repair"
+    },
+    {
+      "id": "py_import:error_models",
+      "type": "py_import",
+      "name": "error_models"
+    },
+    {
+      "id": "py_import:goal_parser",
+      "type": "py_import",
+      "name": "goal_parser"
+    },
+    {
+      "id": "py_import:goal_schema",
+      "type": "py_import",
+      "name": "goal_schema"
+    },
+    {
+      "id": "py_import:json",
+      "type": "py_import",
+      "name": "json"
+    },
+    {
+      "id": "py_import:pathlib",
+      "type": "py_import",
+      "name": "pathlib"
+    },
+    {
+      "id": "py_import:state_gap_analyzer",
+      "type": "py_import",
+      "name": "state_gap_analyzer"
+    },
+    {
+      "id": "py_import:task_graph",
+      "type": "py_import",
+      "name": "task_graph"
+    },
+    {
+      "id": "py_import:timing",
+      "type": "py_import",
+      "name": "timing"
+    },
+    {
+      "id": "py_module:automation.cognitive_loop_task_graph",
+      "type": "py_module",
+      "name": "automation.cognitive_loop_task_graph",
+      "props": {
+        "path": "automation/cognitive_loop_task_graph.py"
+      }
+    },
+    {
+      "id": "py_import:automation.goal_schema",
+      "type": "py_import",
+      "name": "automation.goal_schema"
+    },
+    {
+      "id": "py_import:automation.state_gap_analyzer",
+      "type": "py_import",
+      "name": "automation.state_gap_analyzer"
+    },
+    {
+      "id": "py_import:automation.task_graph",
+      "type": "py_import",
+      "name": "automation.task_graph"
+    },
+    {
+      "id": "py_module:automation.desktop_actions",
+      "type": "py_module",
+      "name": "automation.desktop_actions",
+      "props": {
+        "path": "automation/desktop_actions.py"
+      }
+    },
+    {
+      "id": "py_import:ctypes",
+      "type": "py_import",
+      "name": "ctypes"
+    },
+    {
+      "id": "py_import:dataclasses",
+      "type": "py_import",
+      "name": "dataclasses"
+    },
+    {
+      "id": "py_import:datetime",
+      "type": "py_import",
+      "name": "datetime"
+    },
+    {
+      "id": "py_import:easyocr",
+      "type": "py_import",
+      "name": "easyocr"
+    },
+    {
+      "id": "py_import:mss",
+      "type": "py_import",
+      "name": "mss"
+    },
+    {
+      "id": "py_import:pywinauto",
+      "type": "py_import",
+      "name": "pywinauto"
+    },
+    {
+      "id": "py_import:re",
+      "type": "py_import",
+      "name": "re"
+    },
+    {
+      "id": "py_module:automation.devtools_bridge",
+      "type": "py_module",
+      "name": "automation.devtools_bridge",
+      "props": {
+        "path": "automation/devtools_bridge.py"
+      }
+    },
+    {
+      "id": "py_import:websockets",
+      "type": "py_import",
+      "name": "websockets"
+    },
+    {
+      "id": "py_module:automation.element_resolver",
+      "type": "py_module",
+      "name": "automation.element_resolver",
+      "props": {
+        "path": "automation/element_resolver.py"
+      }
+    },
+    {
+      "id": "py_import:difflib",
+      "type": "py_import",
+      "name": "difflib"
+    },
+    {
+      "id": "py_module:automation.error_models",
+      "type": "py_module",
+      "name": "automation.error_models",
+      "props": {
+        "path": "automation/error_models.py"
+      }
+    },
+    {
+      "id": "py_import:enum",
+      "type": "py_import",
+      "name": "enum"
+    },
+    {
+      "id": "py_module:automation.gmail_actions",
+      "type": "py_module",
+      "name": "automation.gmail_actions",
+      "props": {
+        "path": "automation/gmail_actions.py"
+      }
+    },
+    {
+      "id": "py_module:automation.goal_parser",
+      "type": "py_module",
+      "name": "automation.goal_parser",
+      "props": {
+        "path": "automation/goal_parser.py"
+      }
+    },
+    {
+      "id": "py_module:automation.goal_schema",
+      "type": "py_module",
+      "name": "automation.goal_schema",
+      "props": {
+        "path": "automation/goal_schema.py"
+      }
+    },
+    {
+      "id": "py_module:automation.planner",
+      "type": "py_module",
+      "name": "automation.planner",
+      "props": {
+        "path": "automation/planner.py"
+      }
+    },
+    {
+      "id": "py_import:automation.services",
+      "type": "py_import",
+      "name": "automation.services"
+    },
+    {
+      "id": "py_import:awareness.snapshot",
+      "type": "py_import",
+      "name": "awareness.snapshot"
+    },
+    {
+      "id": "py_import:awareness.state_cache",
+      "type": "py_import",
+      "name": "awareness.state_cache"
+    },
+    {
+      "id": "py_import:capabilities",
+      "type": "py_import",
+      "name": "capabilities"
+    },
+    {
+      "id": "py_import:cognitive_loop",
+      "type": "py_import",
+      "name": "cognitive_loop"
+    },
+    {
+      "id": "py_import:urllib.parse",
+      "type": "py_import",
+      "name": "urllib.parse"
+    },
+    {
+      "id": "py_module:automation.playwright_manager",
+      "type": "py_module",
+      "name": "automation.playwright_manager",
+      "props": {
+        "path": "automation/playwright_manager.py"
+      }
+    },
+    {
+      "id": "py_import:contextlib",
+      "type": "py_import",
+      "name": "contextlib"
+    },
+    {
+      "id": "py_import:playwright.async_api",
+      "type": "py_import",
+      "name": "playwright.async_api"
+    },
+    {
+      "id": "py_import:shutil",
+      "type": "py_import",
+      "name": "shutil"
+    },
+    {
+      "id": "py_import:socket",
+      "type": "py_import",
+      "name": "socket"
+    },
+    {
+      "id": "py_import:subprocess",
+      "type": "py_import",
+      "name": "subprocess"
+    },
+    {
+      "id": "py_module:automation.quick_actions",
+      "type": "py_module",
+      "name": "automation.quick_actions",
+      "props": {
+        "path": "automation/quick_actions.py"
+      }
+    },
+    {
+      "id": "py_module:automation.semantic_actions",
+      "type": "py_module",
+      "name": "automation.semantic_actions",
+      "props": {
+        "path": "automation/semantic_actions.py"
+      }
+    },
+    {
+      "id": "py_module:automation.services",
+      "type": "py_module",
+      "name": "automation.services",
+      "props": {
+        "path": "automation/services.py"
+      }
+    },
+    {
+      "id": "py_import:amazon_shopping",
+      "type": "py_import",
+      "name": "amazon_shopping"
+    },
+    {
+      "id": "py_import:automation.timing",
+      "type": "py_import",
+      "name": "automation.timing"
+    },
+    {
+      "id": "py_import:core.telemetry",
+      "type": "py_import",
+      "name": "core.telemetry"
+    },
+    {
+      "id": "py_import:desktop_actions",
+      "type": "py_import",
+      "name": "desktop_actions"
+    },
+    {
+      "id": "py_import:gmail_actions",
+      "type": "py_import",
+      "name": "gmail_actions"
+    },
+    {
+      "id": "py_import:hashlib",
+      "type": "py_import",
+      "name": "hashlib"
+    },
+    {
+      "id": "py_import:verification",
+      "type": "py_import",
+      "name": "verification"
+    },
+    {
+      "id": "py_import:webbrowser",
+      "type": "py_import",
+      "name": "webbrowser"
+    },
+    {
+      "id": "py_module:automation.state_gap_analyzer",
+      "type": "py_module",
+      "name": "automation.state_gap_analyzer",
+      "props": {
+        "path": "automation/state_gap_analyzer.py"
+      }
+    },
+    {
+      "id": "py_module:automation.task_graph",
+      "type": "py_module",
+      "name": "automation.task_graph",
+      "props": {
+        "path": "automation/task_graph.py"
+      }
+    },
+    {
+      "id": "py_import:automation.semantic_actions",
+      "type": "py_import",
+      "name": "automation.semantic_actions"
+    },
+    {
+      "id": "py_module:automation.taskbar_locator",
+      "type": "py_module",
+      "name": "automation.taskbar_locator",
+      "props": {
+        "path": "automation/taskbar_locator.py"
+      }
+    },
+    {
+      "id": "py_import:automation.taskbar_trainer",
+      "type": "py_import",
+      "name": "automation.taskbar_trainer"
+    },
+    {
+      "id": "py_module:automation.taskbar_trainer",
+      "type": "py_module",
+      "name": "automation.taskbar_trainer",
+      "props": {
+        "path": "automation/taskbar_trainer.py"
+      }
+    },
+    {
+      "id": "py_module:automation.timing",
+      "type": "py_module",
+      "name": "automation.timing",
+      "props": {
+        "path": "automation/timing.py"
+      }
+    },
+    {
+      "id": "py_module:automation.ui_pattern_memory",
+      "type": "py_module",
+      "name": "automation.ui_pattern_memory",
+      "props": {
+        "path": "automation/ui_pattern_memory.py"
+      }
+    },
+    {
+      "id": "py_module:automation.verification",
+      "type": "py_module",
+      "name": "automation.verification",
+      "props": {
+        "path": "automation/verification.py"
+      }
+    },
+    {
+      "id": "py_module:awareness",
+      "type": "py_module",
+      "name": "awareness",
+      "props": {
+        "path": "awareness/__init__.py"
+      }
+    },
+    {
+      "id": "py_module:awareness.controller",
+      "type": "py_module",
+      "name": "awareness.controller",
+      "props": {
+        "path": "awareness/controller.py"
+      }
+    },
+    {
+      "id": "py_import:event_dispatcher",
+      "type": "py_import",
+      "name": "event_dispatcher"
+    },
+    {
+      "id": "py_import:process_watcher",
+      "type": "py_import",
+      "name": "process_watcher"
+    },
+    {
+      "id": "py_import:state_cache",
+      "type": "py_import",
+      "name": "state_cache"
+    },
+    {
+      "id": "py_import:types",
+      "type": "py_import",
+      "name": "types"
+    },
+    {
+      "id": "py_import:windows.uia_monitor",
+      "type": "py_import",
+      "name": "windows.uia_monitor"
+    },
+    {
+      "id": "py_module:awareness.event_dispatcher",
+      "type": "py_module",
+      "name": "awareness.event_dispatcher",
+      "props": {
+        "path": "awareness/event_dispatcher.py"
+      }
+    },
+    {
+      "id": "py_import:collections",
+      "type": "py_import",
+      "name": "collections"
+    },
+    {
+      "id": "py_module:awareness.perception_snapshot",
+      "type": "py_module",
+      "name": "awareness.perception_snapshot",
+      "props": {
+        "path": "awareness/perception_snapshot.py"
+      }
+    },
+    {
+      "id": "py_module:awareness.process_watcher",
+      "type": "py_module",
+      "name": "awareness.process_watcher",
+      "props": {
+        "path": "awareness/process_watcher.py"
+      }
+    },
+    {
+      "id": "py_import:psutil",
+      "type": "py_import",
+      "name": "psutil"
+    },
+    {
+      "id": "py_module:awareness.snapshot",
+      "type": "py_module",
+      "name": "awareness.snapshot",
+      "props": {
+        "path": "awareness/snapshot.py"
+      }
+    },
+    {
+      "id": "py_module:awareness.state_cache",
+      "type": "py_module",
+      "name": "awareness.state_cache",
+      "props": {
+        "path": "awareness/state_cache.py"
+      }
+    },
+    {
+      "id": "py_import:copy",
+      "type": "py_import",
+      "name": "copy"
+    },
+    {
+      "id": "py_import:snapshot",
+      "type": "py_import",
+      "name": "snapshot"
+    },
+    {
+      "id": "py_import:windows_accessibility",
+      "type": "py_import",
+      "name": "windows_accessibility"
+    },
+    {
+      "id": "py_import:world_state",
+      "type": "py_import",
+      "name": "world_state"
+    },
+    {
+      "id": "py_module:awareness.system_monitor",
+      "type": "py_module",
+      "name": "awareness.system_monitor",
+      "props": {
+        "path": "awareness/system_monitor.py"
+      }
+    },
+    {
+      "id": "py_import:platform",
+      "type": "py_import",
+      "name": "platform"
+    },
+    {
+      "id": "py_module:awareness.types",
+      "type": "py_module",
+      "name": "awareness.types",
+      "props": {
+        "path": "awareness/types.py"
+      }
+    },
+    {
+      "id": "py_module:awareness.windows.uia_monitor",
+      "type": "py_module",
+      "name": "awareness.windows.uia_monitor",
+      "props": {
+        "path": "awareness/windows/uia_monitor.py"
+      }
+    },
+    {
+      "id": "py_import:uiautomation",
+      "type": "py_import",
+      "name": "uiautomation"
+    },
+    {
+      "id": "py_module:awareness.windows_accessibility",
+      "type": "py_module",
+      "name": "awareness.windows_accessibility",
+      "props": {
+        "path": "awareness/windows_accessibility.py"
+      }
+    },
+    {
+      "id": "py_module:awareness.world_state",
+      "type": "py_module",
+      "name": "awareness.world_state",
+      "props": {
+        "path": "awareness/world_state.py"
+      }
+    },
+    {
+      "id": "py_module:capabilities",
+      "type": "py_module",
+      "name": "capabilities",
+      "props": {
+        "path": "capabilities.py"
+      }
+    },
+    {
+      "id": "py_module:clip_test",
+      "type": "py_module",
+      "name": "clip_test",
+      "props": {
+        "path": "clip_test.py"
+      }
+    },
+    {
+      "id": "py_import:clip",
+      "type": "py_import",
+      "name": "clip"
+    },
+    {
+      "id": "py_import:torch",
+      "type": "py_import",
+      "name": "torch"
+    },
+    {
+      "id": "py_module:config",
+      "type": "py_module",
+      "name": "config",
+      "props": {
+        "path": "config/__init__.py"
+      }
+    },
+    {
+      "id": "py_import:dotenv",
+      "type": "py_import",
+      "name": "dotenv"
+    },
+    {
+      "id": "py_import:functools",
+      "type": "py_import",
+      "name": "functools"
+    },
+    {
+      "id": "py_module:core",
+      "type": "py_module",
+      "name": "core",
+      "props": {
+        "path": "core/__init__.py"
+      }
+    },
+    {
+      "id": "py_module:core.assistant",
+      "type": "py_module",
+      "name": "core.assistant",
+      "props": {
+        "path": "core/assistant.py"
+      }
+    },
+    {
+      "id": "py_import:automation.cognitive_loop",
+      "type": "py_import",
+      "name": "automation.cognitive_loop"
+    },
+    {
+      "id": "py_import:automation.planner",
+      "type": "py_import",
+      "name": "automation.planner"
+    },
+    {
+      "id": "py_import:core.capability_dispatcher",
+      "type": "py_import",
+      "name": "core.capability_dispatcher"
+    },
+    {
+      "id": "py_import:core.intent_parser",
+      "type": "py_import",
+      "name": "core.intent_parser"
+    },
+    {
+      "id": "py_import:core.llm_sanitizer",
+      "type": "py_import",
+      "name": "core.llm_sanitizer"
+    },
+    {
+      "id": "py_import:core.reasoner",
+      "type": "py_import",
+      "name": "core.reasoner"
+    },
+    {
+      "id": "py_import:memory.memory_controller",
+      "type": "py_import",
+      "name": "memory.memory_controller"
+    },
+    {
+      "id": "py_import:personality",
+      "type": "py_import",
+      "name": "personality"
+    },
+    {
+      "id": "py_import:services",
+      "type": "py_import",
+      "name": "services"
+    },
+    {
+      "id": "py_module:core.capability_dispatcher",
+      "type": "py_module",
+      "name": "core.capability_dispatcher",
+      "props": {
+        "path": "core/capability_dispatcher.py"
+      }
+    },
+    {
+      "id": "py_import:services.news_service",
+      "type": "py_import",
+      "name": "services.news_service"
+    },
+    {
+      "id": "py_module:core.focus_watcher",
+      "type": "py_module",
+      "name": "core.focus_watcher",
+      "props": {
+        "path": "core/focus_watcher.py"
+      }
+    },
+    {
+      "id": "py_module:core.intent_parser",
+      "type": "py_module",
+      "name": "core.intent_parser",
+      "props": {
+        "path": "core/intent_parser.py"
+      }
+    },
+    {
+      "id": "py_module:core.llm_sanitizer",
+      "type": "py_module",
+      "name": "core.llm_sanitizer",
+      "props": {
+        "path": "core/llm_sanitizer.py"
+      }
+    },
+    {
+      "id": "py_module:core.reasoner",
+      "type": "py_module",
+      "name": "core.reasoner",
+      "props": {
+        "path": "core/reasoner.py"
+      }
+    },
+    {
+      "id": "py_module:core.repair_diagnostics",
+      "type": "py_module",
+      "name": "core.repair_diagnostics",
+      "props": {
+        "path": "core/repair_diagnostics.py"
+      }
+    },
+    {
+      "id": "py_module:core.repair_strategies",
+      "type": "py_module",
+      "name": "core.repair_strategies",
+      "props": {
+        "path": "core/repair_strategies.py"
+      }
+    },
+    {
+      "id": "py_module:core.repair_telemetry",
+      "type": "py_module",
+      "name": "core.repair_telemetry",
+      "props": {
+        "path": "core/repair_telemetry.py"
+      }
+    },
+    {
+      "id": "py_module:core.routine_scheduler",
+      "type": "py_module",
+      "name": "core.routine_scheduler",
+      "props": {
+        "path": "core/routine_scheduler.py"
+      }
+    },
+    {
+      "id": "py_module:core.self_repair",
+      "type": "py_module",
+      "name": "core.self_repair",
+      "props": {
+        "path": "core/self_repair.py"
+      }
+    },
+    {
+      "id": "py_import:core.repair_telemetry",
+      "type": "py_import",
+      "name": "core.repair_telemetry"
+    },
+    {
+      "id": "py_module:core.telemetry",
+      "type": "py_module",
+      "name": "core.telemetry",
+      "props": {
+        "path": "core/telemetry.py"
+      }
+    },
+    {
+      "id": "py_module:core.training_controller",
+      "type": "py_module",
+      "name": "core.training_controller",
+      "props": {
+        "path": "core/training_controller.py"
+      }
+    },
+    {
+      "id": "py_import:automation.ui_pattern_memory",
+      "type": "py_import",
+      "name": "automation.ui_pattern_memory"
+    },
+    {
+      "id": "py_import:awareness.controller",
+      "type": "py_import",
+      "name": "awareness.controller"
+    },
+    {
+      "id": "py_import:core.focus_watcher",
+      "type": "py_import",
+      "name": "core.focus_watcher"
+    },
+    {
+      "id": "py_module:edge_tts_alt",
+      "type": "py_module",
+      "name": "edge_tts_alt",
+      "props": {
+        "path": "edge_tts_alt.py"
+      }
+    },
+    {
+      "id": "py_module:edge_tts_voice",
+      "type": "py_module",
+      "name": "edge_tts_voice",
+      "props": {
+        "path": "edge_tts_voice.py"
+      }
+    },
+    {
+      "id": "py_import:edge_tts",
+      "type": "py_import",
+      "name": "edge_tts"
+    },
+    {
+      "id": "py_import:playsound",
+      "type": "py_import",
+      "name": "playsound"
+    },
+    {
+      "id": "py_import:sys",
+      "type": "py_import",
+      "name": "sys"
+    },
+    {
+      "id": "py_import:tempfile",
+      "type": "py_import",
+      "name": "tempfile"
+    },
+    {
+      "id": "py_module:groq_jarvis",
+      "type": "py_module",
+      "name": "groq_jarvis",
+      "props": {
+        "path": "groq_jarvis.py"
+      }
+    },
+    {
+      "id": "py_module:groq_llm",
+      "type": "py_module",
+      "name": "groq_llm",
+      "props": {
+        "path": "groq_llm.py"
+      }
+    },
+    {
+      "id": "py_import:config",
+      "type": "py_import",
+      "name": "config"
+    },
+    {
+      "id": "py_import:groq",
+      "type": "py_import",
+      "name": "groq"
+    },
+    {
+      "id": "py_module:jarvis_io",
+      "type": "py_module",
+      "name": "jarvis_io",
+      "props": {
+        "path": "jarvis_io.py"
+      }
+    },
+    {
+      "id": "py_import:distutils.version",
+      "type": "py_import",
+      "name": "distutils.version"
+    },
+    {
+      "id": "py_import:packaging.version",
+      "type": "py_import",
+      "name": "packaging.version"
+    },
+    {
+      "id": "py_import:pyttsx3",
+      "type": "py_import",
+      "name": "pyttsx3"
+    },
+    {
+      "id": "py_import:queue",
+      "type": "py_import",
+      "name": "queue"
+    },
+    {
+      "id": "py_import:setuptools._distutils.version",
+      "type": "py_import",
+      "name": "setuptools._distutils.version"
+    },
+    {
+      "id": "py_import:speech_recognition",
+      "type": "py_import",
+      "name": "speech_recognition"
+    },
+    {
+      "id": "py_import:winsound",
+      "type": "py_import",
+      "name": "winsound"
+    },
+    {
+      "id": "py_module:main",
+      "type": "py_module",
+      "name": "main",
+      "props": {
+        "path": "main.py"
+      }
+    },
+    {
+      "id": "py_import:automation.browser_state_tracker",
+      "type": "py_import",
+      "name": "automation.browser_state_tracker"
+    },
+    {
+      "id": "py_import:awareness.system_monitor",
+      "type": "py_import",
+      "name": "awareness.system_monitor"
+    },
+    {
+      "id": "py_import:awareness.windows_accessibility",
+      "type": "py_import",
+      "name": "awareness.windows_accessibility"
+    },
+    {
+      "id": "py_import:core.assistant",
+      "type": "py_import",
+      "name": "core.assistant"
+    },
+    {
+      "id": "py_import:core.routine_scheduler",
+      "type": "py_import",
+      "name": "core.routine_scheduler"
+    },
+    {
+      "id": "py_import:edge_tts_voice",
+      "type": "py_import",
+      "name": "edge_tts_voice"
+    },
+    {
+      "id": "py_import:groq_llm",
+      "type": "py_import",
+      "name": "groq_llm"
+    },
+    {
+      "id": "py_import:importlib",
+      "type": "py_import",
+      "name": "importlib"
+    },
+    {
+      "id": "py_import:jarvis_io",
+      "type": "py_import",
+      "name": "jarvis_io"
+    },
+    {
+      "id": "py_import:plugins",
+      "type": "py_import",
+      "name": "plugins"
+    },
+    {
+      "id": "py_import:server.app",
+      "type": "py_import",
+      "name": "server.app"
+    },
+    {
+      "id": "py_import:services.maps_service",
+      "type": "py_import",
+      "name": "services.maps_service"
+    },
+    {
+      "id": "py_import:services.weather_service",
+      "type": "py_import",
+      "name": "services.weather_service"
+    },
+    {
+      "id": "py_import:struct",
+      "type": "py_import",
+      "name": "struct"
+    },
+    {
+      "id": "py_import:traceback",
+      "type": "py_import",
+      "name": "traceback"
+    },
+    {
+      "id": "py_import:tts_formatter",
+      "type": "py_import",
+      "name": "tts_formatter"
+    },
+    {
+      "id": "py_import:ui.ipc_server",
+      "type": "py_import",
+      "name": "ui.ipc_server"
+    },
+    {
+      "id": "py_module:memory",
+      "type": "py_module",
+      "name": "memory",
+      "props": {
+        "path": "memory/__init__.py"
+      }
+    },
+    {
+      "id": "py_import:memory_controller",
+      "type": "py_import",
+      "name": "memory_controller"
+    },
+    {
+      "id": "py_import:short_term_buffer",
+      "type": "py_import",
+      "name": "short_term_buffer"
+    },
+    {
+      "id": "py_module:memory.memory_controller",
+      "type": "py_module",
+      "name": "memory.memory_controller",
+      "props": {
+        "path": "memory/memory_controller.py"
+      }
+    },
+    {
+      "id": "py_import:memory_core",
+      "type": "py_import",
+      "name": "memory_core"
+    },
+    {
+      "id": "py_import:vector_memory",
+      "type": "py_import",
+      "name": "vector_memory"
+    },
+    {
+      "id": "py_module:memory.short_term_buffer",
+      "type": "py_module",
+      "name": "memory.short_term_buffer",
+      "props": {
+        "path": "memory/short_term_buffer.py"
+      }
+    },
+    {
+      "id": "py_module:memory_core",
+      "type": "py_module",
+      "name": "memory_core",
+      "props": {
+        "path": "memory_core.py"
+      }
+    },
+    {
+      "id": "py_module:ocr_roi_test",
+      "type": "py_module",
+      "name": "ocr_roi_test",
+      "props": {
+        "path": "ocr_roi_test.py"
+      }
+    },
+    {
+      "id": "py_module:ocr_test",
+      "type": "py_module",
+      "name": "ocr_test",
+      "props": {
+        "path": "ocr_test.py"
+      }
+    },
+    {
+      "id": "py_module:personality",
+      "type": "py_module",
+      "name": "personality",
+      "props": {
+        "path": "personality.py"
+      }
+    },
+    {
+      "id": "py_module:plugins",
+      "type": "py_module",
+      "name": "plugins",
+      "props": {
+        "path": "plugins/__init__.py"
+      }
+    },
+    {
+      "id": "py_import:loader",
+      "type": "py_import",
+      "name": "loader"
+    },
+    {
+      "id": "py_module:plugins.calendar_scheduler.module",
+      "type": "py_module",
+      "name": "plugins.calendar_scheduler.module",
+      "props": {
+        "path": "plugins/calendar_scheduler/module.py"
+      }
+    },
+    {
+      "id": "py_module:plugins.gmail_sender.module",
+      "type": "py_module",
+      "name": "plugins.gmail_sender.module",
+      "props": {
+        "path": "plugins/gmail_sender/module.py"
+      }
+    },
+    {
+      "id": "py_import:automation.gmail_actions",
+      "type": "py_import",
+      "name": "automation.gmail_actions"
+    },
+    {
+      "id": "py_module:plugins.loader",
+      "type": "py_module",
+      "name": "plugins.loader",
+      "props": {
+        "path": "plugins/loader.py"
+      }
+    },
+    {
+      "id": "py_import:importlib.util",
+      "type": "py_import",
+      "name": "importlib.util"
+    },
+    {
+      "id": "py_module:plugins.status_monitor.module",
+      "type": "py_module",
+      "name": "plugins.status_monitor.module",
+      "props": {
+        "path": "plugins/status_monitor/module.py"
+      }
+    },
+    {
+      "id": "py_module:project_intelligence.extract_intelligence",
+      "type": "py_module",
+      "name": "project_intelligence.extract_intelligence",
+      "props": {
+        "path": "project_intelligence/extract_intelligence.py"
+      }
+    },
+    {
+      "id": "py_module:project_intelligence.small",
+      "type": "py_module",
+      "name": "project_intelligence.small",
+      "props": {
+        "path": "project_intelligence/small.py"
+      }
+    },
+    {
+      "id": "py_module:quick_test_maps",
+      "type": "py_module",
+      "name": "quick_test_maps",
+      "props": {
+        "path": "quick_test_maps.py"
+      }
+    },
+    {
+      "id": "py_module:remote.telegram_relay",
+      "type": "py_module",
+      "name": "remote.telegram_relay",
+      "props": {
+        "path": "remote/telegram_relay.py"
+      }
+    },
+    {
+      "id": "py_import:requests",
+      "type": "py_import",
+      "name": "requests"
+    },
+    {
+      "id": "py_import:telegram",
+      "type": "py_import",
+      "name": "telegram"
+    },
+    {
+      "id": "py_import:telegram.ext",
+      "type": "py_import",
+      "name": "telegram.ext"
+    },
+    {
+      "id": "py_module:remote.webhook_server",
+      "type": "py_module",
+      "name": "remote.webhook_server",
+      "props": {
+        "path": "remote/webhook_server.py"
+      }
+    },
+    {
+      "id": "py_import:fastapi",
+      "type": "py_import",
+      "name": "fastapi"
+    },
+    {
+      "id": "py_import:hmac",
+      "type": "py_import",
+      "name": "hmac"
+    },
+    {
+      "id": "py_import:pydantic",
+      "type": "py_import",
+      "name": "pydantic"
+    },
+    {
+      "id": "py_import:uvicorn",
+      "type": "py_import",
+      "name": "uvicorn"
+    },
+    {
+      "id": "py_module:roi_change_ocr",
+      "type": "py_module",
+      "name": "roi_change_ocr",
+      "props": {
+        "path": "roi_change_ocr.py"
+      }
+    },
+    {
+      "id": "py_module:roi_changes_test",
+      "type": "py_module",
+      "name": "roi_changes_test",
+      "props": {
+        "path": "roi_changes_test.py"
+      }
+    },
+    {
+      "id": "py_module:scripts.taskbar_debug_run",
+      "type": "py_module",
+      "name": "scripts.taskbar_debug_run",
+      "props": {
+        "path": "scripts/taskbar_debug_run.py"
+      }
+    },
+    {
+      "id": "py_import:argparse",
+      "type": "py_import",
+      "name": "argparse"
+    },
+    {
+      "id": "py_module:security",
+      "type": "py_module",
+      "name": "security",
+      "props": {
+        "path": "security/__init__.py"
+      }
+    },
+    {
+      "id": "py_import:credential_vault",
+      "type": "py_import",
+      "name": "credential_vault"
+    },
+    {
+      "id": "py_module:security.credential_vault",
+      "type": "py_module",
+      "name": "security.credential_vault",
+      "props": {
+        "path": "security/credential_vault.py"
+      }
+    },
+    {
+      "id": "py_import:win32crypt",
+      "type": "py_import",
+      "name": "win32crypt"
+    },
+    {
+      "id": "py_module:server",
+      "type": "py_module",
+      "name": "server",
+      "props": {
+        "path": "server/__init__.py"
+      }
+    },
+    {
+      "id": "py_module:server.app",
+      "type": "py_module",
+      "name": "server.app",
+      "props": {
+        "path": "server/app.py"
+      }
+    },
+    {
+      "id": "py_import:fastapi.responses",
+      "type": "py_import",
+      "name": "fastapi.responses"
+    },
+    {
+      "id": "py_import:fastapi.staticfiles",
+      "type": "py_import",
+      "name": "fastapi.staticfiles"
+    },
+    {
+      "id": "py_import:ipaddress",
+      "type": "py_import",
+      "name": "ipaddress"
+    },
+    {
+      "id": "py_module:services.distancematrix_service",
+      "type": "py_module",
+      "name": "services.distancematrix_service",
+      "props": {
+        "path": "services/distancematrix_service.py"
+      }
+    },
+    {
+      "id": "py_module:services.maps_service",
+      "type": "py_module",
+      "name": "services.maps_service",
+      "props": {
+        "path": "services/maps_service.py"
+      }
+    },
+    {
+      "id": "py_import:services.distancematrix_service",
+      "type": "py_import",
+      "name": "services.distancematrix_service"
+    },
+    {
+      "id": "py_module:services.market_service",
+      "type": "py_module",
+      "name": "services.market_service",
+      "props": {
+        "path": "services/market_service.py"
+      }
+    },
+    {
+      "id": "py_module:services.news_service",
+      "type": "py_module",
+      "name": "services.news_service",
+      "props": {
+        "path": "services/news_service.py"
+      }
+    },
+    {
+      "id": "py_module:services.search_service",
+      "type": "py_module",
+      "name": "services.search_service",
+      "props": {
+        "path": "services/search_service.py"
+      }
+    },
+    {
+      "id": "py_module:services.weather_service",
+      "type": "py_module",
+      "name": "services.weather_service",
+      "props": {
+        "path": "services/weather_service.py"
+      }
+    },
+    {
+      "id": "py_module:start_remote_server",
+      "type": "py_module",
+      "name": "start_remote_server",
+      "props": {
+        "path": "start_remote_server.py"
+      }
+    },
+    {
+      "id": "py_module:test_pydantic_ai",
+      "type": "py_module",
+      "name": "test_pydantic_ai",
+      "props": {
+        "path": "test_pydantic_ai.py"
+      }
+    },
+    {
+      "id": "py_import:pydantic_ai",
+      "type": "py_import",
+      "name": "pydantic_ai"
+    },
+    {
+      "id": "py_module:tests",
+      "type": "py_module",
+      "name": "tests",
+      "props": {
+        "path": "tests/__init__.py"
+      }
+    },
+    {
+      "id": "py_module:tests.mocks.mock_api",
+      "type": "py_module",
+      "name": "tests.mocks.mock_api",
+      "props": {
+        "path": "tests/mocks/mock_api.py"
+      }
+    },
+    {
+      "id": "py_import:flask",
+      "type": "py_import",
+      "name": "flask"
+    },
+    {
+      "id": "py_import:math",
+      "type": "py_import",
+      "name": "math"
+    },
+    {
+      "id": "py_module:tests.test_automation_components",
+      "type": "py_module",
+      "name": "tests.test_automation_components",
+      "props": {
+        "path": "tests/test_automation_components.py"
+      }
+    },
+    {
+      "id": "py_import:automation",
+      "type": "py_import",
+      "name": "automation"
+    },
+    {
+      "id": "py_import:pytest",
+      "type": "py_import",
+      "name": "pytest"
+    },
+    {
+      "id": "py_module:tests.test_awareness",
+      "type": "py_module",
+      "name": "tests.test_awareness",
+      "props": {
+        "path": "tests/test_awareness.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_awareness_state_cache",
+      "type": "py_module",
+      "name": "tests.test_awareness_state_cache",
+      "props": {
+        "path": "tests/test_awareness_state_cache.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_capabilities",
+      "type": "py_module",
+      "name": "tests.test_capabilities",
+      "props": {
+        "path": "tests/test_capabilities.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_capability_priority_edge_cases",
+      "type": "py_module",
+      "name": "tests.test_capability_priority_edge_cases",
+      "props": {
+        "path": "tests/test_capability_priority_edge_cases.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_distancematrix",
+      "type": "py_module",
+      "name": "tests.test_distancematrix",
+      "props": {
+        "path": "tests/test_distancematrix.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_maps_distance",
+      "type": "py_module",
+      "name": "tests.test_maps_distance",
+      "props": {
+        "path": "tests/test_maps_distance.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_planner",
+      "type": "py_module",
+      "name": "tests.test_planner",
+      "props": {
+        "path": "tests/test_planner.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_planner_recovery",
+      "type": "py_module",
+      "name": "tests.test_planner_recovery",
+      "props": {
+        "path": "tests/test_planner_recovery.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_planner_reload",
+      "type": "py_module",
+      "name": "tests.test_planner_reload",
+      "props": {
+        "path": "tests/test_planner_reload.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_prompt_builder",
+      "type": "py_module",
+      "name": "tests.test_prompt_builder",
+      "props": {
+        "path": "tests/test_prompt_builder.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_remote_execute",
+      "type": "py_module",
+      "name": "tests.test_remote_execute",
+      "props": {
+        "path": "tests/test_remote_execute.py"
+      }
+    },
+    {
+      "id": "py_import:fastapi.testclient",
+      "type": "py_import",
+      "name": "fastapi.testclient"
+    },
+    {
+      "id": "py_module:tests.test_remote_reload",
+      "type": "py_module",
+      "name": "tests.test_remote_reload",
+      "props": {
+        "path": "tests/test_remote_reload.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_state_cache_ocr",
+      "type": "py_module",
+      "name": "tests.test_state_cache_ocr",
+      "props": {
+        "path": "tests/test_state_cache_ocr.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_taskbar_utils",
+      "type": "py_module",
+      "name": "tests.test_taskbar_utils",
+      "props": {
+        "path": "tests/test_taskbar_utils.py"
+      }
+    },
+    {
+      "id": "py_module:tests.test_webhook_hmac",
+      "type": "py_module",
+      "name": "tests.test_webhook_hmac",
+      "props": {
+        "path": "tests/test_webhook_hmac.py"
+      }
+    },
+    {
+      "id": "py_module:tts_formatter",
+      "type": "py_module",
+      "name": "tts_formatter",
+      "props": {
+        "path": "tts_formatter.py"
+      }
+    },
+    {
+      "id": "py_module:ui",
+      "type": "py_module",
+      "name": "ui",
+      "props": {
+        "path": "ui/__init__.py"
+      }
+    },
+    {
+      "id": "py_module:ui.ipc_server",
+      "type": "py_module",
+      "name": "ui.ipc_server",
+      "props": {
+        "path": "ui/ipc_server.py"
+      }
+    },
+    {
+      "id": "py_import:websockets.server",
+      "type": "py_import",
+      "name": "websockets.server"
+    },
+    {
+      "id": "py_module:vector_memory",
+      "type": "py_module",
+      "name": "vector_memory",
+      "props": {
+        "path": "vector_memory.py"
+      }
+    },
+    {
+      "id": "py_import:faiss",
+      "type": "py_import",
+      "name": "faiss"
+    },
+    {
+      "id": "py_import:sentence_transformers",
+      "type": "py_import",
+      "name": "sentence_transformers"
+    },
+    {
+      "id": "py_module:voice_io",
+      "type": "py_module",
+      "name": "voice_io",
+      "props": {
+        "path": "voice_io.py"
+      }
+    },
+    {
+      "id": "py_module:wake_word_listener",
+      "type": "py_module",
+      "name": "wake_word_listener",
+      "props": {
+        "path": "wake_word_listener.py"
+      }
+    },
+    {
+      "id": "py_import:pvporcupine",
+      "type": "py_import",
+      "name": "pvporcupine"
+    },
+    {
+      "id": "py_import:pyaudio",
+      "type": "py_import",
+      "name": "pyaudio"
+    },
+    {
+      "id": "py_module:win_action_test",
+      "type": "py_module",
+      "name": "win_action_test",
+      "props": {
+        "path": "win_action_test.py"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:req:requirements.txt:python-dotenv==1.0.1",
+      "from": "repo:root",
+      "to": "py_req:python-dotenv==1.0.1",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:requests==2.32.5",
+      "from": "repo:root",
+      "to": "py_req:requests==2.32.5",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:fastapi==0.115.2",
+      "from": "repo:root",
+      "to": "py_req:fastapi==0.115.2",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:uvicorn==0.30.6",
+      "from": "repo:root",
+      "to": "py_req:uvicorn==0.30.6",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pydantic==2.12.4",
+      "from": "repo:root",
+      "to": "py_req:pydantic==2.12.4",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:websockets==12.0",
+      "from": "repo:root",
+      "to": "py_req:websockets==12.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:playwright==1.55.0",
+      "from": "repo:root",
+      "to": "py_req:playwright==1.55.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:edge-tts==7.2.3",
+      "from": "repo:root",
+      "to": "py_req:edge-tts==7.2.3",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:playsound==1.2.2",
+      "from": "repo:root",
+      "to": "py_req:playsound==1.2.2",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pvporcupine==3.0.5",
+      "from": "repo:root",
+      "to": "py_req:pvporcupine==3.0.5",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:PyAudio==0.2.14",
+      "from": "repo:root",
+      "to": "py_req:PyAudio==0.2.14",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pyttsx3==2.99",
+      "from": "repo:root",
+      "to": "py_req:pyttsx3==2.99",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:SpeechRecognition==3.10.4",
+      "from": "repo:root",
+      "to": "py_req:SpeechRecognition==3.10.4",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:groq==0.33.0",
+      "from": "repo:root",
+      "to": "py_req:groq==0.33.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:numpy==2.1.3",
+      "from": "repo:root",
+      "to": "py_req:numpy==2.1.3",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:faiss-cpu==1.13.1; platform_system != \"Windows\"",
+      "from": "repo:root",
+      "to": "py_req:faiss-cpu==1.13.1; platform_system != \"Windows\"",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:sentence-transformers==2.7.0; platform_system != \"Windows\"",
+      "from": "repo:root",
+      "to": "py_req:sentence-transformers==2.7.0; platform_system != \"Windows\"",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:psutil==5.9.8",
+      "from": "repo:root",
+      "to": "py_req:psutil==5.9.8",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pyautogui==0.9.54",
+      "from": "repo:root",
+      "to": "py_req:pyautogui==0.9.54",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pywinauto==0.6.8",
+      "from": "repo:root",
+      "to": "py_req:pywinauto==0.6.8",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pillow==10.4.0",
+      "from": "repo:root",
+      "to": "py_req:pillow==10.4.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:uiautomation==2.0.18",
+      "from": "repo:root",
+      "to": "py_req:uiautomation==2.0.18",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements.txt:pytesseract==0.3.10",
+      "from": "repo:root",
+      "to": "py_req:pytesseract==0.3.10",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:pytest==8.3.4",
+      "from": "repo:root",
+      "to": "py_req:pytest==8.3.4",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:flask==3.0.3",
+      "from": "repo:root",
+      "to": "py_req:flask==3.0.3",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:requests==2.32.5",
+      "from": "repo:root",
+      "to": "py_req:requests==2.32.5",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:python-dotenv==1.0.1",
+      "from": "repo:root",
+      "to": "py_req:python-dotenv==1.0.1",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:websockets==12.0",
+      "from": "repo:root",
+      "to": "py_req:websockets==12.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:playwright==1.55.0",
+      "from": "repo:root",
+      "to": "py_req:playwright==1.55.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:fastapi==0.115.2",
+      "from": "repo:root",
+      "to": "py_req:fastapi==0.115.2",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:uvicorn==0.30.6",
+      "from": "repo:root",
+      "to": "py_req:uvicorn==0.30.6",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:pydantic==2.12.4",
+      "from": "repo:root",
+      "to": "py_req:pydantic==2.12.4",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:httpx==0.25.2",
+      "from": "repo:root",
+      "to": "py_req:httpx==0.25.2",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-dev.txt:python-telegram-bot==20.6",
+      "from": "repo:root",
+      "to": "py_req:python-telegram-bot==20.6",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:\ufeffpython-dotenv==1.0.1",
+      "from": "repo:root",
+      "to": "py_req:\ufeffpython-dotenv==1.0.1",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:requests==2.32.5",
+      "from": "repo:root",
+      "to": "py_req:requests==2.32.5",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:fastapi==0.115.2",
+      "from": "repo:root",
+      "to": "py_req:fastapi==0.115.2",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:uvicorn==0.30.6",
+      "from": "repo:root",
+      "to": "py_req:uvicorn==0.30.6",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pydantic==2.12.4",
+      "from": "repo:root",
+      "to": "py_req:pydantic==2.12.4",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:websockets==12.0",
+      "from": "repo:root",
+      "to": "py_req:websockets==12.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:playwright==1.55.0",
+      "from": "repo:root",
+      "to": "py_req:playwright==1.55.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:edge-tts==7.2.3",
+      "from": "repo:root",
+      "to": "py_req:edge-tts==7.2.3",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:playsound==1.2.2",
+      "from": "repo:root",
+      "to": "py_req:playsound==1.2.2",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pvporcupine==3.0.5",
+      "from": "repo:root",
+      "to": "py_req:pvporcupine==3.0.5",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:PyAudio==0.2.14",
+      "from": "repo:root",
+      "to": "py_req:PyAudio==0.2.14",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pyttsx3==2.99",
+      "from": "repo:root",
+      "to": "py_req:pyttsx3==2.99",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:SpeechRecognition==3.10.4",
+      "from": "repo:root",
+      "to": "py_req:SpeechRecognition==3.10.4",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:groq==0.33.0",
+      "from": "repo:root",
+      "to": "py_req:groq==0.33.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:numpy==2.1.3",
+      "from": "repo:root",
+      "to": "py_req:numpy==2.1.3",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:faiss-cpu==1.13.1; platform_system != \"Windows\"",
+      "from": "repo:root",
+      "to": "py_req:faiss-cpu==1.13.1; platform_system != \"Windows\"",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:sentence-transformers==2.7.0; platform_system != \"Windows\"",
+      "from": "repo:root",
+      "to": "py_req:sentence-transformers==2.7.0; platform_system != \"Windows\"",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:psutil==5.9.8",
+      "from": "repo:root",
+      "to": "py_req:psutil==5.9.8",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pyautogui==0.9.54",
+      "from": "repo:root",
+      "to": "py_req:pyautogui==0.9.54",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pywinauto==0.6.8",
+      "from": "repo:root",
+      "to": "py_req:pywinauto==0.6.8",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pillow==10.4.0",
+      "from": "repo:root",
+      "to": "py_req:pillow==10.4.0",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:uiautomation==2.0.18",
+      "from": "repo:root",
+      "to": "py_req:uiautomation==2.0.18",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:req:requirements-312.txt:pytesseract==0.3.10",
+      "from": "repo:root",
+      "to": "py_req:pytesseract==0.3.10",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:@playwright/test",
+      "from": "repo:root",
+      "to": "js_dep:@playwright/test",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:@types/node",
+      "from": "repo:root",
+      "to": "js_dep:@types/node",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:dependencies:electron",
+      "from": "repo:root",
+      "to": "js_dep:electron",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:cross-env",
+      "from": "repo:root",
+      "to": "js_dep:cross-env",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:electron-builder",
+      "from": "repo:root",
+      "to": "js_dep:electron-builder",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:eslint",
+      "from": "repo:root",
+      "to": "js_dep:eslint",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:dependencies:react",
+      "from": "repo:root",
+      "to": "js_dep:react",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:dependencies:react-dom",
+      "from": "repo:root",
+      "to": "js_dep:react-dom",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:@vitejs/plugin-react",
+      "from": "repo:root",
+      "to": "js_dep:@vitejs/plugin-react",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:jsdep:package.json:devDependencies:vite",
+      "from": "repo:root",
+      "to": "js_dep:vite",
+      "type": "declares_dependency"
+    },
+    {
+      "id": "edge:py_import:automation.action_planner:__future__",
+      "from": "py_module:automation.action_planner",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.action_planner:awareness.world_state",
+      "from": "py_module:automation.action_planner",
+      "to": "py_import:awareness.world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.action_planner:semantic_actions",
+      "from": "py_module:automation.action_planner",
+      "to": "py_import:semantic_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.action_planner:typing",
+      "from": "py_module:automation.action_planner",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.action_planner:ui_pattern_memory",
+      "from": "py_module:automation.action_planner",
+      "to": "py_import:ui_pattern_memory",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.amazon_shopping:__future__",
+      "from": "py_module:automation.amazon_shopping",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.amazon_shopping:asyncio",
+      "from": "py_module:automation.amazon_shopping",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.amazon_shopping:playwright_manager",
+      "from": "py_module:automation.amazon_shopping",
+      "to": "py_import:playwright_manager",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.amazon_shopping:quick_actions",
+      "from": "py_module:automation.amazon_shopping",
+      "to": "py_import:quick_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.amazon_shopping:typing",
+      "from": "py_module:automation.amazon_shopping",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:__future__",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:asyncio",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:awareness.event_dispatcher",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:awareness.event_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:awareness.types",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:awareness.types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:devtools_bridge",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:devtools_bridge",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:os",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:playwright_manager",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:playwright_manager",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:threading",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:time",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.browser_state_tracker:typing",
+      "from": "py_module:automation.browser_state_tracker",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:PIL",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:__future__",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:automation.taskbar_locator",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:automation.taskbar_locator",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:cv2",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:getpass",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:getpass",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:numpy",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:pyautogui",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:pyautogui",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:pytesseract",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:pytesseract",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:security.credential_vault",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:security.credential_vault",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:time",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.chrome_pipeline:typing",
+      "from": "py_module:automation.chrome_pipeline",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:__future__",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:action_planner",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:action_planner",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:automation.chrome_pipeline",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:automation.chrome_pipeline",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:awareness.perception_snapshot",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:awareness.world_state",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:awareness.world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:cognitive_loop_task_graph",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:cognitive_loop_task_graph",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:core.repair_diagnostics",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:core.repair_diagnostics",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:core.repair_strategies",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:core.repair_strategies",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:core.self_repair",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:core.self_repair",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:error_models",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:error_models",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:goal_parser",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:goal_parser",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:goal_schema",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:goal_schema",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:json",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:pathlib",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:state_gap_analyzer",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:state_gap_analyzer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:task_graph",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:task_graph",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:time",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:timing",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:timing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:typing",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop:ui_pattern_memory",
+      "from": "py_module:automation.cognitive_loop",
+      "to": "py_import:ui_pattern_memory",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop_task_graph:__future__",
+      "from": "py_module:automation.cognitive_loop_task_graph",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop_task_graph:automation.goal_schema",
+      "from": "py_module:automation.cognitive_loop_task_graph",
+      "to": "py_import:automation.goal_schema",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop_task_graph:automation.state_gap_analyzer",
+      "from": "py_module:automation.cognitive_loop_task_graph",
+      "to": "py_import:automation.state_gap_analyzer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop_task_graph:automation.task_graph",
+      "from": "py_module:automation.cognitive_loop_task_graph",
+      "to": "py_import:automation.task_graph",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop_task_graph:awareness.perception_snapshot",
+      "from": "py_module:automation.cognitive_loop_task_graph",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.cognitive_loop_task_graph:typing",
+      "from": "py_module:automation.cognitive_loop_task_graph",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:PIL",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:__future__",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:ctypes",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:ctypes",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:cv2",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:dataclasses",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:datetime",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:easyocr",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:easyocr",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:mss",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:mss",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:numpy",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:os",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:pathlib",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:pyautogui",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:pyautogui",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:pytesseract",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:pytesseract",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:pywinauto",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:pywinauto",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:quick_actions",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:quick_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:re",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.desktop_actions:typing",
+      "from": "py_module:automation.desktop_actions",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:__future__",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:asyncio",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:dataclasses",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:json",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:os",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:playwright_manager",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:playwright_manager",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:typing",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.devtools_bridge:websockets",
+      "from": "py_module:automation.devtools_bridge",
+      "to": "py_import:websockets",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.element_resolver:__future__",
+      "from": "py_module:automation.element_resolver",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.element_resolver:awareness.perception_snapshot",
+      "from": "py_module:automation.element_resolver",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.element_resolver:difflib",
+      "from": "py_module:automation.element_resolver",
+      "to": "py_import:difflib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.element_resolver:security.credential_vault",
+      "from": "py_module:automation.element_resolver",
+      "to": "py_import:security.credential_vault",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.element_resolver:typing",
+      "from": "py_module:automation.element_resolver",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.error_models:__future__",
+      "from": "py_module:automation.error_models",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.error_models:dataclasses",
+      "from": "py_module:automation.error_models",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.error_models:enum",
+      "from": "py_module:automation.error_models",
+      "to": "py_import:enum",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.error_models:semantic_actions",
+      "from": "py_module:automation.error_models",
+      "to": "py_import:semantic_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.error_models:typing",
+      "from": "py_module:automation.error_models",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.gmail_actions:__future__",
+      "from": "py_module:automation.gmail_actions",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.gmail_actions:asyncio",
+      "from": "py_module:automation.gmail_actions",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.gmail_actions:dataclasses",
+      "from": "py_module:automation.gmail_actions",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.gmail_actions:playwright_manager",
+      "from": "py_module:automation.gmail_actions",
+      "to": "py_import:playwright_manager",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_parser:__future__",
+      "from": "py_module:automation.goal_parser",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_parser:goal_schema",
+      "from": "py_module:automation.goal_parser",
+      "to": "py_import:goal_schema",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_parser:re",
+      "from": "py_module:automation.goal_parser",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_parser:typing",
+      "from": "py_module:automation.goal_parser",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_schema:__future__",
+      "from": "py_module:automation.goal_schema",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_schema:awareness.world_state",
+      "from": "py_module:automation.goal_schema",
+      "to": "py_import:awareness.world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_schema:dataclasses",
+      "from": "py_module:automation.goal_schema",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.goal_schema:typing",
+      "from": "py_module:automation.goal_schema",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:__future__",
+      "from": "py_module:automation.planner",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:automation.services",
+      "from": "py_module:automation.planner",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:awareness.snapshot",
+      "from": "py_module:automation.planner",
+      "to": "py_import:awareness.snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:awareness.state_cache",
+      "from": "py_module:automation.planner",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:capabilities",
+      "from": "py_module:automation.planner",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:cognitive_loop",
+      "from": "py_module:automation.planner",
+      "to": "py_import:cognitive_loop",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:re",
+      "from": "py_module:automation.planner",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:time",
+      "from": "py_module:automation.planner",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:typing",
+      "from": "py_module:automation.planner",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.planner:urllib.parse",
+      "from": "py_module:automation.planner",
+      "to": "py_import:urllib.parse",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:__future__",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:asyncio",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:contextlib",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:contextlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:os",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:pathlib",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:playwright.async_api",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:playwright.async_api",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:shutil",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:shutil",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:socket",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:socket",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:subprocess",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:subprocess",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:threading",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:time",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.playwright_manager:typing",
+      "from": "py_module:automation.playwright_manager",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.quick_actions:__future__",
+      "from": "py_module:automation.quick_actions",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.quick_actions:asyncio",
+      "from": "py_module:automation.quick_actions",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.quick_actions:dataclasses",
+      "from": "py_module:automation.quick_actions",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.quick_actions:playwright_manager",
+      "from": "py_module:automation.quick_actions",
+      "to": "py_import:playwright_manager",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.quick_actions:typing",
+      "from": "py_module:automation.quick_actions",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.semantic_actions:__future__",
+      "from": "py_module:automation.semantic_actions",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.semantic_actions:dataclasses",
+      "from": "py_module:automation.semantic_actions",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.semantic_actions:typing",
+      "from": "py_module:automation.semantic_actions",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:PIL",
+      "from": "py_module:automation.services",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:__future__",
+      "from": "py_module:automation.services",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:amazon_shopping",
+      "from": "py_module:automation.services",
+      "to": "py_import:amazon_shopping",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:asyncio",
+      "from": "py_module:automation.services",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:automation.timing",
+      "from": "py_module:automation.services",
+      "to": "py_import:automation.timing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:awareness.state_cache",
+      "from": "py_module:automation.services",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:awareness.world_state",
+      "from": "py_module:automation.services",
+      "to": "py_import:awareness.world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:core.telemetry",
+      "from": "py_module:automation.services",
+      "to": "py_import:core.telemetry",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:ctypes",
+      "from": "py_module:automation.services",
+      "to": "py_import:ctypes",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:dataclasses",
+      "from": "py_module:automation.services",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:datetime",
+      "from": "py_module:automation.services",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:desktop_actions",
+      "from": "py_module:automation.services",
+      "to": "py_import:desktop_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:devtools_bridge",
+      "from": "py_module:automation.services",
+      "to": "py_import:devtools_bridge",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:gmail_actions",
+      "from": "py_module:automation.services",
+      "to": "py_import:gmail_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:hashlib",
+      "from": "py_module:automation.services",
+      "to": "py_import:hashlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:os",
+      "from": "py_module:automation.services",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:pathlib",
+      "from": "py_module:automation.services",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:playwright_manager",
+      "from": "py_module:automation.services",
+      "to": "py_import:playwright_manager",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:pyautogui",
+      "from": "py_module:automation.services",
+      "to": "py_import:pyautogui",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:quick_actions",
+      "from": "py_module:automation.services",
+      "to": "py_import:quick_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:security.credential_vault",
+      "from": "py_module:automation.services",
+      "to": "py_import:security.credential_vault",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:semantic_actions",
+      "from": "py_module:automation.services",
+      "to": "py_import:semantic_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:subprocess",
+      "from": "py_module:automation.services",
+      "to": "py_import:subprocess",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:threading",
+      "from": "py_module:automation.services",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:time",
+      "from": "py_module:automation.services",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:timing",
+      "from": "py_module:automation.services",
+      "to": "py_import:timing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:typing",
+      "from": "py_module:automation.services",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:urllib.parse",
+      "from": "py_module:automation.services",
+      "to": "py_import:urllib.parse",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:verification",
+      "from": "py_module:automation.services",
+      "to": "py_import:verification",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.services:webbrowser",
+      "from": "py_module:automation.services",
+      "to": "py_import:webbrowser",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.state_gap_analyzer:__future__",
+      "from": "py_module:automation.state_gap_analyzer",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.state_gap_analyzer:awareness.world_state",
+      "from": "py_module:automation.state_gap_analyzer",
+      "to": "py_import:awareness.world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.state_gap_analyzer:goal_schema",
+      "from": "py_module:automation.state_gap_analyzer",
+      "to": "py_import:goal_schema",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.state_gap_analyzer:typing",
+      "from": "py_module:automation.state_gap_analyzer",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.task_graph:__future__",
+      "from": "py_module:automation.task_graph",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.task_graph:automation.semantic_actions",
+      "from": "py_module:automation.task_graph",
+      "to": "py_import:automation.semantic_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.task_graph:awareness.perception_snapshot",
+      "from": "py_module:automation.task_graph",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.task_graph:dataclasses",
+      "from": "py_module:automation.task_graph",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.task_graph:enum",
+      "from": "py_module:automation.task_graph",
+      "to": "py_import:enum",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.task_graph:typing",
+      "from": "py_module:automation.task_graph",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:PIL",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:__future__",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:automation.taskbar_trainer",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:automation.taskbar_trainer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:cv2",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:json",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:numpy",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:os",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:pathlib",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:pyautogui",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:pyautogui",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_locator:typing",
+      "from": "py_module:automation.taskbar_locator",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:PIL",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:__future__",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:ctypes",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:ctypes",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:cv2",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:json",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:numpy",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:os",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:pathlib",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:pyautogui",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:pyautogui",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:time",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.taskbar_trainer:typing",
+      "from": "py_module:automation.taskbar_trainer",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.timing:__future__",
+      "from": "py_module:automation.timing",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.timing:time",
+      "from": "py_module:automation.timing",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.timing:typing",
+      "from": "py_module:automation.timing",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:__future__",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:awareness.world_state",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:awareness.world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:dataclasses",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:json",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:pathlib",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:time",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.ui_pattern_memory:typing",
+      "from": "py_module:automation.ui_pattern_memory",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.verification:__future__",
+      "from": "py_module:automation.verification",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:automation.verification:typing",
+      "from": "py_module:automation.verification",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:__future__",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:event_dispatcher",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:event_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:process_watcher",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:process_watcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:state_cache",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:types",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:typing",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.controller:windows.uia_monitor",
+      "from": "py_module:awareness.controller",
+      "to": "py_import:windows.uia_monitor",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.event_dispatcher:__future__",
+      "from": "py_module:awareness.event_dispatcher",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.event_dispatcher:collections",
+      "from": "py_module:awareness.event_dispatcher",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.event_dispatcher:threading",
+      "from": "py_module:awareness.event_dispatcher",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.event_dispatcher:types",
+      "from": "py_module:awareness.event_dispatcher",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.event_dispatcher:typing",
+      "from": "py_module:awareness.event_dispatcher",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.perception_snapshot:__future__",
+      "from": "py_module:awareness.perception_snapshot",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.perception_snapshot:dataclasses",
+      "from": "py_module:awareness.perception_snapshot",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.perception_snapshot:hashlib",
+      "from": "py_module:awareness.perception_snapshot",
+      "to": "py_import:hashlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.perception_snapshot:time",
+      "from": "py_module:awareness.perception_snapshot",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.perception_snapshot:typing",
+      "from": "py_module:awareness.perception_snapshot",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:__future__",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:dataclasses",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:psutil",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:psutil",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:threading",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:time",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:types",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.process_watcher:typing",
+      "from": "py_module:awareness.process_watcher",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.snapshot:__future__",
+      "from": "py_module:awareness.snapshot",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.snapshot:time",
+      "from": "py_module:awareness.snapshot",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.snapshot:types",
+      "from": "py_module:awareness.snapshot",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.snapshot:typing",
+      "from": "py_module:awareness.snapshot",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:__future__",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:copy",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:copy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:pyautogui",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:pyautogui",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:snapshot",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:threading",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:time",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:types",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:typing",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:windows_accessibility",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:windows_accessibility",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.state_cache:world_state",
+      "from": "py_module:awareness.state_cache",
+      "to": "py_import:world_state",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.system_monitor:__future__",
+      "from": "py_module:awareness.system_monitor",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.system_monitor:dataclasses",
+      "from": "py_module:awareness.system_monitor",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.system_monitor:platform",
+      "from": "py_module:awareness.system_monitor",
+      "to": "py_import:platform",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.system_monitor:psutil",
+      "from": "py_module:awareness.system_monitor",
+      "to": "py_import:psutil",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.system_monitor:typing",
+      "from": "py_module:awareness.system_monitor",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.types:__future__",
+      "from": "py_module:awareness.types",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.types:dataclasses",
+      "from": "py_module:awareness.types",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.types:enum",
+      "from": "py_module:awareness.types",
+      "to": "py_import:enum",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.types:typing",
+      "from": "py_module:awareness.types",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:__future__",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:dataclasses",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:platform",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:platform",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:threading",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:time",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:types",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:typing",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows.uia_monitor:uiautomation",
+      "from": "py_module:awareness.windows.uia_monitor",
+      "to": "py_import:uiautomation",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows_accessibility:__future__",
+      "from": "py_module:awareness.windows_accessibility",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows_accessibility:ctypes",
+      "from": "py_module:awareness.windows_accessibility",
+      "to": "py_import:ctypes",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows_accessibility:dataclasses",
+      "from": "py_module:awareness.windows_accessibility",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows_accessibility:platform",
+      "from": "py_module:awareness.windows_accessibility",
+      "to": "py_import:platform",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows_accessibility:psutil",
+      "from": "py_module:awareness.windows_accessibility",
+      "to": "py_import:psutil",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.windows_accessibility:typing",
+      "from": "py_module:awareness.windows_accessibility",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.world_state:__future__",
+      "from": "py_module:awareness.world_state",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.world_state:dataclasses",
+      "from": "py_module:awareness.world_state",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.world_state:hashlib",
+      "from": "py_module:awareness.world_state",
+      "to": "py_import:hashlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.world_state:time",
+      "from": "py_module:awareness.world_state",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:awareness.world_state:typing",
+      "from": "py_module:awareness.world_state",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:capabilities:copy",
+      "from": "py_module:capabilities",
+      "to": "py_import:copy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:capabilities:json",
+      "from": "py_module:capabilities",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:capabilities:pathlib",
+      "from": "py_module:capabilities",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:capabilities:re",
+      "from": "py_module:capabilities",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:capabilities:typing",
+      "from": "py_module:capabilities",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:clip_test:PIL",
+      "from": "py_module:clip_test",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:clip_test:clip",
+      "from": "py_module:clip_test",
+      "to": "py_import:clip",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:clip_test:torch",
+      "from": "py_module:clip_test",
+      "to": "py_import:torch",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:dataclasses",
+      "from": "py_module:config",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:dotenv",
+      "from": "py_module:config",
+      "to": "py_import:dotenv",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:functools",
+      "from": "py_module:config",
+      "to": "py_import:functools",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:os",
+      "from": "py_module:config",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:pathlib",
+      "from": "py_module:config",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:__future__",
+      "from": "py_module:config",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:dataclasses",
+      "from": "py_module:config",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:dotenv",
+      "from": "py_module:config",
+      "to": "py_import:dotenv",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:functools",
+      "from": "py_module:config",
+      "to": "py_import:functools",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:os",
+      "from": "py_module:config",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:config:pathlib",
+      "from": "py_module:config",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:__future__",
+      "from": "py_module:core.assistant",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:asyncio",
+      "from": "py_module:core.assistant",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:automation.cognitive_loop",
+      "from": "py_module:core.assistant",
+      "to": "py_import:automation.cognitive_loop",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:automation.planner",
+      "from": "py_module:core.assistant",
+      "to": "py_import:automation.planner",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:automation.services",
+      "from": "py_module:core.assistant",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:awareness.snapshot",
+      "from": "py_module:core.assistant",
+      "to": "py_import:awareness.snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:awareness.state_cache",
+      "from": "py_module:core.assistant",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:core.capability_dispatcher",
+      "from": "py_module:core.assistant",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:core.intent_parser",
+      "from": "py_module:core.assistant",
+      "to": "py_import:core.intent_parser",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:core.llm_sanitizer",
+      "from": "py_module:core.assistant",
+      "to": "py_import:core.llm_sanitizer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:core.reasoner",
+      "from": "py_module:core.assistant",
+      "to": "py_import:core.reasoner",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:dataclasses",
+      "from": "py_module:core.assistant",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:memory.memory_controller",
+      "from": "py_module:core.assistant",
+      "to": "py_import:memory.memory_controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:os",
+      "from": "py_module:core.assistant",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:personality",
+      "from": "py_module:core.assistant",
+      "to": "py_import:personality",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:re",
+      "from": "py_module:core.assistant",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:services",
+      "from": "py_module:core.assistant",
+      "to": "py_import:services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:time",
+      "from": "py_module:core.assistant",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.assistant:typing",
+      "from": "py_module:core.assistant",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:__future__",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:automation.services",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:capabilities",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:core.telemetry",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:core.telemetry",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:dataclasses",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:re",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:services.news_service",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:services.news_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:typing",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.capability_dispatcher:urllib.parse",
+      "from": "py_module:core.capability_dispatcher",
+      "to": "py_import:urllib.parse",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.focus_watcher:__future__",
+      "from": "py_module:core.focus_watcher",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.focus_watcher:awareness.perception_snapshot",
+      "from": "py_module:core.focus_watcher",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.focus_watcher:awareness.state_cache",
+      "from": "py_module:core.focus_watcher",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.focus_watcher:time",
+      "from": "py_module:core.focus_watcher",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.focus_watcher:typing",
+      "from": "py_module:core.focus_watcher",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.intent_parser:__future__",
+      "from": "py_module:core.intent_parser",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.intent_parser:dataclasses",
+      "from": "py_module:core.intent_parser",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.intent_parser:re",
+      "from": "py_module:core.intent_parser",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.intent_parser:typing",
+      "from": "py_module:core.intent_parser",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.llm_sanitizer:__future__",
+      "from": "py_module:core.llm_sanitizer",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.llm_sanitizer:re",
+      "from": "py_module:core.llm_sanitizer",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.llm_sanitizer:typing",
+      "from": "py_module:core.llm_sanitizer",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.reasoner:__future__",
+      "from": "py_module:core.reasoner",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.reasoner:awareness.state_cache",
+      "from": "py_module:core.reasoner",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.reasoner:capabilities",
+      "from": "py_module:core.reasoner",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.reasoner:dataclasses",
+      "from": "py_module:core.reasoner",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.reasoner:os",
+      "from": "py_module:core.reasoner",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.reasoner:typing",
+      "from": "py_module:core.reasoner",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_diagnostics:__future__",
+      "from": "py_module:core.repair_diagnostics",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_diagnostics:awareness.perception_snapshot",
+      "from": "py_module:core.repair_diagnostics",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_diagnostics:typing",
+      "from": "py_module:core.repair_diagnostics",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_strategies:__future__",
+      "from": "py_module:core.repair_strategies",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_strategies:awareness.perception_snapshot",
+      "from": "py_module:core.repair_strategies",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_strategies:typing",
+      "from": "py_module:core.repair_strategies",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_telemetry:__future__",
+      "from": "py_module:core.repair_telemetry",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_telemetry:json",
+      "from": "py_module:core.repair_telemetry",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_telemetry:pathlib",
+      "from": "py_module:core.repair_telemetry",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_telemetry:time",
+      "from": "py_module:core.repair_telemetry",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.repair_telemetry:typing",
+      "from": "py_module:core.repair_telemetry",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.routine_scheduler:__future__",
+      "from": "py_module:core.routine_scheduler",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.routine_scheduler:dataclasses",
+      "from": "py_module:core.routine_scheduler",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.routine_scheduler:datetime",
+      "from": "py_module:core.routine_scheduler",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.routine_scheduler:threading",
+      "from": "py_module:core.routine_scheduler",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.routine_scheduler:time",
+      "from": "py_module:core.routine_scheduler",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.routine_scheduler:typing",
+      "from": "py_module:core.routine_scheduler",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:__future__",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:automation.semantic_actions",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:automation.semantic_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:automation.task_graph",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:automation.task_graph",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:awareness.perception_snapshot",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:core.repair_diagnostics",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:core.repair_diagnostics",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:core.repair_strategies",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:core.repair_strategies",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:core.repair_telemetry",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:core.repair_telemetry",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:dataclasses",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:time",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.self_repair:typing",
+      "from": "py_module:core.self_repair",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.telemetry:__future__",
+      "from": "py_module:core.telemetry",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.telemetry:collections",
+      "from": "py_module:core.telemetry",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.telemetry:json",
+      "from": "py_module:core.telemetry",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.telemetry:pathlib",
+      "from": "py_module:core.telemetry",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.telemetry:time",
+      "from": "py_module:core.telemetry",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.telemetry:typing",
+      "from": "py_module:core.telemetry",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:__future__",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:automation.taskbar_trainer",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:automation.taskbar_trainer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:automation.ui_pattern_memory",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:automation.ui_pattern_memory",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:awareness.controller",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:awareness.controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:awareness.perception_snapshot",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:awareness.perception_snapshot",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:awareness.state_cache",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:core.focus_watcher",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:core.focus_watcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:getpass",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:getpass",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:json",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:pathlib",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:security.credential_vault",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:security.credential_vault",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:time",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:core.training_controller:typing",
+      "from": "py_module:core.training_controller",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:asyncio",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:edge_tts",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:edge_tts",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:os",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:playsound",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:playsound",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:re",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:subprocess",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:subprocess",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:sys",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:sys",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:tempfile",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:tempfile",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:edge_tts_voice:time",
+      "from": "py_module:edge_tts_voice",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:groq_llm:config",
+      "from": "py_module:groq_llm",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:groq_llm:groq",
+      "from": "py_module:groq_llm",
+      "to": "py_import:groq",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:groq_llm:os",
+      "from": "py_module:groq_llm",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:groq_llm:re",
+      "from": "py_module:groq_llm",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:groq_llm:time",
+      "from": "py_module:groq_llm",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:distutils.version",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:distutils.version",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:os",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:packaging.version",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:packaging.version",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:pyttsx3",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:pyttsx3",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:queue",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:queue",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:setuptools._distutils.version",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:setuptools._distutils.version",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:speech_recognition",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:speech_recognition",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:subprocess",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:subprocess",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:sys",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:sys",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:threading",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:types",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:jarvis_io:winsound",
+      "from": "py_module:jarvis_io",
+      "to": "py_import:winsound",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:asyncio",
+      "from": "py_module:main",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:automation.browser_state_tracker",
+      "from": "py_module:main",
+      "to": "py_import:automation.browser_state_tracker",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:automation.services",
+      "from": "py_module:main",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:awareness.controller",
+      "from": "py_module:main",
+      "to": "py_import:awareness.controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:awareness.system_monitor",
+      "from": "py_module:main",
+      "to": "py_import:awareness.system_monitor",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:awareness.windows_accessibility",
+      "from": "py_module:main",
+      "to": "py_import:awareness.windows_accessibility",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:capabilities",
+      "from": "py_module:main",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:collections",
+      "from": "py_module:main",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:config",
+      "from": "py_module:main",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:core.assistant",
+      "from": "py_module:main",
+      "to": "py_import:core.assistant",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:core.capability_dispatcher",
+      "from": "py_module:main",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:core.routine_scheduler",
+      "from": "py_module:main",
+      "to": "py_import:core.routine_scheduler",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:core.telemetry",
+      "from": "py_module:main",
+      "to": "py_import:core.telemetry",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:edge_tts_voice",
+      "from": "py_module:main",
+      "to": "py_import:edge_tts_voice",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:groq_llm",
+      "from": "py_module:main",
+      "to": "py_import:groq_llm",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:importlib",
+      "from": "py_module:main",
+      "to": "py_import:importlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:jarvis_io",
+      "from": "py_module:main",
+      "to": "py_import:jarvis_io",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:memory.memory_controller",
+      "from": "py_module:main",
+      "to": "py_import:memory.memory_controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:os",
+      "from": "py_module:main",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:pathlib",
+      "from": "py_module:main",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:personality",
+      "from": "py_module:main",
+      "to": "py_import:personality",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:plugins",
+      "from": "py_module:main",
+      "to": "py_import:plugins",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:queue",
+      "from": "py_module:main",
+      "to": "py_import:queue",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:re",
+      "from": "py_module:main",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:server.app",
+      "from": "py_module:main",
+      "to": "py_import:server.app",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:services.maps_service",
+      "from": "py_module:main",
+      "to": "py_import:services.maps_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:services.weather_service",
+      "from": "py_module:main",
+      "to": "py_import:services.weather_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:socket",
+      "from": "py_module:main",
+      "to": "py_import:socket",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:struct",
+      "from": "py_module:main",
+      "to": "py_import:struct",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:threading",
+      "from": "py_module:main",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:time",
+      "from": "py_module:main",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:traceback",
+      "from": "py_module:main",
+      "to": "py_import:traceback",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:tts_formatter",
+      "from": "py_module:main",
+      "to": "py_import:tts_formatter",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:main:ui.ipc_server",
+      "from": "py_module:main",
+      "to": "py_import:ui.ipc_server",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory:memory_controller",
+      "from": "py_module:memory",
+      "to": "py_import:memory_controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory:short_term_buffer",
+      "from": "py_module:memory",
+      "to": "py_import:short_term_buffer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:__future__",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:dataclasses",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:datetime",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:memory_core",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:memory_core",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:re",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:short_term_buffer",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:short_term_buffer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:typing",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.memory_controller:vector_memory",
+      "from": "py_module:memory.memory_controller",
+      "to": "py_import:vector_memory",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.short_term_buffer:collections",
+      "from": "py_module:memory.short_term_buffer",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.short_term_buffer:dataclasses",
+      "from": "py_module:memory.short_term_buffer",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory.short_term_buffer:typing",
+      "from": "py_module:memory.short_term_buffer",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory_core:difflib",
+      "from": "py_module:memory_core",
+      "to": "py_import:difflib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory_core:json",
+      "from": "py_module:memory_core",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:memory_core:os",
+      "from": "py_module:memory_core",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ocr_roi_test:PIL",
+      "from": "py_module:ocr_roi_test",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ocr_roi_test:cv2",
+      "from": "py_module:ocr_roi_test",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ocr_roi_test:numpy",
+      "from": "py_module:ocr_roi_test",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ocr_roi_test:pytesseract",
+      "from": "py_module:ocr_roi_test",
+      "to": "py_import:pytesseract",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ocr_test:PIL",
+      "from": "py_module:ocr_test",
+      "to": "py_import:PIL",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ocr_test:pytesseract",
+      "from": "py_module:ocr_test",
+      "to": "py_import:pytesseract",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins:loader",
+      "from": "py_module:plugins",
+      "to": "py_import:loader",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.calendar_scheduler.module:__future__",
+      "from": "py_module:plugins.calendar_scheduler.module",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.calendar_scheduler.module:automation.services",
+      "from": "py_module:plugins.calendar_scheduler.module",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.calendar_scheduler.module:core.capability_dispatcher",
+      "from": "py_module:plugins.calendar_scheduler.module",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.calendar_scheduler.module:datetime",
+      "from": "py_module:plugins.calendar_scheduler.module",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.calendar_scheduler.module:typing",
+      "from": "py_module:plugins.calendar_scheduler.module",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.gmail_sender.module:__future__",
+      "from": "py_module:plugins.gmail_sender.module",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.gmail_sender.module:automation.gmail_actions",
+      "from": "py_module:plugins.gmail_sender.module",
+      "to": "py_import:automation.gmail_actions",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.gmail_sender.module:core.capability_dispatcher",
+      "from": "py_module:plugins.gmail_sender.module",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.gmail_sender.module:core.intent_parser",
+      "from": "py_module:plugins.gmail_sender.module",
+      "to": "py_import:core.intent_parser",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:__future__",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:capabilities",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:core.capability_dispatcher",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:dataclasses",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:importlib.util",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:importlib.util",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:json",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:pathlib",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:sys",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:sys",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:types",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.loader:typing",
+      "from": "py_module:plugins.loader",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.status_monitor.module:__future__",
+      "from": "py_module:plugins.status_monitor.module",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.status_monitor.module:awareness.system_monitor",
+      "from": "py_module:plugins.status_monitor.module",
+      "to": "py_import:awareness.system_monitor",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.status_monitor.module:core.capability_dispatcher",
+      "from": "py_module:plugins.status_monitor.module",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:plugins.status_monitor.module:typing",
+      "from": "py_module:plugins.status_monitor.module",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:quick_test_maps:dotenv",
+      "from": "py_module:quick_test_maps",
+      "to": "py_import:dotenv",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:quick_test_maps:services.maps_service",
+      "from": "py_module:quick_test_maps",
+      "to": "py_import:services.maps_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:asyncio",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:dotenv",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:dotenv",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:os",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:pathlib",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:requests",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:sys",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:sys",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:telegram",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:telegram",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:telegram.ext",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:telegram.ext",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.telegram_relay:typing",
+      "from": "py_module:remote.telegram_relay",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:collections",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:dotenv",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:dotenv",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:fastapi",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:fastapi",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:hashlib",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:hashlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:hmac",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:hmac",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:json",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:os",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:pathlib",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:pydantic",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:pydantic",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:requests",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:sys",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:sys",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:time",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:typing",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:remote.webhook_server:uvicorn",
+      "from": "py_module:remote.webhook_server",
+      "to": "py_import:uvicorn",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_change_ocr:cv2",
+      "from": "py_module:roi_change_ocr",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_change_ocr:mss",
+      "from": "py_module:roi_change_ocr",
+      "to": "py_import:mss",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_change_ocr:numpy",
+      "from": "py_module:roi_change_ocr",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_change_ocr:pytesseract",
+      "from": "py_module:roi_change_ocr",
+      "to": "py_import:pytesseract",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_change_ocr:time",
+      "from": "py_module:roi_change_ocr",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_changes_test:cv2",
+      "from": "py_module:roi_changes_test",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_changes_test:mss",
+      "from": "py_module:roi_changes_test",
+      "to": "py_import:mss",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_changes_test:numpy",
+      "from": "py_module:roi_changes_test",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:roi_changes_test:time",
+      "from": "py_module:roi_changes_test",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:__future__",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:argparse",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:argparse",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:automation.taskbar_locator",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:automation.taskbar_locator",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:automation.taskbar_trainer",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:automation.taskbar_trainer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:cv2",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:cv2",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:json",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:pathlib",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:sys",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:sys",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:scripts.taskbar_debug_run:typing",
+      "from": "py_module:scripts.taskbar_debug_run",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security:credential_vault",
+      "from": "py_module:security",
+      "to": "py_import:credential_vault",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:__future__",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:json",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:os",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:pathlib",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:threading",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:typing",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:security.credential_vault:win32crypt",
+      "from": "py_module:security.credential_vault",
+      "to": "py_import:win32crypt",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:__future__",
+      "from": "py_module:server.app",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:collections",
+      "from": "py_module:server.app",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:fastapi",
+      "from": "py_module:server.app",
+      "to": "py_import:fastapi",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:fastapi.responses",
+      "from": "py_module:server.app",
+      "to": "py_import:fastapi.responses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:fastapi.staticfiles",
+      "from": "py_module:server.app",
+      "to": "py_import:fastapi.staticfiles",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:ipaddress",
+      "from": "py_module:server.app",
+      "to": "py_import:ipaddress",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:json",
+      "from": "py_module:server.app",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:os",
+      "from": "py_module:server.app",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:pathlib",
+      "from": "py_module:server.app",
+      "to": "py_import:pathlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:pydantic",
+      "from": "py_module:server.app",
+      "to": "py_import:pydantic",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:threading",
+      "from": "py_module:server.app",
+      "to": "py_import:threading",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:time",
+      "from": "py_module:server.app",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:typing",
+      "from": "py_module:server.app",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:server.app:uvicorn",
+      "from": "py_module:server.app",
+      "to": "py_import:uvicorn",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.distancematrix_service:config",
+      "from": "py_module:services.distancematrix_service",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.distancematrix_service:dataclasses",
+      "from": "py_module:services.distancematrix_service",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.distancematrix_service:os",
+      "from": "py_module:services.distancematrix_service",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.distancematrix_service:requests",
+      "from": "py_module:services.distancematrix_service",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.distancematrix_service:typing",
+      "from": "py_module:services.distancematrix_service",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.maps_service:services.distancematrix_service",
+      "from": "py_module:services.maps_service",
+      "to": "py_import:services.distancematrix_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.market_service:__future__",
+      "from": "py_module:services.market_service",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.market_service:config",
+      "from": "py_module:services.market_service",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.market_service:datetime",
+      "from": "py_module:services.market_service",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.market_service:requests",
+      "from": "py_module:services.market_service",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.market_service:typing",
+      "from": "py_module:services.market_service",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.news_service:__future__",
+      "from": "py_module:services.news_service",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.news_service:config",
+      "from": "py_module:services.news_service",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.news_service:requests",
+      "from": "py_module:services.news_service",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.news_service:typing",
+      "from": "py_module:services.news_service",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.search_service:__future__",
+      "from": "py_module:services.search_service",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.search_service:config",
+      "from": "py_module:services.search_service",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.search_service:requests",
+      "from": "py_module:services.search_service",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.weather_service:config",
+      "from": "py_module:services.weather_service",
+      "to": "py_import:config",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.weather_service:os",
+      "from": "py_module:services.weather_service",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.weather_service:requests",
+      "from": "py_module:services.weather_service",
+      "to": "py_import:requests",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.weather_service:time",
+      "from": "py_module:services.weather_service",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:services.weather_service:typing",
+      "from": "py_module:services.weather_service",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:start_remote_server:queue",
+      "from": "py_module:start_remote_server",
+      "to": "py_import:queue",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:start_remote_server:server.app",
+      "from": "py_module:start_remote_server",
+      "to": "py_import:server.app",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:start_remote_server:time",
+      "from": "py_module:start_remote_server",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:test_pydantic_ai:dotenv",
+      "from": "py_module:test_pydantic_ai",
+      "to": "py_import:dotenv",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:test_pydantic_ai:os",
+      "from": "py_module:test_pydantic_ai",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:test_pydantic_ai:pydantic_ai",
+      "from": "py_module:test_pydantic_ai",
+      "to": "py_import:pydantic_ai",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.mocks.mock_api:__future__",
+      "from": "py_module:tests.mocks.mock_api",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.mocks.mock_api:flask",
+      "from": "py_module:tests.mocks.mock_api",
+      "to": "py_import:flask",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.mocks.mock_api:math",
+      "from": "py_module:tests.mocks.mock_api",
+      "to": "py_import:math",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.mocks.mock_api:typing",
+      "from": "py_module:tests.mocks.mock_api",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:__future__",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:asyncio",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:automation",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:automation",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:automation.browser_state_tracker",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:automation.browser_state_tracker",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:awareness.event_dispatcher",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:awareness.event_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:awareness.types",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:awareness.types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:pytest",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:pytest",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_automation_components:typing",
+      "from": "py_module:tests.test_automation_components",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:__future__",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:awareness.event_dispatcher",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:awareness.event_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:awareness.state_cache",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:awareness.types",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:awareness.types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:collections",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:collections",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:pytest",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:pytest",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness:typing",
+      "from": "py_module:tests.test_awareness",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness_state_cache:asyncio",
+      "from": "py_module:tests.test_awareness_state_cache",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness_state_cache:automation.browser_state_tracker",
+      "from": "py_module:tests.test_awareness_state_cache",
+      "to": "py_import:automation.browser_state_tracker",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_awareness_state_cache:types",
+      "from": "py_module:tests.test_awareness_state_cache",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_capabilities:capabilities",
+      "from": "py_module:tests.test_capabilities",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_capabilities:core.assistant",
+      "from": "py_module:tests.test_capabilities",
+      "to": "py_import:core.assistant",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_capabilities:core.capability_dispatcher",
+      "from": "py_module:tests.test_capabilities",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_capabilities:memory.memory_controller",
+      "from": "py_module:tests.test_capabilities",
+      "to": "py_import:memory.memory_controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_capabilities:personality",
+      "from": "py_module:tests.test_capabilities",
+      "to": "py_import:personality",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_capability_priority_edge_cases:capabilities",
+      "from": "py_module:tests.test_capability_priority_edge_cases",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_distancematrix:json",
+      "from": "py_module:tests.test_distancematrix",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_distancematrix:services.distancematrix_service",
+      "from": "py_module:tests.test_distancematrix",
+      "to": "py_import:services.distancematrix_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_distancematrix:types",
+      "from": "py_module:tests.test_distancematrix",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_maps_distance:os",
+      "from": "py_module:tests.test_maps_distance",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_maps_distance:pytest",
+      "from": "py_module:tests.test_maps_distance",
+      "to": "py_import:pytest",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_maps_distance:re",
+      "from": "py_module:tests.test_maps_distance",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_maps_distance:services.maps_service",
+      "from": "py_module:tests.test_maps_distance",
+      "to": "py_import:services.maps_service",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner:__future__",
+      "from": "py_module:tests.test_planner",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner:automation.planner",
+      "from": "py_module:tests.test_planner",
+      "to": "py_import:automation.planner",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner:dataclasses",
+      "from": "py_module:tests.test_planner",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner:pytest",
+      "from": "py_module:tests.test_planner",
+      "to": "py_import:pytest",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner_recovery:automation.planner",
+      "from": "py_module:tests.test_planner_recovery",
+      "to": "py_import:automation.planner",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner_recovery:automation.services",
+      "from": "py_module:tests.test_planner_recovery",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner_recovery:types",
+      "from": "py_module:tests.test_planner_recovery",
+      "to": "py_import:types",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner_reload:automation.planner",
+      "from": "py_module:tests.test_planner_reload",
+      "to": "py_import:automation.planner",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_planner_reload:automation.services",
+      "from": "py_module:tests.test_planner_reload",
+      "to": "py_import:automation.services",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_prompt_builder:capabilities",
+      "from": "py_module:tests.test_prompt_builder",
+      "to": "py_import:capabilities",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_prompt_builder:core.assistant",
+      "from": "py_module:tests.test_prompt_builder",
+      "to": "py_import:core.assistant",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_prompt_builder:core.capability_dispatcher",
+      "from": "py_module:tests.test_prompt_builder",
+      "to": "py_import:core.capability_dispatcher",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_prompt_builder:memory.memory_controller",
+      "from": "py_module:tests.test_prompt_builder",
+      "to": "py_import:memory.memory_controller",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_prompt_builder:personality",
+      "from": "py_module:tests.test_prompt_builder",
+      "to": "py_import:personality",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_prompt_builder:re",
+      "from": "py_module:tests.test_prompt_builder",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_remote_execute:fastapi.testclient",
+      "from": "py_module:tests.test_remote_execute",
+      "to": "py_import:fastapi.testclient",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_remote_execute:importlib",
+      "from": "py_module:tests.test_remote_execute",
+      "to": "py_import:importlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_remote_reload:fastapi.testclient",
+      "from": "py_module:tests.test_remote_reload",
+      "to": "py_import:fastapi.testclient",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_remote_reload:importlib",
+      "from": "py_module:tests.test_remote_reload",
+      "to": "py_import:importlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_state_cache_ocr:awareness.state_cache",
+      "from": "py_module:tests.test_state_cache_ocr",
+      "to": "py_import:awareness.state_cache",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_state_cache_ocr:time",
+      "from": "py_module:tests.test_state_cache_ocr",
+      "to": "py_import:time",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_taskbar_utils:__future__",
+      "from": "py_module:tests.test_taskbar_utils",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_taskbar_utils:automation.taskbar_trainer",
+      "from": "py_module:tests.test_taskbar_utils",
+      "to": "py_import:automation.taskbar_trainer",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_webhook_hmac:fastapi.testclient",
+      "from": "py_module:tests.test_webhook_hmac",
+      "to": "py_import:fastapi.testclient",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_webhook_hmac:hashlib",
+      "from": "py_module:tests.test_webhook_hmac",
+      "to": "py_import:hashlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_webhook_hmac:hmac",
+      "from": "py_module:tests.test_webhook_hmac",
+      "to": "py_import:hmac",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_webhook_hmac:importlib",
+      "from": "py_module:tests.test_webhook_hmac",
+      "to": "py_import:importlib",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_webhook_hmac:json",
+      "from": "py_module:tests.test_webhook_hmac",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tests.test_webhook_hmac:os",
+      "from": "py_module:tests.test_webhook_hmac",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tts_formatter:personality",
+      "from": "py_module:tts_formatter",
+      "to": "py_import:personality",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tts_formatter:re",
+      "from": "py_module:tts_formatter",
+      "to": "py_import:re",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:tts_formatter:urllib.parse",
+      "from": "py_module:tts_formatter",
+      "to": "py_import:urllib.parse",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:__future__",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:__future__",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:asyncio",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:asyncio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:dataclasses",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:dataclasses",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:json",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:typing",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:websockets",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:websockets",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:ui.ipc_server:websockets.server",
+      "from": "py_module:ui.ipc_server",
+      "to": "py_import:websockets.server",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:datetime",
+      "from": "py_module:vector_memory",
+      "to": "py_import:datetime",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:faiss",
+      "from": "py_module:vector_memory",
+      "to": "py_import:faiss",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:json",
+      "from": "py_module:vector_memory",
+      "to": "py_import:json",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:math",
+      "from": "py_module:vector_memory",
+      "to": "py_import:math",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:numpy",
+      "from": "py_module:vector_memory",
+      "to": "py_import:numpy",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:os",
+      "from": "py_module:vector_memory",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:sentence_transformers",
+      "from": "py_module:vector_memory",
+      "to": "py_import:sentence_transformers",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:vector_memory:typing",
+      "from": "py_module:vector_memory",
+      "to": "py_import:typing",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:voice_io:speech_recognition",
+      "from": "py_module:voice_io",
+      "to": "py_import:speech_recognition",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:wake_word_listener:os",
+      "from": "py_module:wake_word_listener",
+      "to": "py_import:os",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:wake_word_listener:pvporcupine",
+      "from": "py_module:wake_word_listener",
+      "to": "py_import:pvporcupine",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:wake_word_listener:pyaudio",
+      "from": "py_module:wake_word_listener",
+      "to": "py_import:pyaudio",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:wake_word_listener:struct",
+      "from": "py_module:wake_word_listener",
+      "to": "py_import:struct",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:win_action_test:ctypes",
+      "from": "py_module:win_action_test",
+      "to": "py_import:ctypes",
+      "type": "imports"
+    },
+    {
+      "id": "edge:py_import:win_action_test:time",
+      "from": "py_module:win_action_test",
+      "to": "py_import:time",
+      "type": "imports"
+    }
+  ]
+}

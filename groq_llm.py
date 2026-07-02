@@ -1,41 +1,126 @@
 import re
-from groq import Groq
-# Comment out or remove this line since it's causing error
-# from memory_core import should_continue
+import time
+import os
+from config import get_settings
 
-client = Groq(api_key="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")
+try:
+    from groq import Groq
+except Exception:
+    Groq = None  # type: ignore
+
+SETTINGS = get_settings()
+_groq_client = None
+
+_MAX_TOKENS = int(os.getenv("GROQ_MAX_TOKENS", "1536"))
+_MAX_CONTINUATIONS = int(os.getenv("GROQ_MAX_CONTINUATIONS", "2"))
+_MAX_OUTPUT_CHARS = int(os.getenv("GROQ_MAX_OUTPUT_CHARS", "12000"))
 
 def remove_think_blocks(text):
-    # Remove all <think>...</think> blocks and their contents completely
-    cleaned = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
-    return cleaned.strip()
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
-def query_qwen(prompt, memory_snippet=""):
-    final_prompt = (memory_snippet + " " + prompt).strip()
+def clean_output(text):
+    text = remove_think_blocks(text)
+    text = text.replace("Jarvis:", "").replace("JARVIS:", "").strip()
+    return text
 
-    # Temporarily skip this check
-    # if not should_continue(final_prompt):
-    #     return "Sorry, your request is too long for me to handle."
+def _stringify_memory(memory_snippet):
+    if not memory_snippet:
+        return ""
+    if isinstance(memory_snippet, str):
+        return memory_snippet
+    if isinstance(memory_snippet, (list, tuple)):
+        return "\n".join(str(item) for item in memory_snippet if item)
+    if isinstance(memory_snippet, dict):
+        return "\n".join(f"{key}: {value}" for key, value in memory_snippet.items())
+    return str(memory_snippet)
 
-    try:
-        response = client.chat.completions.create(
-            model="qwen-qwq-32b",
-            messages=[
-                {"role": "system", "content": "You are Jarvis, a helpful AI assistant."},
-                {"role": "user", "content": final_prompt}
-            ],
-            temperature=0.7,
-            max_tokens=1024
-        )
 
-        raw_result = response.choices[0].message.content.strip()
-        final_result = remove_think_blocks(raw_result)
+def query_groq(prompt, memory_snippet=""):
+    memory_text = _stringify_memory(memory_snippet)
+    final_prompt = (memory_text + "\n\n" + prompt).strip()
 
-        if not final_result:
-            return raw_result
-        return final_result
+    api_key = getattr(SETTINGS, "groq_api_key", None)
+    if not api_key:
+        return "[LLM unavailable] GROQ_API_KEY is not set."
 
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return f"Groq API error: {str(e)}"
+    if Groq is None:
+        return "[LLM unavailable] 'groq' package is not installed in this environment. Install it to enable LLM responses."
+
+    global _groq_client
+    if _groq_client is None:
+        _groq_client = Groq(api_key=api_key)
+
+    last_err = None
+    for attempt in range(1, 4):  # up to 3 attempts
+        try:
+            system_msg = {
+                "role": "system",
+                "content": (
+                    "You are JARVIS, a realistic, intelligent voice assistant created by Shreesh. "
+                    "You never refer to yourself as a human, boyfriend, or god. Your tone is helpful, witty, and sharp — like a true AI companion. "
+                    "Avoid repeating the user's prompt or including random hallucinations."
+                ),
+            }
+
+            messages = [system_msg, {"role": "user", "content": final_prompt}]
+            out_parts = []
+            finish_reason = None
+
+            for cont_idx in range(_MAX_CONTINUATIONS + 1):
+                response = _groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=messages,
+                    temperature=0.7,
+                    max_tokens=_MAX_TOKENS,
+                )
+
+                try:
+                    finish_reason = getattr(response.choices[0], "finish_reason", None)
+                except Exception:
+                    finish_reason = None
+
+                raw = (response.choices[0].message.content or "").strip()
+                cleaned = clean_output(raw)
+                piece = cleaned if cleaned else raw
+                if piece:
+                    out_parts.append(piece)
+
+                combined = "\n".join([p for p in out_parts if p]).strip()
+                if combined and len(combined) >= _MAX_OUTPUT_CHARS:
+                    return combined[:_MAX_OUTPUT_CHARS].rstrip()
+
+                if finish_reason != "length":
+                    break
+
+                if cont_idx >= _MAX_CONTINUATIONS:
+                    break
+
+                messages = [
+                    system_msg,
+                    {"role": "user", "content": final_prompt},
+                    {"role": "assistant", "content": raw},
+                    {
+                        "role": "user",
+                        "content": "Continue exactly where you left off. Do not repeat earlier content.",
+                    },
+                ]
+
+            return "\n".join([p for p in out_parts if p]).strip()
+        except Exception as e:
+            msg = str(e) if e else "Unknown error"
+            last_err = msg
+            # Reinitialize client on protocol/connection errors once
+            if attempt == 1 and ("protocol error" in msg.lower() or "connection" in msg.lower()):
+                try:
+                    time.sleep(0.6)
+                    # recreate client
+                    globals()["_groq_client"] = Groq(api_key=api_key)
+                except Exception:
+                    pass
+            # Backoff and retry
+            if attempt < 3:
+                time.sleep(0.8 * attempt)
+                continue
+            break
+
+    return f"[ERROR from Groq API]: {last_err or 'Unknown error'}"
