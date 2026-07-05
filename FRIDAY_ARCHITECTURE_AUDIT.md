@@ -447,22 +447,22 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 |-------------|------------------------------|------------------------|-----------|
 | Ch 5 Ontology (Goal/Capability/Env/Evidence) | `planner/requirements.py`, `tools/registry.py`, `verification/evidence_law.py` | Goal object, Environment type, Belief type, Strategy type | 25% |
 | Ch 6 Cognitive Architecture (3 layers) | `planner/requirements.py` (Understanding), `planner/operator_planner.py` (Reasoning), `executor.py` (Operation) | Clean separation; continuous loop | 30% |
-| Ch 7 Intent Analysis | `planner/requirements.py`, `planner/goal_parser.py` | Intent Object, assumption spectrum, clarification policy, complexity | 35% |
-| Ch 8 Problem Classification | `planner/operator_planner.py::_generic_capabilities` (shadow) | Problem classes, Problem Graph, reclassification | 5% |
-| Ch 9 World Model | `perception/world_state.py`, `perception/types.py`, `perception/priority.py` | Beliefs, confidence, evidence graph, expiration, relationships, Desired/Predicted worlds | 20% |
-| Ch 10 Deliberation | `planner/operator_planner.py`, `capabilities/web_agent.py` (partial loop) | Utility function, candidate generation, next-action model | 25% |
+| Ch 7 Intent Analysis | `intent/{intent,analyzer}.py` (M5: immutable Intent, Assumption spectrum, clarification policy, complexity estimate, kernel-event-driven IntentAnalyzer); `planner/requirements.py`, `planner/goal_parser.py` | LLM-backed analysis behind the same interface | 60% |
+| Ch 8 Problem Classification | `intent/classifier.py` (M5: weighted multi-class ProblemClassifier with reclassify(); deterministic, app-agnostic signals) | Problem Graph; evidence-driven reclassification triggers | 45% |
+| Ch 9 World Model | `world/{belief,objects,worlds,world_model}.py` (M2: beliefs with confidence/decay/expiry, object graph, Observed/Predicted/Desired worlds, kernel-event-fed WorldModel); legacy `perception/world_state.py` kept for the pipeline until M6 | Predictive modelling; pipeline migration (M6) | 55% |
+| Ch 10 Deliberation | `deliberation/{candidate,utility,deliberator}.py` (M4: CandidateAction with PredictedOutcome, deterministic UtilityFunction, Deliberator); `planner/operator_planner.py` | LLM-backed candidate generation; next-action model | 50% |
 | Ch 11 Operation | `executor.py`, `actions/primitives.py`, `actions/adapters/*` | Interruptible, event-driven, observe-between-actions | 55% |
-| Ch 12 Perception | `perception/{screen,ocr,vision,desktop,browser}.py` | Uniform sensor contract, Observation type, fusion engine, attention | 30% |
+| Ch 12 Perception | `perception/{screen,ocr,vision,desktop,browser}.py`; M2 adds `perception/{contracts,observation,fusion}.py` (SensorContract, uniform Observation, noisy-OR SensorFusion, ScreenSensor adapter) | Migrate remaining sensors to SensorContract; attention | 45% |
 | Ch 13 Reflection | — | Entire subsystem | 0% |
 | Ch 14 Memory | `memory/{controller,working,episodic,procedural,semantic,stores,interfaces}.py` | Wiring to Kernel/Reflection; behavioural formation | 30% |
 | Ch 15 Learning | `learning/__init__.py` (empty) | Entire subsystem | 2% |
 | Ch 16 Capabilities | `tools/registry.py`, `actions/primitives.py`, `actions/adapters/*` | Capability contract, handlers, confidence, versioning, sandbox | 25% |
-| Ch 17 Persistent Runtime | — (legacy `main.py` blocked) | Entire runtime | 0% |
-| Ch 18 Goal Lifecycle | `planner/requirements.py` (RequirementSet) | Goal object, state machine, persistence, suspension | 15% |
-| Ch 19 Goal Graph | — | Entire graph | 0% |
-| Ch 20 Cognitive Kernel | — | Entire kernel | 0% |
-| Ch 21 Event System | `operator.py` (trace list only) | Event bus, schema, causality, replay, persistence | 0% |
-| Ch 22 Decision Architecture | `executor.py` (implicit) | Candidate sets, utility, decision records, hard boundaries | 20% |
+| Ch 17 Persistent Runtime | `kernel/scheduler.py`, `kernel/checkpoint.py` (M1: continuous tick loop + checkpoint/restore) | Goal execution on the runtime; session continuity across reboots | 40% |
+| Ch 18 Goal Lifecycle | `goals/goal.py` (M3: immutable Goal, legal-transition state machine incl. suspension, failure reasons, serialization); `planner/requirements.py` | Wiring the pipeline to Goal objects (M6) | 55% |
+| Ch 19 Goal Graph | `goals/graph.py`, `goals/manager.py` (M3: decomposition + dependency graph, cycle detection, readiness, kernel-event-driven GoalManager with auto parent completion) | Priority/utility ordering (M4) | 50% |
+| Ch 20 Cognitive Kernel | `kernel/kernel.py`, `kernel/clock.py`, `kernel/contracts/*`, `kernel/echo_runtime.py` (M1) | World Model/Goal Graph ownership (M2/M3); capability dispatch (M7) | 45% |
+| Ch 21 Event System | `events/event.py`, `events/bus.py`, `events/store.py` (M1: immutable signed events, pattern bus, append-only store, replay, checkpoints) | Async handler queues; cross-process event transport | 55% |
+| Ch 22 Decision Architecture | `deliberation/deliberator.py` (M4: candidate sets, utility ranking, immutable DecisionRecords on the event log, inaction threshold, irreversibility penalty); `executor.py` | Hard boundaries / permission gates (M5+) | 50% |
 | Ch 23 Environment Architecture | `actions/browser_strategy.py`, `actions/browser_factory.py` | Environment contract, graph, nesting, discovery | 35% |
 | Ch 24 Interaction Architecture | `actions/adapters/resolver.py` + adapters | Per-interaction prediction/verification | 45% |
 | Ch 25/66 Exploration | `capabilities/web_agent.py` (browser-only shadow) | Object graph, affordance inference, exploration engine, demonstration | 5% |
