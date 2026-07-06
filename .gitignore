@@ -1,4 +1,3 @@
-
 # Playwright
 node_modules/
 /test-results/
@@ -7,17 +6,25 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 
- # Env / secrets
- .env
- .env.*
+# Env / secrets
+.env
+.env.*
+!.env.example
 
- # Python
- __pycache__/
- *.pyc
- .pytest_cache/
- .venv/
- .venv*/
- venv/
- dist/
- build/
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.venv*/
+venv/
+dist/
+build/
 jarvis_ai/
+
+# Runtime state (memory tiers, event logs)
+friday_data/
+.friday/
+
+# Stray git metadata copies
+.git - Copy*/
