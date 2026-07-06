@@ -34,24 +34,24 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 8 | Intent Analysis Engine (Ch 7) | ⚠️ PARTIAL | NO | NO | **35%** | MEDIUM | P2 |
 | 9 | Problem Classification (Ch 8) | ❌ NO | — | NO | **5%** | MEDIUM | P2 |
 | 10 | Deliberation (Ch 10) | ⚠️ PARTIAL | NO | YES | **25%** | HIGH | P1 |
-| 11 | Operation (Ch 11) | ✅ PARTIAL | YES | NO | **55%** | MEDIUM | P2 |
+| 11 | Operation (Ch 11) | ✅ PARTIAL | YES | YES | **65%** | MEDIUM | P2 |
 | 12 | Perception (Ch 12) | ⚠️ PARTIAL | NO | YES | **30%** | HIGH | P1 |
 | 13 | Reflection (Ch 13) | ❌ NO | — | YES | **0%** | HIGH | P1 |
 | 14 | Memory (Ch 14) | ⚠️ PARTIAL | PARTIAL | YES (orphaned) | **30%** | HIGH | P1 |
 | 15 | Learning (Ch 15) | ❌ NO | — | YES | **2%** | MEDIUM | P2 |
-| 16 | Capabilities (Ch 16) | ⚠️ PARTIAL | NO | YES | **25%** | HIGH | P1 |
+| 16 | Capabilities (Ch 16) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 17 | Decision Architecture (Ch 22) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
-| 18 | Environment Architecture (Ch 23) | ⚠️ PARTIAL | NO | YES | **35%** | HIGH | P1 |
+| 18 | Environment Architecture (Ch 23) | ✅ PARTIAL | YES | YES | **70%** | HIGH | P1 |
 | 19 | Interaction Architecture (Ch 24) | ⚠️ PARTIAL | PARTIAL | NO | **45%** | MEDIUM | P2 |
-| 20 | Unknown Environment Exploration (Ch 25/66) | ❌ NO | — | NO | **5%** | HIGH | P1 |
+| 20 | Unknown Environment Exploration (Ch 25/66) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 21 | Procedure Synthesis (Ch 26) | ⚠️ PARTIAL | NO | YES | **30%** | MEDIUM | P2 |
 | 22 | Capability Evolution (Ch 27) | ❌ NO | — | NO | **0%** | LOW | P3 |
 | 23 | Competence Model (Ch 28) | ❌ NO | — | NO | **0%** | MEDIUM | P2 |
-| 24 | Browser Runtime (Ch 29) | ✅ PARTIAL | PARTIAL | YES | **50%** | MEDIUM | P2 |
-| 25 | Desktop Runtime (Ch 30) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
-| 26 | Motor System (Ch 31) | ⚠️ PARTIAL | NO | YES | **25%** | MEDIUM | P2 |
-| 27 | Verification Engine (Ch 32) | ✅ PARTIAL | YES | NO | **55%** | LOW | P2 |
-| 28 | Evidence System (Ch 33) | ✅ PARTIAL | YES | NO | **50%** | LOW | P2 |
+| 24 | Browser Runtime (Ch 29) | ✅ PARTIAL | YES | YES | **65%** | MEDIUM | P2 |
+| 25 | Desktop Runtime (Ch 30) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
+| 26 | Motor System (Ch 31) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
+| 27 | Verification Engine (Ch 32) | ✅ PARTIAL | YES | YES | **70%** | LOW | P2 |
+| 28 | Evidence System (Ch 33) | ✅ PARTIAL | YES | YES | **65%** | LOW | P2 |
 | 29 | Recovery Engine (Ch 34) | ⚠️ PARTIAL | NO | NO | **30%** | MEDIUM | P2 |
 | 30 | Safety & Permission (Ch 35) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
 | 31 | Human Collaboration (Ch 36) | ⚠️ PARTIAL | NO | NO | **20%** | MEDIUM | P2 |
@@ -451,29 +451,29 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 8 Problem Classification | `intent/classifier.py` (M5: weighted multi-class ProblemClassifier with reclassify(); deterministic, app-agnostic signals) | Problem Graph; evidence-driven reclassification triggers | 45% |
 | Ch 9 World Model | `world/{belief,objects,worlds,world_model}.py` (M2: beliefs with confidence/decay/expiry, object graph, Observed/Predicted/Desired worlds, kernel-event-fed WorldModel); legacy `perception/world_state.py` kept for the pipeline until M6 | Predictive modelling; pipeline migration (M6) | 55% |
 | Ch 10 Deliberation | `deliberation/{candidate,utility,deliberator}.py` (M4: CandidateAction with PredictedOutcome, deterministic UtilityFunction, Deliberator); `planner/operator_planner.py` | LLM-backed candidate generation; next-action model | 50% |
-| Ch 11 Operation | `executor.py`, `actions/primitives.py`, `actions/adapters/*` | Interruptible, event-driven, observe-between-actions | 55% |
+| Ch 11 Operation | `executor.py`, `actions/primitives.py`, `actions/adapters/*`; M6 `environments/{contract,runtime}.py` (EnvironmentContract.interact→ActionResult, EnvironmentRuntime bridge) | Interruptible, event-driven, observe-between-actions | 65% |
 | Ch 12 Perception | `perception/{screen,ocr,vision,desktop,browser}.py`; M2 adds `perception/{contracts,observation,fusion}.py` (SensorContract, uniform Observation, noisy-OR SensorFusion, ScreenSensor adapter) | Migrate remaining sensors to SensorContract; attention | 45% |
 | Ch 13 Reflection | — | Entire subsystem | 0% |
 | Ch 14 Memory | `memory/{controller,working,episodic,procedural,semantic,stores,interfaces}.py` | Wiring to Kernel/Reflection; behavioural formation | 30% |
 | Ch 15 Learning | `learning/__init__.py` (empty) | Entire subsystem | 2% |
-| Ch 16 Capabilities | `tools/registry.py`, `actions/primitives.py`, `actions/adapters/*` | Capability contract, handlers, confidence, versioning, sandbox | 25% |
+| Ch 16 Capabilities | M7 `kernel/contracts/capability.py` (full 9-member CapabilityContract + Condition/WorldStateDelta/CompetenceRecord), `capabilities/contracts.py` (BaseCapability, Laplace confidence), `capabilities/registry.py` (CapabilityRegistry, confidence-ranked, TD-5 legacy coexistence); `tools/registry.py` (adapted), `actions/primitives.py`, `actions/adapters/*` | Versioning, sandbox, full handler wiring | 60% |
 | Ch 17 Persistent Runtime | `kernel/scheduler.py`, `kernel/checkpoint.py` (M1: continuous tick loop + checkpoint/restore) | Goal execution on the runtime; session continuity across reboots | 40% |
 | Ch 18 Goal Lifecycle | `goals/goal.py` (M3: immutable Goal, legal-transition state machine incl. suspension, failure reasons, serialization); `planner/requirements.py` | Wiring the pipeline to Goal objects (M6) | 55% |
 | Ch 19 Goal Graph | `goals/graph.py`, `goals/manager.py` (M3: decomposition + dependency graph, cycle detection, readiness, kernel-event-driven GoalManager with auto parent completion) | Priority/utility ordering (M4) | 50% |
 | Ch 20 Cognitive Kernel | `kernel/kernel.py`, `kernel/clock.py`, `kernel/contracts/*`, `kernel/echo_runtime.py` (M1) | World Model/Goal Graph ownership (M2/M3); capability dispatch (M7) | 45% |
 | Ch 21 Event System | `events/event.py`, `events/bus.py`, `events/store.py` (M1: immutable signed events, pattern bus, append-only store, replay, checkpoints) | Async handler queues; cross-process event transport | 55% |
 | Ch 22 Decision Architecture | `deliberation/deliberator.py` (M4: candidate sets, utility ranking, immutable DecisionRecords on the event log, inaction threshold, irreversibility penalty); `executor.py` | Hard boundaries / permission gates (M5+) | 50% |
-| Ch 23 Environment Architecture | `actions/browser_strategy.py`, `actions/browser_factory.py` | Environment contract, graph, nesting, discovery | 35% |
+| Ch 23 Environment Architecture | M6 `environments/{contract,runtime,stub}.py`, `environments/browser/adapter.py`, `environments/desktop/__init__.py` (uniform EnvironmentContract, EnvironmentRuntime bridge, StubEnvironment gate, site-agnostic); `actions/browser_strategy.py`, `actions/browser_factory.py` | Environment graph, nesting, discovery | 70% |
 | Ch 24 Interaction Architecture | `actions/adapters/resolver.py` + adapters | Per-interaction prediction/verification | 45% |
-| Ch 25/66 Exploration | `capabilities/web_agent.py` (browser-only shadow) | Object graph, affordance inference, exploration engine, demonstration | 5% |
+| Ch 25/66 Exploration | M7 `environments/unknown/{object_graph,affordances,experiment,demonstration,exploration}.py` (ObjectGraph, AffordanceInferrer, SafeExperimentPlanner risk-ladder, DemonstrationRecorder principles-not-coordinates, ExplorationEngine — abstract-contract only, M7 Gate passes on unknown software); `capabilities/web_agent.py` | Capability candidate promotion depth, richer object-graph edges | 60% |
 | Ch 26 Procedure Synthesis | `planner/operator_planner.py`, `planner/llm_decomposer.py` | Incremental graph synthesis, interleaving, recursion | 30% |
 | Ch 27 Capability Evolution | — | Entire pipeline | 0% |
 | Ch 28 Competence Model | — | Entire model | 0% |
-| Ch 29 Browser Runtime | `actions/browser_controller.py`, `chrome_launcher.py`, `chrome_profiles.py`, `profile_clone.py` | Multi-backend, Environment contract, first-class profiles/tabs | 50% |
-| Ch 30 Desktop Runtime | `actions/desktop_chrome.py`, `actions/system.py`, `perception/desktop.py` | Window/Display/Clipboard/Notification/Session managers, multi-monitor, DPI | 20% |
-| Ch 31 Motor System | `actions/adapters/desktop.py`, `desktop_actions.py` (open-loop pyautogui) | Closed-loop control, target acquisition, motion profiles | 25% |
-| Ch 32 Verification Engine | `verification/evidence_law.py`, `verification/verifier.py` | Unify two verifiers; prediction input | 55% |
-| Ch 33 Evidence System | `verification/evidence_law.py`, `verification/evidence.py`, `screenshot_evidence.py` | Repository, graph, signatures, retention, search | 50% |
+| Ch 29 Browser Runtime | M6 `environments/browser/adapter.py` (BrowserEnvironment wraps controller behind EnvironmentContract, dict-dispatch routing, no Playwright leakage); `actions/browser_controller.py`, `chrome_launcher.py`, `chrome_profiles.py`, `profile_clone.py` | Multi-backend (WebDriver adapter), first-class profiles/tabs | 65% |
+| Ch 30 Desktop Runtime | M7 `environments/desktop/{runtime,window_manager,display_manager,clipboard,session}.py` (real DesktopEnvironment on EnvironmentContract, UIA+OCR fusion, WindowManager/DisplayManager DPI/ClipboardManager/SessionManager gated lock; supersedes broken DesktopPerception TD-7); `actions/desktop_chrome.py`, `actions/system.py` | UIA sensor depth, notifications, multi-monitor live | 60% |
+| Ch 31 Motor System | M7 `capabilities/motor.py` (closed-loop MotorSystem: acquire_target UIA>OCR, move_to observe→predict→move→observe→correct, MotionProfile/TargetLock/MotorResult, DisplayManager transform, no blind clicks) | Live pyautogui verification, motion easing | 60% |
+| Ch 32 Verification Engine | M6 `verification/engine.py` (UnifiedVerificationEngine merges EvidenceVerifier + ActionVerifier; verify_action/requirement/goal; Evidence Law preserved verbatim); `verification/evidence_law.py`, `verification/verifier.py` | Prediction input from Deliberation | 70% |
+| Ch 33 Evidence System | M6 `verification/evidence_repo.py` (EvidenceRepository: HMAC-signed, append-only, indexed by goal/kind, tamper-evident, for_goal reconstruction); `verification/evidence_law.py`, `verification/evidence.py`, `screenshot_evidence.py` | Evidence graph, retention policies, full-text search | 65% |
 | Ch 34 Recovery Engine | `planner/repair.py`, `planner/replanner.py`, operator loop | Failure taxonomy, multi-level recovery, recovery learning | 30% |
 | Ch 35 Safety & Permission | `actions/delivery.py`, `FRIDAY_DRY_RUN` guards | Permission model, trust zones, secret vault, immutable boundary | 20% |
 | Ch 36 Human Collaboration | `actions/delivery.py` (gate), clarification fragments | Interruption/approval/demonstration/shared-control managers | 20% |
