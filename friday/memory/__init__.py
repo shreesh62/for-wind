@@ -20,10 +20,14 @@ from friday.memory.episodic import EpisodicMemory, Episode
 from friday.memory.procedural import ProceduralMemory, ActionPattern, RepairOutcome
 from friday.memory.semantic import SemanticMemory, Fact
 from friday.memory.interfaces import MemoryEntry, MemoryStore, MemoryTier
+from friday.memory.runtime import MemoryRuntime, MemoryDecision, CandidateVerdict
 
 __all__ = [
     "FridayMemory",
     "MemoryContext",
+    "MemoryRuntime",
+    "MemoryDecision",
+    "CandidateVerdict",
     "WorkingMemory",
     "ConversationTurn",
     "ActiveGoal",
