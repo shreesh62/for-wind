@@ -36,8 +36,8 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 10 | Deliberation (Ch 10) | ⚠️ PARTIAL | NO | YES | **25%** | HIGH | P1 |
 | 11 | Operation (Ch 11) | ✅ PARTIAL | YES | YES | **65%** | MEDIUM | P2 |
 | 12 | Perception (Ch 12) | ⚠️ PARTIAL | NO | YES | **30%** | HIGH | P1 |
-| 13 | Reflection (Ch 13) | ❌ NO | — | YES | **0%** | HIGH | P1 |
-| 14 | Memory (Ch 14) | ⚠️ PARTIAL | PARTIAL | YES (orphaned) | **30%** | HIGH | P1 |
+| 13 | Reflection (Ch 13) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
+| 14 | Memory (Ch 14) | ✅ PARTIAL | YES | YES (wired) | **60%** | HIGH | P1 |
 | 15 | Learning (Ch 15) | ❌ NO | — | YES | **2%** | MEDIUM | P2 |
 | 16 | Capabilities (Ch 16) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 17 | Decision Architecture (Ch 22) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
@@ -46,13 +46,13 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 20 | Unknown Environment Exploration (Ch 25/66) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 21 | Procedure Synthesis (Ch 26) | ⚠️ PARTIAL | NO | YES | **30%** | MEDIUM | P2 |
 | 22 | Capability Evolution (Ch 27) | ❌ NO | — | NO | **0%** | LOW | P3 |
-| 23 | Competence Model (Ch 28) | ❌ NO | — | NO | **0%** | MEDIUM | P2 |
+| 23 | Competence Model (Ch 28) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 24 | Browser Runtime (Ch 29) | ✅ PARTIAL | YES | YES | **65%** | MEDIUM | P2 |
 | 25 | Desktop Runtime (Ch 30) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 26 | Motor System (Ch 31) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 27 | Verification Engine (Ch 32) | ✅ PARTIAL | YES | YES | **70%** | LOW | P2 |
 | 28 | Evidence System (Ch 33) | ✅ PARTIAL | YES | YES | **65%** | LOW | P2 |
-| 29 | Recovery Engine (Ch 34) | ⚠️ PARTIAL | NO | NO | **30%** | MEDIUM | P2 |
+| 29 | Recovery Engine (Ch 34) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 30 | Safety & Permission (Ch 35) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
 | 31 | Human Collaboration (Ch 36) | ⚠️ PARTIAL | NO | NO | **20%** | MEDIUM | P2 |
 | 32 | Research Domain (Ch 37) | ✅ PARTIAL | PARTIAL | NO | **45%** | LOW | P2 |
@@ -453,8 +453,8 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 10 Deliberation | `deliberation/{candidate,utility,deliberator}.py` (M4: CandidateAction with PredictedOutcome, deterministic UtilityFunction, Deliberator); `planner/operator_planner.py` | LLM-backed candidate generation; next-action model | 50% |
 | Ch 11 Operation | `executor.py`, `actions/primitives.py`, `actions/adapters/*`; M6 `environments/{contract,runtime}.py` (EnvironmentContract.interact→ActionResult, EnvironmentRuntime bridge) | Interruptible, event-driven, observe-between-actions | 65% |
 | Ch 12 Perception | `perception/{screen,ocr,vision,desktop,browser}.py`; M2 adds `perception/{contracts,observation,fusion}.py` (SensorContract, uniform Observation, noisy-OR SensorFusion, ScreenSensor adapter) | Migrate remaining sensors to SensorContract; attention | 45% |
-| Ch 13 Reflection | — | Entire subsystem | 0% |
-| Ch 14 Memory | `memory/{controller,working,episodic,procedural,semantic,stores,interfaces}.py` | Wiring to Kernel/Reflection; behavioural formation | 30% |
+| Ch 13 Reflection | M8 `cognition/reflection.py` (ReflectionEngine: prediction-error via Jaccard, 5 Questions, 4 scales, ConfidenceCalibrator, emits `memory.candidate`/`reflection.completed`; never writes memory directly) | Multi-scale session/long-term reflection depth | 60% |
+| Ch 14 Memory | M8 `memory/runtime.py` (MemoryRuntime: RuntimeContract wrapping FridayMemory, verified-only + reality-outranks-memory decide(), accept/reject/merge/forget, degraded-mode); `memory/{controller,working,episodic,procedural,semantic,stores,interfaces}.py` (wired, not rewritten) | Retrieval router, richer merge/forget policy | 60% |
 | Ch 15 Learning | `learning/__init__.py` (empty) | Entire subsystem | 2% |
 | Ch 16 Capabilities | M7 `kernel/contracts/capability.py` (full 9-member CapabilityContract + Condition/WorldStateDelta/CompetenceRecord), `capabilities/contracts.py` (BaseCapability, Laplace confidence), `capabilities/registry.py` (CapabilityRegistry, confidence-ranked, TD-5 legacy coexistence); `tools/registry.py` (adapted), `actions/primitives.py`, `actions/adapters/*` | Versioning, sandbox, full handler wiring | 60% |
 | Ch 17 Persistent Runtime | `kernel/scheduler.py`, `kernel/checkpoint.py` (M1: continuous tick loop + checkpoint/restore) | Goal execution on the runtime; session continuity across reboots | 40% |
@@ -468,13 +468,13 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 25/66 Exploration | M7 `environments/unknown/{object_graph,affordances,experiment,demonstration,exploration}.py` (ObjectGraph, AffordanceInferrer, SafeExperimentPlanner risk-ladder, DemonstrationRecorder principles-not-coordinates, ExplorationEngine — abstract-contract only, M7 Gate passes on unknown software); `capabilities/web_agent.py` | Capability candidate promotion depth, richer object-graph edges | 60% |
 | Ch 26 Procedure Synthesis | `planner/operator_planner.py`, `planner/llm_decomposer.py` | Incremental graph synthesis, interleaving, recursion | 30% |
 | Ch 27 Capability Evolution | — | Entire pipeline | 0% |
-| Ch 28 Competence Model | — | Entire model | 0% |
+| Ch 28 Competence Model | M8 `competence/model.py` (CompetenceModel: evidence-only per-(capability,environment) via CompetenceRecord, time-decay toward neutral prior, monotonic risk-confidence gate, kernel-driven `verification.completed`→`competence.updated`) | Competence-graph edges, cross-context transfer | 60% |
 | Ch 29 Browser Runtime | M6 `environments/browser/adapter.py` (BrowserEnvironment wraps controller behind EnvironmentContract, dict-dispatch routing, no Playwright leakage); `actions/browser_controller.py`, `chrome_launcher.py`, `chrome_profiles.py`, `profile_clone.py` | Multi-backend (WebDriver adapter), first-class profiles/tabs | 65% |
 | Ch 30 Desktop Runtime | M7 `environments/desktop/{runtime,window_manager,display_manager,clipboard,session}.py` (real DesktopEnvironment on EnvironmentContract, UIA+OCR fusion, WindowManager/DisplayManager DPI/ClipboardManager/SessionManager gated lock; supersedes broken DesktopPerception TD-7); `actions/desktop_chrome.py`, `actions/system.py` | UIA sensor depth, notifications, multi-monitor live | 60% |
 | Ch 31 Motor System | M7 `capabilities/motor.py` (closed-loop MotorSystem: acquire_target UIA>OCR, move_to observe→predict→move→observe→correct, MotionProfile/TargetLock/MotorResult, DisplayManager transform, no blind clicks) | Live pyautogui verification, motion easing | 60% |
 | Ch 32 Verification Engine | M6 `verification/engine.py` (UnifiedVerificationEngine merges EvidenceVerifier + ActionVerifier; verify_action/requirement/goal; Evidence Law preserved verbatim); `verification/evidence_law.py`, `verification/verifier.py` | Prediction input from Deliberation | 70% |
 | Ch 33 Evidence System | M6 `verification/evidence_repo.py` (EvidenceRepository: HMAC-signed, append-only, indexed by goal/kind, tamper-evident, for_goal reconstruction); `verification/evidence_law.py`, `verification/evidence.py`, `screenshot_evidence.py` | Evidence graph, retention policies, full-text search | 65% |
-| Ch 34 Recovery Engine | `planner/repair.py`, `planner/replanner.py`, operator loop | Failure taxonomy, multi-level recovery, recovery learning | 30% |
+| Ch 34 Recovery Engine | M8 `recovery/engine.py` (RecoveryEngine wraps RepairDiagnoser into the full loop: FailureClass taxonomy, RecoveryLevel ladder, RollbackKind contracts, goal-id-preserving `recover()`, irreversible-action confidence floor → HUMAN escalation, emits `recovery.proposed`); `planner/repair.py`, `planner/replanner.py` | Recovery-outcome learning, live re-entry into Deliberation | 60% |
 | Ch 35 Safety & Permission | `actions/delivery.py`, `FRIDAY_DRY_RUN` guards | Permission model, trust zones, secret vault, immutable boundary | 20% |
 | Ch 36 Human Collaboration | `actions/delivery.py` (gate), clarification fragments | Interruption/approval/demonstration/shared-control managers | 20% |
 | Ch 37 Research Domain | `capabilities/research.py`, `planner/query_extractor.py` | Hypotheses, credibility ranking, contradiction engine, knowledge graph | 45% |
