@@ -38,7 +38,7 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 12 | Perception (Ch 12) | ⚠️ PARTIAL | NO | YES | **30%** | HIGH | P1 |
 | 13 | Reflection (Ch 13) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 14 | Memory (Ch 14) | ✅ PARTIAL | YES | YES (wired) | **60%** | HIGH | P1 |
-| 15 | Learning (Ch 15) | ❌ NO | — | YES | **2%** | MEDIUM | P2 |
+| 15 | Learning (Ch 15) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 16 | Capabilities (Ch 16) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 17 | Decision Architecture (Ch 22) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
 | 18 | Environment Architecture (Ch 23) | ✅ PARTIAL | YES | YES | **70%** | HIGH | P1 |
@@ -60,11 +60,11 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 34 | Communication Domain (Ch 39) | ⚠️ PARTIAL | NO | YES | **25%** | MEDIUM | P2 |
 | 35 | Document Intelligence (Ch 40) | ⚠️ PARTIAL | NO | NO | **20%** | LOW | P3 |
 | 36 | Software Engineering Domain (Ch 41) | ❌ NO | — | NO | **0%** | LOW | P3 |
-| 37 | Long-Horizon Planning (Ch 42) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
-| 38 | Background Cognition (Ch 43) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
+| 37 | Long-Horizon Planning (Ch 42) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
+| 38 | Background Cognition (Ch 43) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 39 | Self-Improvement (Ch 44) | ❌ NO | — | NO | **0%** | LOW | P3 |
 | 40 | Resource Model (Ch 45-48) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
-| 41 | Temporal Reasoning (Ch 49) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
+| 41 | Temporal Reasoning (Ch 49) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 42 | Memory Architecture / 4-tier (Ch 50) | ⚠️ PARTIAL | PARTIAL | YES (orphaned) | **35%** | MEDIUM | P2 |
 | 43 | Cognitive Identity (Ch 51) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
 | 44 | Runtime Communication (Ch 52) | ❌ NO | — | YES | **5%** | HIGH | P1 |
@@ -455,7 +455,7 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 12 Perception | `perception/{screen,ocr,vision,desktop,browser}.py`; M2 adds `perception/{contracts,observation,fusion}.py` (SensorContract, uniform Observation, noisy-OR SensorFusion, ScreenSensor adapter) | Migrate remaining sensors to SensorContract; attention | 45% |
 | Ch 13 Reflection | M8 `cognition/reflection.py` (ReflectionEngine: prediction-error via Jaccard, 5 Questions, 4 scales, ConfidenceCalibrator, emits `memory.candidate`/`reflection.completed`; never writes memory directly) | Multi-scale session/long-term reflection depth | 60% |
 | Ch 14 Memory | M8 `memory/runtime.py` (MemoryRuntime: RuntimeContract wrapping FridayMemory, verified-only + reality-outranks-memory decide(), accept/reject/merge/forget, degraded-mode); `memory/{controller,working,episodic,procedural,semantic,stores,interfaces}.py` (wired, not rewritten) | Retrieval router, richer merge/forget policy | 60% |
-| Ch 15 Learning | `learning/__init__.py` (empty) | Entire subsystem | 2% |
+| Ch 15 Learning | M9 `learning/{models,patterns,generalization,validation,engine}.py` (LearningEngine: discover→generalize→validate over verified experience only; PatternDiscovery repetition threshold; Generalizer transfer + monotonic confidence; LearningValidator hard verified-gate + measurable-improvement + unlearning; improvement tracking from `competence.updated`; emits `learning.pattern_discovered`/`validated`/`rejected`/`unlearned` + verified `memory.candidate`; never writes memory directly) | Deeper transfer, cross-goal principle reuse | 60% |
 | Ch 16 Capabilities | M7 `kernel/contracts/capability.py` (full 9-member CapabilityContract + Condition/WorldStateDelta/CompetenceRecord), `capabilities/contracts.py` (BaseCapability, Laplace confidence), `capabilities/registry.py` (CapabilityRegistry, confidence-ranked, TD-5 legacy coexistence); `tools/registry.py` (adapted), `actions/primitives.py`, `actions/adapters/*` | Versioning, sandbox, full handler wiring | 60% |
 | Ch 17 Persistent Runtime | `kernel/scheduler.py`, `kernel/checkpoint.py` (M1: continuous tick loop + checkpoint/restore) | Goal execution on the runtime; session continuity across reboots | 40% |
 | Ch 18 Goal Lifecycle | `goals/goal.py` (M3: immutable Goal, legal-transition state machine incl. suspension, failure reasons, serialization); `planner/requirements.py` | Wiring the pipeline to Goal objects (M6) | 55% |
@@ -482,11 +482,11 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 39 Communication Domain | `actions/delivery.py`, `capabilities/web_agent.py` | Remove hardcoded URLs; conversation model; delivery verification | 25% |
 | Ch 40 Document Intelligence | `actions/file_tool.py` | Semantic doc model, multi-format, citations, PDF/PPTX | 20% |
 | Ch 41 Software Engineering | — | Entire domain | 0% |
-| Ch 42 Long-Horizon Planning | — | Entire subsystem | 0% |
-| Ch 43 Background Cognition | — | Entire subsystem | 0% |
+| Ch 42 Long-Horizon Planning | M9 `horizon/planner.py` (LongHorizonPlanner: Vision>Mission>Project>Milestone>Goal; prerequisite-gated `next_actionable`; verification-gated `advance`; dynamic `revise_roadmap` with immutable vision; checkpoint/restore reusing Goal serialization; emits `horizon.milestone_reached`/`project_advanced`) | Mission-level roadmap synthesis | 60% |
+| Ch 43 Background Cognition | M9 `background/runtime.py` (BackgroundRuntime: RuntimeContract; event-driven idle tracking; foreground preemption; bounded round-robin work units — consolidate/decay/freshness/advance; DRY_RUN-safe; degraded-mode containment; emits `background.work_done` + proposes `memory.candidate`) | Richer work-unit policies | 60% |
 | Ch 44 Self-Improvement | — | Entire subsystem | 0% |
 | Ch 45-48 Resource Model | `models/router.py` (LLM-only shadow) | Resource registry, allocation, scheduling, federation, economics | 0% |
-| Ch 49 Temporal Reasoning | — | Entire subsystem | 0% |
+| Ch 49 Temporal Reasoning | M9 `temporal/{clock,aging,deadlines}.py` (TemporalReasoner freshness/staleness/time-remaining over the kernel clock; KnowledgeAging half-life decay reusing the CompetenceModel precedent; DeadlineTracker ON_TRACK/APPROACHING/MISSED classification + emits `temporal.deadline_approaching`/`missed`; reads time only from Kernel_Events) | Predictive scheduling, richer TTL policy | 60% |
 | Ch 50 Memory Architecture | `memory/*` | Wiring; preference tier; compression; forgetting policy | 35% |
 | Ch 51 Cognitive Identity | — | Checkpoint, continuity, cross-device | 0% |
 | Ch 52 Runtime Communication | — (direct calls) | Event bus, contracts, dependency inversion | 5% |

@@ -396,14 +396,18 @@ class MotorSystem:
             )
             cursor = observed
 
-        # Arrival verification: the target must still be present.
+        # Arrival verification: the target must still be present AND the cursor
+        # must have converged to where the target IS NOW — the freshly
+        # re-acquired ``final`` lock, not the (possibly stale) in-loop ``lock``.
+        # If the target moved on the final observation, arrival is judged against
+        # its new position, so a cursor that only reached the old center reports
+        # no_convergence rather than a false success (closed-loop correctness).
         final = self.acquire_target(lock.target_text, self._observe_world())
-        arrived = distance(cursor, lock.center) <= self.arrival_tolerance
 
         if final is None:
             success = False
             error: Optional[str] = "target_lost"
-        elif not arrived:
+        elif distance(cursor, final.center) > self.arrival_tolerance:
             success = False
             error = "no_convergence"
         else:
