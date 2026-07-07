@@ -53,20 +53,20 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 27 | Verification Engine (Ch 32) | ✅ PARTIAL | YES | YES | **70%** | LOW | P2 |
 | 28 | Evidence System (Ch 33) | ✅ PARTIAL | YES | YES | **65%** | LOW | P2 |
 | 29 | Recovery Engine (Ch 34) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
-| 30 | Safety & Permission (Ch 35) | ⚠️ PARTIAL | NO | YES | **20%** | HIGH | P1 |
+| 30 | Safety & Permission (Ch 35) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 31 | Human Collaboration (Ch 36) | ⚠️ PARTIAL | NO | NO | **20%** | MEDIUM | P2 |
-| 32 | Research Domain (Ch 37) | ✅ PARTIAL | PARTIAL | NO | **45%** | LOW | P2 |
+| 32 | Research Domain (Ch 37) | ✅ PARTIAL | YES | YES | **70%** | LOW | P2 |
 | 33 | Knowledge Acquisition (Ch 38) | ❌ NO | — | NO | **5%** | LOW | P3 |
-| 34 | Communication Domain (Ch 39) | ⚠️ PARTIAL | NO | YES | **25%** | MEDIUM | P2 |
-| 35 | Document Intelligence (Ch 40) | ⚠️ PARTIAL | NO | NO | **20%** | LOW | P3 |
-| 36 | Software Engineering Domain (Ch 41) | ❌ NO | — | NO | **0%** | LOW | P3 |
+| 34 | Communication Domain (Ch 39) | ✅ PARTIAL | YES | YES | **55%** | MEDIUM | P2 |
+| 35 | Document Intelligence (Ch 40) | ✅ PARTIAL | YES | YES | **55%** | LOW | P3 |
+| 36 | Software Engineering Domain (Ch 41) | ⏸️ DEFERRED | — | NO | **5%** | LOW | P3 |
 | 37 | Long-Horizon Planning (Ch 42) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 38 | Background Cognition (Ch 43) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 39 | Self-Improvement (Ch 44) | ❌ NO | — | NO | **0%** | LOW | P3 |
-| 40 | Resource Model (Ch 45-48) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
+| 40 | Resource Model (Ch 45-48) | ✅ PARTIAL | YES | YES | **45%** | MEDIUM | P2 |
 | 41 | Temporal Reasoning (Ch 49) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 42 | Memory Architecture / 4-tier (Ch 50) | ⚠️ PARTIAL | PARTIAL | YES (orphaned) | **35%** | MEDIUM | P2 |
-| 43 | Cognitive Identity (Ch 51) | ❌ NO | — | YES | **0%** | MEDIUM | P2 |
+| 43 | Cognitive Identity (Ch 51) | ✅ PARTIAL | YES | YES | **55%** | MEDIUM | P2 |
 | 44 | Runtime Communication (Ch 52) | ❌ NO | — | YES | **5%** | HIGH | P1 |
 | 45 | Runtime Composition / Replaceability (Ch 53) | ⚠️ PARTIAL | NO | YES | **30%** | MEDIUM | P2 |
 | 46 | Plugin Architecture (Ch 54) | ❌ NO | — | NO | **0%** | LOW | P3 |
@@ -475,20 +475,20 @@ Every chapter mapped to implementing files, missing pieces, and compliance. "—
 | Ch 32 Verification Engine | M6 `verification/engine.py` (UnifiedVerificationEngine merges EvidenceVerifier + ActionVerifier; verify_action/requirement/goal; Evidence Law preserved verbatim); `verification/evidence_law.py`, `verification/verifier.py` | Prediction input from Deliberation | 70% |
 | Ch 33 Evidence System | M6 `verification/evidence_repo.py` (EvidenceRepository: HMAC-signed, append-only, indexed by goal/kind, tamper-evident, for_goal reconstruction); `verification/evidence_law.py`, `verification/evidence.py`, `screenshot_evidence.py` | Evidence graph, retention policies, full-text search | 65% |
 | Ch 34 Recovery Engine | M8 `recovery/engine.py` (RecoveryEngine wraps RepairDiagnoser into the full loop: FailureClass taxonomy, RecoveryLevel ladder, RollbackKind contracts, goal-id-preserving `recover()`, irreversible-action confidence floor → HUMAN escalation, emits `recovery.proposed`); `planner/repair.py`, `planner/replanner.py` | Recovery-outcome learning, live re-entry into Deliberation | 60% |
-| Ch 35 Safety & Permission | `actions/delivery.py`, `FRIDAY_DRY_RUN` guards | Permission model, trust zones, secret vault, immutable boundary | 20% |
+| Ch 35 Safety & Permission | M4 `safety/permission.py` (PermissionManager: 9 PermissionLevels + 5 TrustZones + Decision; forbidden/confirm gating; monotonic trust-zone escalation; irreversible-confidence floor; subscribes `action.requested`, emits `permission.granted`/`denied`), `safety/policy.py` (frozen SafetyPolicy — immutable hard boundaries + confirmation table), `safety/vault.py` (SecretVault: keyring backend + encrypted-file fallback + in-memory under DRY_RUN; secrets by key name, never echoed in repr/str/keys); `actions/delivery.py` gate | Wire providers to vault (retire plaintext `.env`), least-authority scoping, live confirmation UX | 60% |
 | Ch 36 Human Collaboration | `actions/delivery.py` (gate), clarification fragments | Interruption/approval/demonstration/shared-control managers | 20% |
-| Ch 37 Research Domain | `capabilities/research.py`, `planner/query_extractor.py` | Hypotheses, credibility ranking, contradiction engine, knowledge graph | 45% |
+| Ch 37 Research Domain | M10 `domains/research.py` (ResearchDomain: pure composition over `research(...)`; source credibility ranking by authority *class* (never a site name); lightweight claim extraction + subject-scoped contradiction detection; bounded hypothesis-support scoring; deterministic `ResearchFinding`; owns no durable state), `capabilities/research.py`, `planner/query_extractor.py` | Knowledge graph, multi-hop sub-questions | 70% |
 | Ch 38 Knowledge Acquisition | (research gathers text) | Knowledge store/graph, validation, freshness | 5% |
-| Ch 39 Communication Domain | `actions/delivery.py`, `capabilities/web_agent.py` | Remove hardcoded URLs; conversation model; delivery verification | 25% |
-| Ch 40 Document Intelligence | `actions/file_tool.py` | Semantic doc model, multi-format, citations, PDF/PPTX | 20% |
-| Ch 41 Software Engineering | — | Entire domain | 0% |
+| Ch 39 Communication Domain | M10 `domains/communication.py` (CommunicationDomain: environment-independent — discovers a `deliver`-verb capability via `find_for`, NO hardcoded app/site name; delivery gated on a real `DELIVERY_CONFIRMATION` Evidence-Law artifact; immutable caller-owned `Conversation` transcript), `actions/delivery.py`, `capabilities/web_agent.py` | Retire legacy `bridge.py` hardcoded URL map (TD-1); richer conversation memory | 55% |
+| Ch 40 Document Intelligence | M10 `domains/documents.py` (DocumentDomain: semantic `SemanticDocument`→`Section`→`Block` model; deterministic multi-format render MARKDOWN/HTML/PLAINTEXT + DOCX/PDF via `create_file` capability; citations linked to real `SOURCE_URL` evidence), `actions/file_tool.py` | PPTX, richer layout | 55% |
+| Ch 41 Software Engineering | M10 `domains/software.py` (SoftwareDomain: documented v2-deferral stub — `DEFERRED=True`, `status()` returns a `DeferredOutcome`; no behaviour) | Entire domain (deferred to v2, HANDOFF §9) | 5% |
 | Ch 42 Long-Horizon Planning | M9 `horizon/planner.py` (LongHorizonPlanner: Vision>Mission>Project>Milestone>Goal; prerequisite-gated `next_actionable`; verification-gated `advance`; dynamic `revise_roadmap` with immutable vision; checkpoint/restore reusing Goal serialization; emits `horizon.milestone_reached`/`project_advanced`) | Mission-level roadmap synthesis | 60% |
 | Ch 43 Background Cognition | M9 `background/runtime.py` (BackgroundRuntime: RuntimeContract; event-driven idle tracking; foreground preemption; bounded round-robin work units — consolidate/decay/freshness/advance; DRY_RUN-safe; degraded-mode containment; emits `background.work_done` + proposes `memory.candidate`) | Richer work-unit policies | 60% |
 | Ch 44 Self-Improvement | — | Entire subsystem | 0% |
-| Ch 45-48 Resource Model | `models/router.py` (LLM-only shadow) | Resource registry, allocation, scheduling, federation, economics | 0% |
+| Ch 45-48 Resource Model | M4 `resources/types.py` (Resource implements ResourceContract; ResourceKind: compute/memory/network/model/browser/input/storage/human), `resources/registry.py` (ResourceRegistry discover/register/by_kind), `resources/scheduler.py` (ResourceManager: exclusive single-holder, idempotent same-holder, non-exclusive sharing, unknown/unhealthy fail-safe deny, FIFO wait order + next_waiter; subscribes `resource.requested`/`released`, emits `resource.allocated`/`released`/`denied`); `models/router.py` (LLM shadow) | Federation, economics/cost policy, model-budget accounting | 45% |
 | Ch 49 Temporal Reasoning | M9 `temporal/{clock,aging,deadlines}.py` (TemporalReasoner freshness/staleness/time-remaining over the kernel clock; KnowledgeAging half-life decay reusing the CompetenceModel precedent; DeadlineTracker ON_TRACK/APPROACHING/MISSED classification + emits `temporal.deadline_approaching`/`missed`; reads time only from Kernel_Events) | Predictive scheduling, richer TTL policy | 60% |
 | Ch 50 Memory Architecture | `memory/*` | Wiring; preference tier; compression; forgetting policy | 35% |
-| Ch 51 Cognitive Identity | — | Checkpoint, continuity, cross-device | 0% |
+| Ch 51 Cognitive Identity | M4 `identity/identity.py` (CognitiveIdentity: stable identity_id + preferences + goal_states + last_checkpoint; subscribes `goal.state_changed`/`kernel.checkpoint`; JSON checkpoint/restore reusing Goal state shapes; defensive restore invents no goal ids — survives restart) | Cross-device identity sync, richer preference model | 55% |
 | Ch 52 Runtime Communication | — (direct calls) | Event bus, contracts, dependency inversion | 5% |
 | Ch 53 Runtime Composition | `actions/adapters/*` | Plug-in boundaries, independent deploy | 30% |
 | Ch 54 Plugin Architecture | — | Entire subsystem | 0% |
