@@ -159,8 +159,52 @@ class GoalExecutor:
             blocked=ctx.blocked,
         )
 
+    # TD-5: capabilities blocked under DRY_RUN because they cause VISIBLE/external
+    # side effects. Kept as a set so the guard is data-driven and inspectable.
+    _DRY_RUN_BLOCKED = frozenset({
+        ToolCapability.OPEN_APPLICATION, ToolCapability.NAVIGATE_URL,
+        ToolCapability.SEARCH_WEB, ToolCapability.EXTRACT_WEB_CONTENT,
+        ToolCapability.READ_DOM, ToolCapability.READ_SCREEN,
+        ToolCapability.CLICK_ELEMENT, ToolCapability.TYPE_TEXT,
+        ToolCapability.SWITCH_WINDOW,
+    })
+
+    def _dispatch_table(self) -> Dict[Any, Any]:
+        """TD-5: explicit capability→handler map (was an implicit if/elif ladder).
+
+        Each handler has signature ``(target: str, cap, ctx) -> str`` and contains
+        the exact behavior of its former branch. A capability absent from the map
+        falls through to the description fallback in ``_execute_step`` — identical
+        to the old ``else`` behavior. This makes dispatch data-driven and is the
+        prerequisite for later wiring to the CapabilityRegistry, with zero behavior
+        change today (guarded by characterization tests).
+        """
+        return {
+            ToolCapability.SEARCH_WEB: self._dispatch_search_web,
+            ToolCapability.NAVIGATE_URL: self._dispatch_navigate,
+            ToolCapability.OPEN_APPLICATION: self._dispatch_navigate,
+            ToolCapability.READ_DOM: self._dispatch_read,
+            ToolCapability.EXTRACT_WEB_CONTENT: self._dispatch_read,
+            ToolCapability.READ_SCREEN: self._dispatch_read,
+            ToolCapability.CLICK_ELEMENT: self._dispatch_click,
+            ToolCapability.TYPE_TEXT: self._dispatch_type,
+            ToolCapability.GENERATE_TEXT: self._dispatch_generate,
+            ToolCapability.SUMMARIZE: self._dispatch_generate,
+            ToolCapability.CREATE_FILE: self._dispatch_create_file,
+            ToolCapability.EDIT_FILE: self._dispatch_edit_file,
+            ToolCapability.RUN_COMMAND: self._dispatch_run_command,
+            ToolCapability.SEND_MESSAGE: self._dispatch_delivery,
+            ToolCapability.SEND_EMAIL: self._dispatch_delivery,
+            ToolCapability.VERIFY_RESULT: self._dispatch_verify_result,
+        }
+
     def _execute_step(self, step, ctx: ExecutionContext) -> str:
-        """Execute one capability step, reading/writing the context."""
+        """Execute one capability step, reading/writing the context.
+
+        TD-5: dispatch is a data-driven table (``_dispatch_table``) rather than an
+        implicit if/elif ladder. Behavior is unchanged — the DRY-RUN guard and the
+        description fallback are preserved exactly.
+        """
         cap = step.capability
         target = step.target
 
@@ -168,148 +212,140 @@ class GoalExecutor:
         # click, type, search) but ALLOW safe local operations (file create/edit,
         # content generation, verification). This stops phantom Chrome/Notepad
         # windows during tests while keeping file-based tests working.
-        if self._dry_run and cap in (
-            ToolCapability.OPEN_APPLICATION, ToolCapability.NAVIGATE_URL,
-            ToolCapability.SEARCH_WEB, ToolCapability.EXTRACT_WEB_CONTENT,
-            ToolCapability.READ_DOM, ToolCapability.READ_SCREEN,
-            ToolCapability.CLICK_ELEMENT, ToolCapability.TYPE_TEXT,
-            ToolCapability.SWITCH_WINDOW,
-        ):
+        if self._dry_run and cap in self._DRY_RUN_BLOCKED:
             return f"[DRY-RUN] Would execute {cap.value}: {target}"
 
-        # --- Web search ---
-        if cap == ToolCapability.SEARCH_WEB:
-            return self._execute_research(target, ctx)
-
-        # --- Navigate ---
-        elif cap in (ToolCapability.NAVIGATE_URL, ToolCapability.OPEN_APPLICATION):
-            url = self._target_to_url(target)
-            # TAB-SPAM GUARD: never open the same URL twice in one execution.
-            if url and url in ctx.navigated_urls:
-                return f"Already navigated to {url} (skipping duplicate open)"
-            if url and self._browser and self._browser.available:
-                result = self._browser.navigate(url)
-                if result.get("ok"):
-                    landed = result.get("url", url)
-                    ctx.navigated_urls.append(url)
-                    ctx.evidence.add_navigation(landed)  # EVIDENCE: confirmed navigation
-                    # Visual evidence + block detection after landing.
-                    from friday.verification.screenshot_evidence import (
-                        is_blocked_page, blocked_reason, capture_screenshot,
-                    )
-                    page_text = self._browser.read_text() if hasattr(self._browser, "read_text") else ""
-                    if is_blocked_page(page_text, landed):
-                        shot = capture_screenshot(label="nav_blocked")
-                        if shot.is_real:
-                            ctx.evidence.add_screenshot(shot.path, shot.size, "nav_blocked")
-                        ctx.blocked = True
-                        return f"Navigated to {landed} but BLOCKED: {blocked_reason(page_text, landed)}"
-                    shot = capture_screenshot(label="after_navigate")
-                    if shot.is_real:
-                        ctx.evidence.add_screenshot(shot.path, shot.size, "after_navigate")
-                    return f"Navigated to {landed}"
-                return f"Navigation failed: {result.get('error','')}"
-            elif url:
-                # No real browser session. Open ONCE only — do NOT spam tabs
-                # across replanning iterations. Unconfirmed, so no nav evidence.
-                if url not in ctx.navigated_urls:
-                    import webbrowser
-                    webbrowser.open(url)
-                    ctx.navigated_urls.append(url)
-                    return f"Opened {url} (unconfirmed, no evidence recorded)"
-                return f"Already opened {url} (skipping duplicate)"
-            else:
-                from friday.actions.system import SystemActions
-                r = SystemActions().launch_app(target)
-                if r.is_success:
-                    ctx.evidence.add_navigation(f"launched:{target}")
-                return r.message
-
-        # --- Read DOM / Extract ---
-        elif cap in (ToolCapability.READ_DOM, ToolCapability.EXTRACT_WEB_CONTENT, ToolCapability.READ_SCREEN):
-            # If research already gathered content this run, reuse it instead
-            # of redundantly re-reading the current page.
-            if cap == ToolCapability.EXTRACT_WEB_CONTENT and ctx.gathered_info:
-                from friday.verification.evidence_law import EvidenceKind
-                sources = len(ctx.evidence.of_kind(EvidenceKind.SOURCE_URL))
-                return f"Using {len(ctx.gathered_info)} already-gathered items ({sources} sources)"
-            if self._browser and self._browser.available:
-                text = self._browser.read_text()
-                if text:
-                    from friday.verification.screenshot_evidence import (
-                        is_blocked_page, blocked_reason, capture_screenshot,
-                    )
-                    url_now = self._browser.current_url() if hasattr(self._browser, "current_url") else ""
-                    # A captcha/verification page is NOT real content.
-                    if is_blocked_page(text, url_now):
-                        shot = capture_screenshot(label="read_blocked")
-                        if shot.is_real:
-                            ctx.evidence.add_screenshot(shot.path, shot.size, "read_blocked")
-                        ctx.blocked = True
-                        return f"Read BLOCKED page: {blocked_reason(text, url_now)} (not recorded as info)"
-                    ctx.add_info(f"Page content:\n{text[:2500]}")
-                    # EVIDENCE: real content was read from a real page
-                    ctx.evidence.add_gathered_info(text, source=url_now)
-                    if url_now:
-                        ctx.evidence.add_source_url(url_now)
-                    shot = capture_screenshot(label="after_read")
-                    if shot.is_real:
-                        ctx.evidence.add_screenshot(shot.path, shot.size, "after_read")
-                    return f"Read {len(text)} chars from page"
-                return "No content read"
-            return "No browser to read from"
-
-        # --- Click ---
-        elif cap == ToolCapability.CLICK_ELEMENT:
-            return self._execute_click(target, ctx)
-
-        # --- Type ---
-        elif cap == ToolCapability.TYPE_TEXT:
-            return self._execute_type(target, ctx)
-
-        # --- Generate / Summarize (uses gathered info!) ---
-        elif cap in (ToolCapability.GENERATE_TEXT, ToolCapability.SUMMARIZE):
-            content = self._generate(target, ctx)
-            ctx.generated_content = content
-            ctx.evidence.add_generated_content(content)  # EVIDENCE: content produced
-            return f"Generated {len(content)} chars"
-
-        # --- Create File (uses generated content!) ---
-        elif cap == ToolCapability.CREATE_FILE:
-            filename = self._infer_filename(target, ctx)
-            content = ctx.generated_content or ctx.combined_info or f"Content for: {ctx.goal}"
-            result = self._file_tool.create_file(filename, content)
-            if result.is_success:
-                ctx.created_files.append(result.target)
-                # EVIDENCE: real file on disk with verified byte size
-                size = int(result.evidence.raw.get("size", 0)) if result.evidence else 0
-                if size <= 0:
-                    size = self._file_size(result.target)
-                ctx.evidence.add_file(result.target, size)
-                return f"Created file: {result.target} ({size} bytes)"
-            return f"File creation failed: {result.error}"
-
-        # --- Edit File ---
-        elif cap == ToolCapability.EDIT_FILE:
-            if ctx.created_files:
-                content = ctx.generated_content or ctx.combined_info
-                result = self._file_tool.write_file(ctx.created_files[-1], content)
-                return result.message
-            return "No file to edit"
-
-        # --- Run command ---
-        elif cap == ToolCapability.RUN_COMMAND:
-            return f"Command execution: {target} (gated for safety)"
-
-        # --- Send message / email (confirmation + verified delivery, M6) ---
-        elif cap in (ToolCapability.SEND_MESSAGE, ToolCapability.SEND_EMAIL):
-            return self._execute_delivery(cap, target, ctx)
-
-        # --- Verify result ---
-        elif cap == ToolCapability.VERIFY_RESULT:
-            return "Intermediate check passed"
+        handler = self._dispatch_table().get(cap)
+        if handler is not None:
+            return handler(target, cap, ctx)
 
         return f"Executed: {step.description}"
+
+    # --- Dispatch handlers (TD-5): each body is the exact former if/elif branch ---
+
+    def _dispatch_search_web(self, target: str, cap, ctx: ExecutionContext) -> str:
+        return self._execute_research(target, ctx)
+
+    def _dispatch_navigate(self, target: str, cap, ctx: ExecutionContext) -> str:
+        url = self._target_to_url(target)
+        # TAB-SPAM GUARD: never open the same URL twice in one execution.
+        if url and url in ctx.navigated_urls:
+            return f"Already navigated to {url} (skipping duplicate open)"
+        if url and self._browser and self._browser.available:
+            result = self._browser.navigate(url)
+            if result.get("ok"):
+                landed = result.get("url", url)
+                ctx.navigated_urls.append(url)
+                ctx.evidence.add_navigation(landed)  # EVIDENCE: confirmed navigation
+                # Visual evidence + block detection after landing.
+                from friday.verification.screenshot_evidence import (
+                    is_blocked_page, blocked_reason, capture_screenshot,
+                )
+                page_text = self._browser.read_text() if hasattr(self._browser, "read_text") else ""
+                if is_blocked_page(page_text, landed):
+                    shot = capture_screenshot(label="nav_blocked")
+                    if shot.is_real:
+                        ctx.evidence.add_screenshot(shot.path, shot.size, "nav_blocked")
+                    ctx.blocked = True
+                    return f"Navigated to {landed} but BLOCKED: {blocked_reason(page_text, landed)}"
+                shot = capture_screenshot(label="after_navigate")
+                if shot.is_real:
+                    ctx.evidence.add_screenshot(shot.path, shot.size, "after_navigate")
+                return f"Navigated to {landed}"
+            return f"Navigation failed: {result.get('error','')}"
+        elif url:
+            # No real browser session. Open ONCE only — do NOT spam tabs
+            # across replanning iterations. Unconfirmed, so no nav evidence.
+            if url not in ctx.navigated_urls:
+                import webbrowser
+                webbrowser.open(url)
+                ctx.navigated_urls.append(url)
+                return f"Opened {url} (unconfirmed, no evidence recorded)"
+            return f"Already opened {url} (skipping duplicate)"
+        else:
+            from friday.actions.system import SystemActions
+            r = SystemActions().launch_app(target)
+            if r.is_success:
+                ctx.evidence.add_navigation(f"launched:{target}")
+            return r.message
+
+    def _dispatch_read(self, target: str, cap, ctx: ExecutionContext) -> str:
+        # If research already gathered content this run, reuse it instead
+        # of redundantly re-reading the current page.
+        if cap == ToolCapability.EXTRACT_WEB_CONTENT and ctx.gathered_info:
+            from friday.verification.evidence_law import EvidenceKind
+            sources = len(ctx.evidence.of_kind(EvidenceKind.SOURCE_URL))
+            return f"Using {len(ctx.gathered_info)} already-gathered items ({sources} sources)"
+        if self._browser and self._browser.available:
+            text = self._browser.read_text()
+            if text:
+                from friday.verification.screenshot_evidence import (
+                    is_blocked_page, blocked_reason, capture_screenshot,
+                )
+                url_now = self._browser.current_url() if hasattr(self._browser, "current_url") else ""
+                # A captcha/verification page is NOT real content.
+                if is_blocked_page(text, url_now):
+                    shot = capture_screenshot(label="read_blocked")
+                    if shot.is_real:
+                        ctx.evidence.add_screenshot(shot.path, shot.size, "read_blocked")
+                    ctx.blocked = True
+                    return f"Read BLOCKED page: {blocked_reason(text, url_now)} (not recorded as info)"
+                ctx.add_info(f"Page content:\n{text[:2500]}")
+                # EVIDENCE: real content was read from a real page
+                ctx.evidence.add_gathered_info(text, source=url_now)
+                if url_now:
+                    ctx.evidence.add_source_url(url_now)
+                shot = capture_screenshot(label="after_read")
+                if shot.is_real:
+                    ctx.evidence.add_screenshot(shot.path, shot.size, "after_read")
+                return f"Read {len(text)} chars from page"
+            return "No content read"
+        return "No browser to read from"
+
+    def _dispatch_click(self, target: str, cap, ctx: ExecutionContext) -> str:
+        return self._execute_click(target, ctx)
+
+    def _dispatch_type(self, target: str, cap, ctx: ExecutionContext) -> str:
+        return self._execute_type(target, ctx)
+
+    def _dispatch_generate(self, target: str, cap, ctx: ExecutionContext) -> str:
+        # Generate / Summarize (uses gathered info!)
+        content = self._generate(target, ctx)
+        ctx.generated_content = content
+        ctx.evidence.add_generated_content(content)  # EVIDENCE: content produced
+        return f"Generated {len(content)} chars"
+
+    def _dispatch_create_file(self, target: str, cap, ctx: ExecutionContext) -> str:
+        # Create File (uses generated content!)
+        filename = self._infer_filename(target, ctx)
+        content = ctx.generated_content or ctx.combined_info or f"Content for: {ctx.goal}"
+        result = self._file_tool.create_file(filename, content)
+        if result.is_success:
+            ctx.created_files.append(result.target)
+            # EVIDENCE: real file on disk with verified byte size
+            size = int(result.evidence.raw.get("size", 0)) if result.evidence else 0
+            if size <= 0:
+                size = self._file_size(result.target)
+            ctx.evidence.add_file(result.target, size)
+            return f"Created file: {result.target} ({size} bytes)"
+        return f"File creation failed: {result.error}"
+
+    def _dispatch_edit_file(self, target: str, cap, ctx: ExecutionContext) -> str:
+        if ctx.created_files:
+            content = ctx.generated_content or ctx.combined_info
+            result = self._file_tool.write_file(ctx.created_files[-1], content)
+            return result.message
+        return "No file to edit"
+
+    def _dispatch_run_command(self, target: str, cap, ctx: ExecutionContext) -> str:
+        return f"Command execution: {target} (gated for safety)"
+
+    def _dispatch_delivery(self, target: str, cap, ctx: ExecutionContext) -> str:
+        # Send message / email (confirmation + verified delivery, M6)
+        return self._execute_delivery(cap, target, ctx)
+
+    def _dispatch_verify_result(self, target: str, cap, ctx: ExecutionContext) -> str:
+        return "Intermediate check passed"
 
     def execute_repair(self, repair_actions, goal: str, prior_result) -> bool:
         """Run a targeted repair (M4): execute only the repair actions, reusing
