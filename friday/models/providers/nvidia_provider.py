@@ -217,7 +217,9 @@ class NvidiaProvider:
 
     def _check_availability(self) -> None:
         """Check if provider can be used."""
-        api_key = self._config.api_key or os.getenv("NVIDIA_API_KEY", "")
+        from friday.models.credentials import resolve_secret
+
+        api_key = self._config.api_key or resolve_secret("NVIDIA_API_KEY")
         if not api_key:
             self._available = False
             self._last_error = "NVIDIA_API_KEY not set"
@@ -231,8 +233,10 @@ class NvidiaProvider:
         self._available = True
 
     def _get_api_key(self) -> str:
-        """Get API key from config or environment."""
-        return self._config.api_key or os.getenv("NVIDIA_API_KEY", "")
+        """Get API key from config or the SecretVault (env fallback)."""
+        from friday.models.credentials import resolve_secret
+
+        return self._config.api_key or resolve_secret("NVIDIA_API_KEY")
 
     async def complete(
         self,

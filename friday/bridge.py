@@ -45,6 +45,9 @@ class BridgeConfig:
     use_nvidia_primary: bool = True
     verify_actions: bool = True
     allow_unverified: bool = False
+    # M12: opt-in kernel-backed execution for multi-step goals. Default False
+    # preserves the exact legacy Operator path (pure superset, reversible).
+    use_kernel_execution: bool = False
 
 
 @dataclass
@@ -80,6 +83,7 @@ class FridayBridge:
         llm_callable: Optional[Callable] = None,
         model_router: Optional[ModelRouter] = None,
         config: Optional[BridgeConfig] = None,
+        kernel: Optional[Any] = None,
     ) -> None:
         self._config = config or BridgeConfig(
             allow_legacy_fallback=os.getenv("ALLOW_LEGACY_FALLBACK", "1") == "1",
@@ -88,6 +92,10 @@ class FridayBridge:
         self._state_cache = state_cache
         self._llm_callable = llm_callable
         self._model_router = model_router
+        # M12: optional kernel collaborator. When present AND
+        # config.use_kernel_execution is True, multi-step goals run through the
+        # kernel's GoalExecutionRuntime; otherwise the legacy path is used.
+        self._kernel = kernel
 
         # Initialize FRIDAY engine
         engine_config = EngineConfig(
@@ -219,15 +227,68 @@ class FridayBridge:
         """
         automation = context.get("automation")
 
+        # M12: opt-in kernel-backed execution for multi-step / complex goals.
+        # Default (flag off or no kernel) keeps the exact legacy Operator path.
+        kernel_execution = (
+            getattr(self._config, "use_kernel_execution", False)
+            and self._kernel is not None
+        )
+
         if complexity == ComplexityLevel.SIMPLE_ACTION:
             return self._execute_simple_action(text, automation)
         elif complexity == ComplexityLevel.MULTI_STEP:
+            if kernel_execution:
+                return self._execute_via_kernel(text)
             return self._execute_multi_step(text, automation)
         elif complexity == ComplexityLevel.COMPLEX_GOAL:
+            if kernel_execution:
+                return self._execute_via_kernel(text)
             return self._execute_complex_goal(text, automation)
 
         # Fallback
         return self._execute_simple_action(text, automation)
+
+    def _execute_via_kernel(self, text: str) -> str:
+        """M12: run a multi-step goal through the kernel's GoalExecutionRuntime.
+
+        Submits the goal, awaits the ``goal.completed`` / ``goal.failed``
+        lifecycle event, and formats the same style of human-readable string the
+        legacy path returns. Falls back to the legacy Operator path when no
+        kernel is wired (never raises, never returns None).
+        """
+        if self._kernel is None:
+            return self._execute_multi_step(text, None)
+
+        outcome_holder: Dict[str, Any] = {}
+
+        def _capture(event) -> None:
+            payload = getattr(event, "payload", None) or {}
+            if not outcome_holder:
+                outcome_holder.update(
+                    {"event_type": getattr(event, "event_type", ""), "payload": dict(payload)}
+                )
+
+        try:
+            self._kernel.subscribe("goal.completed", _capture)
+            self._kernel.subscribe("goal.failed", _capture)
+            self._kernel.submit_goal(text)
+        except Exception as exc:  # noqa: BLE001 — degrade to the legacy path on any wiring error
+            return self._execute_multi_step(text, None)
+
+        if not outcome_holder:
+            # The runtime executes synchronously on goal.created in-process; if
+            # no lifecycle event was captured, fall back to the legacy path.
+            return self._execute_multi_step(text, None)
+
+        payload = outcome_holder.get("payload", {})
+        if outcome_holder.get("event_type") == "goal.completed":
+            summary = payload.get("summary", "") or "Done."
+            msg = f"Completed: {summary}"
+            files = payload.get("created_files") or []
+            if files:
+                msg += f"\n\nFiles: {', '.join(files)}"
+            return msg
+        return f"Partial: {payload.get('error', 'goal did not complete')}"
 
     def _execute_simple_action(self, text: str, automation) -> Any:
         """Level 1: Single action with verification.
@@ -356,244 +417,16 @@ class FridayBridge:
             self._last_browser_error = str(exc)
         return None
 
-    def _execute_operator_step(self, step, automation, env_state) -> str:
-        """Execute a single operator plan step using the right tool."""
-        import asyncio
-        from friday.tools.registry import ToolCapability
-
-        cap = step.capability
-        target = step.target
-
-        # Navigation / Opening
-        if cap in (ToolCapability.OPEN_APPLICATION, ToolCapability.NAVIGATE_URL):
-            url = self._target_to_url(target)
-            if url:
-                # Browser navigation
-                try:
-                    from friday.actions.browser_session import BrowserSession
-                    pw_mgr = getattr(self, '_playwright_manager', None)
-                    session = BrowserSession(playwright_manager=pw_mgr)
-                    if session.available:
-                        try:
-                            loop = asyncio.get_running_loop()
-                            import concurrent.futures
-                            with concurrent.futures.ThreadPoolExecutor() as pool:
-                                future = pool.submit(asyncio.run, session.navigate(url))
-                                result = future.result(timeout=30)
-                            return result.message
-                        except RuntimeError:
-                            result = asyncio.run(session.navigate(url))
-                            return result.message
-                except Exception as exc:
-                    pass
-                # Fallback: webbrowser
-                import webbrowser
-                webbrowser.open(url)
-                return f"Opened {url}"
-            else:
-                # Desktop app launch
-                from friday.actions.system import SystemActions
-                result = SystemActions().launch_app(target)
-                return result.message
-
-        # Reading content
-        elif cap in (ToolCapability.READ_DOM, ToolCapability.EXTRACT_WEB_CONTENT):
-            try:
-                from friday.actions.browser_session import BrowserSession
-                pw_mgr = getattr(self, '_playwright_manager', None)
-                session = BrowserSession(playwright_manager=pw_mgr)
-                if session.available:
-                    try:
-                        loop = asyncio.get_running_loop()
-                        import concurrent.futures
-                        with concurrent.futures.ThreadPoolExecutor() as pool:
-                            future = pool.submit(asyncio.run, session.get_page_text())
-                            result = future.result(timeout=30)
-                        return result.message[:500]
-                    except RuntimeError:
-                        result = asyncio.run(session.get_page_text())
-                        return result.message[:500]
-            except Exception:
-                return "Could not read page"
-
-        # Clicking
-        elif cap == ToolCapability.CLICK_ELEMENT:
-            try:
-                from friday.actions.browser_session import BrowserSession
-                pw_mgr = getattr(self, '_playwright_manager', None)
-                session = BrowserSession(playwright_manager=pw_mgr)
-                if session.available:
-                    try:
-                        loop = asyncio.get_running_loop()
-                        import concurrent.futures
-                        with concurrent.futures.ThreadPoolExecutor() as pool:
-                            future = pool.submit(asyncio.run, session.click(target))
-                            result = future.result(timeout=15)
-                        return result.message
-                    except RuntimeError:
-                        result = asyncio.run(session.click(target))
-                        return result.message
-            except Exception as exc:
-                return f"Click failed: {exc}"
-
-        # Typing
-        elif cap == ToolCapability.TYPE_TEXT:
-            try:
-                from friday.actions.browser_session import BrowserSession
-                pw_mgr = getattr(self, '_playwright_manager', None)
-                session = BrowserSession(playwright_manager=pw_mgr)
-                if session.available:
-                    try:
-                        loop = asyncio.get_running_loop()
-                        import concurrent.futures
-                        with concurrent.futures.ThreadPoolExecutor() as pool:
-                            future = pool.submit(asyncio.run, session.type_text(target))
-                            result = future.result(timeout=15)
-                        return result.message
-                    except RuntimeError:
-                        result = asyncio.run(session.type_text(target))
-                        return result.message
-            except Exception as exc:
-                return f"Type failed: {exc}"
-
-        # Web search
-        elif cap == ToolCapability.SEARCH_WEB:
-            url = f"https://www.google.com/search?q={target.replace(' ', '+')}"
-            import webbrowser
-            webbrowser.open(url)
-            return f"Searching: {target}"
-
-        # Text generation / summarization
-        elif cap in (ToolCapability.GENERATE_TEXT, ToolCapability.SUMMARIZE):
-            if self._model_router:
-                try:
-                    from friday.models.router import ModelCapability
-                    import concurrent.futures
-                    with concurrent.futures.ThreadPoolExecutor() as pool:
-                        future = pool.submit(
-                            asyncio.run,
-                            self._model_router.complete(
-                                f"Generate a concise response for: {target}",
-                                capability=ModelCapability.REASONING,
-                                max_tokens=300,
-                            )
-                        )
-                        response = future.result(timeout=30)
-                    return response.text[:300]
-                except Exception:
-                    pass
-            return f"Generated content for: {target}"
-
-        # File creation
-        elif cap == ToolCapability.CREATE_FILE:
-            return f"File creation: {target} (deferred)"
-
-        # Communication
-        elif cap == ToolCapability.SEND_MESSAGE:
-            return f"Message sending: {target} (requires interaction)"
-
-        # Fallback
-        return f"Executed: {step.description}"
-
-    def _run_multi_step_browser(self, text: str, session) -> Optional[str]:
-        """Execute a multi-step browser task using planner + session."""
-        import asyncio
-        from friday.planner import GoalParser, TaskDecomposer
-
-        parser = GoalParser()
-        decomposer = TaskDecomposer()
-
-        goal = parser.parse(text)
-        plan = decomposer.decompose(goal)
-
-        results: list = []
-
-        async def execute_plan():
-            for _ in range(plan.total_steps):
-                step = plan.advance()
-                if not step:
-                    break
-
-                result = await self._execute_browser_step(step, session)
-                results.append(f"{step.description}: {result.message[:80]}")
-
-                if result.is_success:
-                    plan.complete_current(result.message)
-                else:
-                    plan.fail_current(result.error or "Failed")
-                    break
-
-        try:
-            try:
-                loop = asyncio.get_running_loop()
-                # Already in async context — use thread
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor() as pool:
-                    future = pool.submit(asyncio.run, execute_plan())
-                    future.result(timeout=60)
-            except RuntimeError:
-                asyncio.run(execute_plan())
-        except Exception as exc:
-            return f"Browser task failed: {exc}"
-
-        if plan.is_complete:
-            return "Completed: " + "; ".join(results[-3:])
-        else:
-            return "Partial: " + "; ".join(results[-3:]) if results else f"Failed to execute plan"
-
-    async def _execute_browser_step(self, step, session):
-        """Execute a single task step via browser session."""
-        from friday.actions.result import ActionResult
-
-        action = step.action_type
-        target = step.target
-
-        if action in ("navigate", "open_app"):
-            # Determine URL from target
-            url = self._target_to_url(target)
-            if url:
-                return await session.navigate(url)
-            else:
-                # Open as app
-                from friday.actions.system import SystemActions
-                return SystemActions().launch_app(target)
-
-        elif action == "click":
-            return await session.click(target)
-
-        elif action == "type":
-            text_to_type = step.parameters.get("text", target)
-            return await session.type_text(text_to_type, field_label=target)
-
-        elif action in ("search", "read_page", "analyze"):
-            return await session.get_page_text()
-
-        else:
-            # Generic: try click
-            return await session.click(target)
-
     def _target_to_url(self, target: str) -> Optional[str]:
-        """Convert a target name to a URL if it's a known site."""
-        target_lower = target.lower().strip()
-        known_urls = {
-            "instagram": "https://www.instagram.com/direct/inbox/",
-            "insta": "https://www.instagram.com/direct/inbox/",
-            "whatsapp": "https://web.whatsapp.com",
-            "gmail": "https://mail.google.com",
-            "youtube": "https://www.youtube.com",
-            "twitter": "https://twitter.com",
-            "x": "https://x.com",
-            "reddit": "https://www.reddit.com",
-            "github": "https://github.com",
-            "amazon": "https://www.amazon.in",
-            "google": "https://www.google.com",
-        }
-        for key, url in known_urls.items():
-            if key in target_lower:
-                return url
-        if target_lower.startswith(("http://", "https://", "www.")):
-            return target if target.startswith("http") else f"https://{target}"
-        return None
+        """Resolve a target to a URL ONLY if it is already a URL/host (Axiom 15).
+
+        No hardcoded site map: a bare app/site word resolves to ``None`` so the
+        environment is discovered generically rather than looked up by
+        application name (FAS Ch 39/Ch 63).
+        """
+        from friday.actions.url_resolve import resolve_target_url
+
+        return resolve_target_url(target)
 
     def _execute_complex_goal(self, text: str, automation) -> str:
         """Level 3: Full cognitive agent loop — same operator planner as Level 2.

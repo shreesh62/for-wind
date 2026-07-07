@@ -539,17 +539,17 @@ That is **15 of ~50 chapters with literally no implementation** — and they inc
 
 | # | Debt | Location | FAS Violation | Severity |
 |---|------|----------|---------------|----------|
-| TD-1 | Hardcoded site URL map (instagram/gmail/whatsapp/...) | `bridge.py::_target_to_url` | Axiom 15, Ch 39, Ch 63 Anti-Patterns | CRITICAL |
-| TD-2 | Two parallel execution paths (bridge `_execute_operator_step` AND `GoalExecutor`) | `bridge.py` vs `executor.py` | Ch 52 (coupling), Ch 53 | HIGH |
-| TD-3 | Two parallel verification systems, one orphaned | `verifier.py` (orphaned) vs `evidence_law.py` | Ch 32 (one engine) | HIGH |
-| TD-4 | `FridayEngine` (core.py) orphaned from Operator | `core.py` | Ch 6/20 (single cognition) | HIGH |
+| TD-1 | ~~Hardcoded site URL map (instagram/gmail/whatsapp/...)~~ **RESOLVED** — both `bridge.py::_target_to_url` and `executor.py::_target_to_url` now delegate to the generic `friday/actions/url_resolve.py::resolve_target_url` (URL/host → https; bare app/site name → None, discovered generically). Enforced by `tests/friday/test_url_resolve.py`. | `actions/url_resolve.py` | ~~Axiom 15, Ch 39, Ch 63~~ (cleared) | ✅ DONE |
+| TD-2 | **LARGELY RESOLVED (M12)** — the dead parallel dispatchers (`bridge.py::_execute_operator_step`/`_run_multi_step_browser`/`_execute_browser_step`) are DELETED; the kernel now has a real execution surface (`kernel/execution.py::GoalExecutionRuntime`) that delegates to the proven Operator, and the bridge routes through it behind the opt-in `use_kernel_execution` flag (default off = legacy path preserved). Remaining: flip default to kernel path once proven in production, then delete the inline Operator branch. | `kernel/execution.py`, `bridge.py` | Ch 52/53 (mostly cleared) | 🟡 MOSTLY |
+| TD-3 | ~~Two parallel verification systems, one orphaned~~ **RESOLVED** — `verification/engine.py` (`UnifiedVerificationEngine`, M6) wraps BOTH `ActionVerifier` (diff) and `EvidenceVerifier` (artifacts) into one engine; `verifier.py` is no longer orphaned (consumed by the engine + environment runtimes). | `verification/engine.py` | ~~Ch 32~~ (cleared) | ✅ DONE |
+| TD-4 | **RE-ASSESSED (not orphaned)** — `FridayEngine` (core.py) is the LIVE Level-1 (simple-action) verifier reached via `FridayBridge._execute_simple_action`; it is intentionally retained. The kernel path (M12) now covers multi-step goals. No action needed beyond the M12 execution surface. | `core.py`, `bridge.py` | Ch 6/20 (clarified) | ✅ N/A |
 | TD-5 | Registry tools all `handler=None`; real dispatch is if/elif | `tools/registry.py`, `executor.py` | Ch 16 (capabilities), Ch 22 | HIGH |
-| TD-6 | Memory fully built but unwired | `memory/*`, `operator.py` | Ch 14 (behavioural memory) | HIGH |
-| TD-7 | `DesktopPerception` needs legacy `state_cache` never provided | `perception/desktop.py` | Ch 12, Ch 30 | HIGH |
-| TD-8 | Direct cross-subsystem method calls everywhere | all of `friday/` | Ch 52 | HIGH |
-| TD-9 | Secrets in plaintext `.env`, no vault | `.env`, all providers | Ch 35 §35.6 | HIGH |
+| TD-6 | **RESOLVED at the kernel seam (M12)** — `kernel/execution.py::GoalExecutionRuntime` records a completed-goal episode via an injected, fail-safe `kernel/memory_sink.py::MemorySink` (duck-typed, never imports `friday.memory`). Wired in `api/server.py` when kernel execution is enabled. Enforced by `test_m12_*`. | `kernel/memory_sink.py`, `kernel/execution.py` | ~~Ch 14~~ (cleared on kernel path) | ✅ DONE |
+| TD-7 | **RE-ASSESSED (stale)** — `DesktopPerception` has graceful `_get_window_fallback` paths and degrades cleanly without `state_cache`; it is optional, not broken. Rating was stale. | `perception/desktop.py` | Ch 12/30 (clarified) | ✅ N/A |
+| TD-8 | **MOSTLY RESOLVED (M12)** — the new kernel path communicates only through kernel events (Ch 52); `GoalExecutionRuntime` holds no cross-subsystem references (Operator via factory, memory via sink). Legacy inline path retained behind the flag until retired. | `kernel/execution.py` | Ch 52 (mostly cleared) | 🟡 MOSTLY |
+| TD-9 | ~~Secrets in plaintext `.env`, no vault~~ **RESOLVED** — providers resolve keys via `friday/models/credentials.py::resolve_secret` (SecretVault-first, env fallback); `api/server.py` seeds the vault from env at startup via `seed_vault_from_env`. Enforced by `tests/friday/test_credentials.py`. | `models/credentials.py`, `safety/vault.py` | ~~Ch 35 §35.6~~ (cleared) | ✅ DONE |
 | TD-10 | 802 tests all mocked / DRY_RUN; no goal/replay/failure tests | `tests/friday/*` | Ch 56 | HIGH |
-| TD-11 | API defined but never served (`uvicorn.run` absent) | `api/*` | Ch 57 | MEDIUM |
+| TD-11 | ~~API defined but never served (`uvicorn.run` absent)~~ **RESOLVED** — `api/server.py::start_server` runs `uvicorn.run(app, ...)` with a `python -m friday.api.server` entrypoint (host/port via `FRIDAY_HOST`/`FRIDAY_PORT`); wires bridge + memory + model router + vault seeding. | `api/server.py` | ~~Ch 57~~ (cleared) | ✅ DONE |
 | TD-12 | Massive legacy tree (~16k lines) coexisting, partially referenced | `automation/`, `awareness/`, `core/`, `server/`, `services/` | Ch 53 (clean composition) | MEDIUM |
 | TD-13 | Browser runtime is Playwright-locked, not multi-backend | `browser_controller.py` | Ch 29 §29.23 | MEDIUM |
 | TD-14 | Open-loop pyautogui motor calls | `adapters/desktop*.py` | Ch 31 | MEDIUM |

@@ -26,6 +26,16 @@ def create_app():
     from dotenv import load_dotenv
     load_dotenv()
 
+    # TD-9: migrate API keys off repeated plaintext .env reads into the vault.
+    # After seeding, providers resolve credentials via the SecretVault (env
+    # remains a transparent fallback for anything not seeded).
+    from friday.models.credentials import seed_vault_from_env
+    seeded = seed_vault_from_env(
+        ("NVIDIA_API_KEY", "GROQ_API_KEY", "REMOTE_API_KEY")
+    )
+    if seeded:
+        print(f"[✓] Vault: {seeded} secret(s) migrated from environment")
+
     from friday.api.app import create_friday_api
     from friday.bridge import FridayBridge
     from friday.memory import FridayMemory
@@ -78,14 +88,48 @@ def create_app():
     except Exception as exc:
         print(f"[⚠] Browser: {exc}")
 
-    # Initialize bridge with browser session available
+    # M12: opt-in kernel-backed execution. Default (flag unset) constructs the
+    # bridge exactly as before. When FRIDAY_USE_KERNEL_EXECUTION=1, build a real
+    # kernel + GoalExecutionRuntime (delegating to the proven Operator) and wire
+    # it into the bridge. The whole block is guarded so a wiring failure falls
+    # back to the legacy bridge and never prevents the server from starting.
     from friday.bridge import BridgeConfig
+
+    kernel = None
+    use_kernel = os.getenv("FRIDAY_USE_KERNEL_EXECUTION") == "1"
+    if use_kernel:
+        try:
+            from friday.kernel.kernel import CognitiveKernel
+            from friday.kernel.execution import GoalExecutionRuntime
+            from friday.kernel.memory_sink import MemorySink
+            from friday.operator import Operator
+
+            def _operator_factory(goal_text: str):
+                return Operator(model_router=model_router, max_iterations=2)
+
+            kernel = CognitiveKernel()
+            runtime = GoalExecutionRuntime(
+                _operator_factory,
+                memory_sink=MemorySink(friday_memory),
+            )
+            kernel.register_runtime(runtime)
+            kernel.start()
+            print("[✓] Kernel: goal_execution runtime active (kernel-backed execution)")
+        except Exception as exc:
+            print(f"[⚠] Kernel execution wiring failed, using legacy path: {exc}")
+            kernel = None
+            use_kernel = False
+
     bridge = FridayBridge(
         automation_services=None,
         state_cache=None,
         llm_callable=None,
         model_router=model_router,
-        config=BridgeConfig(allow_legacy_fallback=False),
+        config=BridgeConfig(
+            allow_legacy_fallback=False,
+            use_kernel_execution=use_kernel,
+        ),
+        kernel=kernel,
     )
 
     # Attach the playwright manager to bridge for Level 2+ tasks

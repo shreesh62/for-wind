@@ -163,9 +163,12 @@ class TestGoalExecutor:
 
     def test_target_to_url(self, tmp_dir):
         executor = GoalExecutor(file_tool=FileTool(output_dir=tmp_dir))
-        assert "instagram.com" in executor._target_to_url("instagram")
-        assert "youtube.com" in executor._target_to_url("youtube")
-        assert executor._target_to_url("notepad") is None  # not a known site
+        # Axiom 15: real URLs/hosts resolve; bare app/site names do NOT (no map).
+        assert executor._target_to_url("example.com") == "https://example.com"
+        assert executor._target_to_url("https://docs.example.org/x") == "https://docs.example.org/x"
+        assert executor._target_to_url("www.example.net") == "https://www.example.net"
+        assert executor._target_to_url("instagram") is None  # bare app name → discovered generically
+        assert executor._target_to_url("notepad") is None
 
 
 class TestBuildWorldState:

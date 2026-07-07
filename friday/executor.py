@@ -671,27 +671,15 @@ class GoalExecutor:
             return 0
 
     def _target_to_url(self, target: str) -> Optional[str]:
-        """Map a target to a URL if it's a known site."""
-        t = target.lower().strip()
-        known = {
-            "instagram": "https://www.instagram.com/direct/inbox/",
-            "whatsapp": "https://web.whatsapp.com",
-            "gmail": "https://mail.google.com",
-            "youtube": "https://www.youtube.com",
-            "twitter": "https://twitter.com",
-            "reddit": "https://www.reddit.com",
-            "github": "https://github.com",
-            "amazon": "https://www.amazon.in",
-            "google": "https://www.google.com",
-        }
-        for key, url in known.items():
-            if key in t:
-                return url
-        if t.startswith(("http://", "https://")):
-            return target
-        if t.startswith("www."):
-            return f"https://{target}"
-        return None
+        """Resolve a target to a URL ONLY if it is already a URL/host (Axiom 15).
+
+        No hardcoded site map: a bare app/site word resolves to ``None`` so the
+        environment is discovered generically (search/exploration), never looked
+        up by application name (FAS Ch 39/Ch 63).
+        """
+        from friday.actions.url_resolve import resolve_target_url
+
+        return resolve_target_url(target)
 
 
 class _DefaultGate:

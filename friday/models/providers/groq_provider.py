@@ -119,7 +119,9 @@ class GroqProvider:
 
     def _init_client(self) -> None:
         """Initialize the Groq client."""
-        api_key = self._config.api_key or os.getenv("GROQ_API_KEY", "")
+        from friday.models.credentials import resolve_secret
+
+        api_key = self._config.api_key or resolve_secret("GROQ_API_KEY")
         if not api_key:
             self._available = False
             self._last_error = "GROQ_API_KEY not set"
