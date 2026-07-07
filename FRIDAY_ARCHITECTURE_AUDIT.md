@@ -45,7 +45,7 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 19 | Interaction Architecture (Ch 24) | ⚠️ PARTIAL | PARTIAL | NO | **45%** | MEDIUM | P2 |
 | 20 | Unknown Environment Exploration (Ch 25/66) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
 | 21 | Procedure Synthesis (Ch 26) | ⚠️ PARTIAL | NO | YES | **30%** | MEDIUM | P2 |
-| 22 | Capability Evolution (Ch 27) | ❌ NO | — | NO | **0%** | LOW | P3 |
+| 22 | Capability Evolution (Ch 27) | ✅ PARTIAL | YES | YES | **60%** | LOW | P3 |
 | 23 | Competence Model (Ch 28) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 24 | Browser Runtime (Ch 29) | ✅ PARTIAL | YES | YES | **65%** | MEDIUM | P2 |
 | 25 | Desktop Runtime (Ch 30) | ✅ PARTIAL | YES | YES | **60%** | HIGH | P1 |
@@ -63,14 +63,14 @@ Compliance = (architectural intent satisfied) × (correctly implemented) × (not
 | 37 | Long-Horizon Planning (Ch 42) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 38 | Background Cognition (Ch 43) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 39 | Self-Improvement (Ch 44) | ❌ NO | — | NO | **0%** | LOW | P3 |
-| 40 | Resource Model (Ch 45-48) | ✅ PARTIAL | YES | YES | **45%** | MEDIUM | P2 |
+| 40 | Resource Model (Ch 45-48) | ✅ PARTIAL | YES | YES | **55%** | MEDIUM | P2 |
 | 41 | Temporal Reasoning (Ch 49) | ✅ PARTIAL | YES | YES | **60%** | MEDIUM | P2 |
 | 42 | Memory Architecture / 4-tier (Ch 50) | ⚠️ PARTIAL | PARTIAL | YES (orphaned) | **35%** | MEDIUM | P2 |
 | 43 | Cognitive Identity (Ch 51) | ✅ PARTIAL | YES | YES | **55%** | MEDIUM | P2 |
 | 44 | Runtime Communication (Ch 52) | ❌ NO | — | YES | **5%** | HIGH | P1 |
 | 45 | Runtime Composition / Replaceability (Ch 53) | ⚠️ PARTIAL | NO | YES | **30%** | MEDIUM | P2 |
-| 46 | Plugin Architecture (Ch 54) | ❌ NO | — | NO | **0%** | LOW | P3 |
-| 47 | Benchmark Architecture (Ch 55) | ❌ NO | — | NO | **0%** | MEDIUM | P2 |
+| 46 | Plugin Architecture (Ch 54) | ✅ PARTIAL | YES | YES | **55%** | LOW | P3 |
+| 47 | Benchmark Architecture (Ch 55) | ✅ PARTIAL | YES | YES | **55%** | MEDIUM | P2 |
 | 48 | Testing Philosophy (Ch 56) | ⚠️ PARTIAL | NO | YES | **25%** | HIGH | P1 |
 | 49 | Deployment Architecture (Ch 57) | ⚠️ PARTIAL | NO | NO | **15%** | LOW | P3 |
 | 50 | Operational Arch / Observability (Ch 58) | ⚠️ PARTIAL | NO | NO | **15%** | MEDIUM | P2 |
