@@ -291,7 +291,7 @@ class WebAgent:
                 fut = pool.submit(asyncio.run, self._router.complete(
                     prompt,
                     capability=ModelCapability.REASONING,
-                    model="qwen/qwen3-next-80b-a3b-instruct",  # fast + accurate
+                    model="openai/gpt-oss-20b",  # fast (~1.7s); qwen3-next now hangs on free tier
                     max_tokens=200,
                     temperature=0.1,
                     system_prompt=SYSTEM_PROMPT,

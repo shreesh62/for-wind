@@ -135,10 +135,10 @@ class RequirementsDiscovery:
             response = await self._router.complete(
                 f"Goal: {goal}",
                 capability=ModelCapability.CLASSIFICATION,
-                # Fast, accurate structured decomposition. qwen3-next (3B active
-                # MoE) answers in ~1-2s with clean JSON — far better than the 4B
-                # (mislabels) or the 49B/70B (slow / sometimes empty).
-                model="qwen/qwen3-next-80b-a3b-instruct",
+                # Fast, accurate structured decomposition. gpt-oss-120b answers in
+                # ~1-2s with clean JSON. (The former qwen3-next-80b now hangs to
+                # timeout on the free NIM tier.)
+                model="openai/gpt-oss-120b",
                 max_tokens=350,
                 temperature=0.2,
                 system_prompt=self.SYSTEM_PROMPT,

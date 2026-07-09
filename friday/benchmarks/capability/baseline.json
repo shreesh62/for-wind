@@ -1,0 +1,22 @@
+{
+  "browser": {
+    "score": 0.0,
+    "measured": false
+  },
+  "desktop": {
+    "score": 0.0,
+    "measured": false
+  },
+  "research": {
+    "score": 0.0,
+    "measured": false
+  },
+  "coding": {
+    "score": 0.0,
+    "measured": false
+  },
+  "long_horizon": {
+    "score": 0.0,
+    "measured": false
+  }
+}

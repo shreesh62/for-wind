@@ -40,6 +40,10 @@ class OperatorOutcome:
     created_files: List[str] = field(default_factory=list)
     final_content: str = ""
     trace: List[str] = field(default_factory=list)
+    # M14: the ExecutionEvidence bundle from the final execution, exposed so
+    # capability benchmarks can score against the Evidence Law. Optional and
+    # defaulted so all existing construction sites/behavior are unchanged.
+    evidence: Any = None
 
     @property
     def completion_ratio(self) -> float:
@@ -250,6 +254,7 @@ class Operator:
             created_files=unique_files,
             final_content=final_content,
             trace=trace,
+            evidence=getattr(exec_result, "evidence", None),
         )
 
     def _repair_unmet(self, unmet, exec_result, goal, trace) -> bool:

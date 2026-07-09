@@ -142,10 +142,10 @@ class LLMDecomposer:
             response = await self._router.complete(
                 prompt,
                 capability=ModelCapability.REASONING,
-                # Decomposition needs accurate capability labeling. qwen3-next is
-                # a sparse-MoE (3B active) — ~1-2s with clean JSON, far faster
-                # than the dense 70B (~40s) while labeling steps correctly.
-                model="qwen/qwen3-next-80b-a3b-instruct",
+                # Decomposition needs accurate capability labeling. gpt-oss-120b
+                # answers in ~1-2s with clean JSON. (The former qwen3-next-80b now
+                # hangs to timeout on the free NIM tier.)
+                model="openai/gpt-oss-120b",
                 max_tokens=600,
                 temperature=0.2,
                 system_prompt=self.SYSTEM_PROMPT,

@@ -28,3 +28,8 @@ friday_data/
 
 # Stray git metadata copies
 .git - Copy*/
+
+# Recorded competence baselines (local runtime state; the committed
+# friday/benchmarks/capability/baseline.json seed stays pristine/all-unmeasured).
+baseline.local.json
+friday/benchmarks/capability/baseline.local.json

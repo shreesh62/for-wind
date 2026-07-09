@@ -1,11 +1,15 @@
 """NVIDIA NIM provider — wraps NVIDIA NIM free API endpoints.
 
-NVIDIA NIM provides free inference for many models including:
-- Vision models (llama-3.2-90b-vision-instruct)
-- Reasoning models (nemotron-3-ultra-550b-a55b)
-- Coding models (qwen3-coder-480b-a35b-instruct)
-- Embedding models (nv-embed-v1)
-- Fast models (deepseek-v4-flash)
+NVIDIA NIM provides free inference for many models. The registry below lists only
+models VERIFIED responsive on the free tier (latency-probed); catalog membership
+alone is not enough — some listed models hang, return HTTP 410/404, or emit empty
+content via a separate reasoning channel. Representative verified models:
+- Reasoning/coding/prose: openai/gpt-oss-120b, mistralai/mistral-medium-3.5-128b
+- Fast/light: openai/gpt-oss-20b
+- Coding: qwen/qwen3.5-397b-a17b
+- Vision: meta/llama-3.2-90b-vision-instruct
+- Safety: meta/llama-guard-4-12b
+- Embedding: nvidia/nv-embed-v1
 
 All accessed via OpenAI-compatible API at integrate.api.nvidia.com.
 """
@@ -34,7 +38,11 @@ class NvidiaConfig:
 
     api_key: str = ""
     base_url: str = NVIDIA_API_BASE
-    default_model: str = "meta/llama-3.3-70b-instruct"
+    # gpt-oss-120b is the responsive default: on the free NIM tier it answers in
+    # ~1-2s with clean output. The former default (meta/llama-3.3-70b-instruct)
+    # now hangs to timeout on the free tier (verified 2024), so it must not be the
+    # default or a routing target.
+    default_model: str = "openai/gpt-oss-120b"
     max_retries: int = 2
     timeout: float = 60.0
 
@@ -48,23 +56,15 @@ class NvidiaProvider:
 
     AVAILABLE_MODELS: List[ModelInfo] = [
         # --- Reasoning / Decomposition (Tier 1: fast + accurate, verified) ---
-        # qwen3-next-80b is a sparse MoE (3B active) — ~1-2s, clean JSON output.
-        ModelInfo(
-            provider="nvidia",
-            model_id="qwen/qwen3-next-80b-a3b-instruct",
-            capabilities=[
-                ModelCapability.REASONING,
-                ModelCapability.CONVERSATION,
-                ModelCapability.SUMMARIZATION,
-                ModelCapability.CLASSIFICATION,
-            ],
-            max_tokens=8192,
-            supports_streaming=True,
-            cost_per_1k_tokens=0.0,
-            priority=10,
-            rate_limit_rpm=40,
-        ),
-        # gpt-oss-120b — strong reasoning, ~1.3s, clean JSON. Great for hard goals.
+        # NOTE (free-tier availability, verified 2024): three formerly-listed models
+        # became unusable on the free NIM endpoint and were removed —
+        #   * qwen/qwen3-next-80b-a3b-instruct  — hangs to timeout
+        #   * meta/llama-3.3-70b-instruct       — hangs to timeout
+        #   * qwen/qwen3-coder-480b-a35b-instruct — HTTP 410 Gone (retired)
+        # The gpt-oss models below are the responsive general reasoning/coding tier
+        # (~1-2s). gpt-oss-120b is the top general model (reasoning + coding + prose);
+        # gpt-oss-20b is the fast lightweight option.
+        # gpt-oss-120b — strong reasoning + coding + prose, ~1.7s, clean output.
         ModelInfo(
             provider="nvidia",
             model_id="openai/gpt-oss-120b",
@@ -73,14 +73,15 @@ class NvidiaProvider:
                 ModelCapability.CODING,
                 ModelCapability.CONVERSATION,
                 ModelCapability.SUMMARIZATION,
+                ModelCapability.CLASSIFICATION,
             ],
             max_tokens=8192,
             supports_streaming=True,
             cost_per_1k_tokens=0.0,
-            priority=9,
+            priority=10,
             rate_limit_rpm=30,
         ),
-        # gpt-oss-20b — fast lightweight reasoning (~1.8s).
+        # gpt-oss-20b — fast lightweight reasoning/classification (~1.7s).
         ModelInfo(
             provider="nvidia",
             model_id="openai/gpt-oss-20b",
@@ -93,15 +94,15 @@ class NvidiaProvider:
             max_tokens=8192,
             supports_streaming=True,
             cost_per_1k_tokens=0.0,
-            priority=8,
+            priority=9,
             rate_limit_rpm=40,
         ),
-        # llama-3.3-70b — reliable content generation (verified producing real
-        # well-structured prose). Slower (~40s cold) so lower priority for
-        # decomposition but solid for final content.
+        # mistral-medium-3.5-128b — very fast (~1.0s), clean output. A reasoning /
+        # content FAILOVER below the gpt-oss primaries: the free tier intermittently
+        # returns 503 "all workers busy", so a second healthy general model matters.
         ModelInfo(
             provider="nvidia",
-            model_id="meta/llama-3.3-70b-instruct",
+            model_id="mistralai/mistral-medium-3.5-128b",
             capabilities=[
                 ModelCapability.REASONING,
                 ModelCapability.CONVERSATION,
@@ -110,9 +111,29 @@ class NvidiaProvider:
             max_tokens=8192,
             supports_streaming=True,
             cost_per_1k_tokens=0.0,
-            priority=7,
+            priority=8,
             rate_limit_rpm=30,
         ),
+        # qwen3.5-397b-a17b — large sparse MoE (17B active), ~1.1s, clean output.
+        # Strong dedicated CODING model (failover below gpt-oss-120b for coding).
+        ModelInfo(
+            provider="nvidia",
+            model_id="qwen/qwen3.5-397b-a17b",
+            capabilities=[
+                ModelCapability.CODING,
+                ModelCapability.REASONING,
+            ],
+            max_tokens=8192,
+            supports_streaming=True,
+            cost_per_1k_tokens=0.0,
+            priority=7,
+            rate_limit_rpm=20,
+        ),
+        # NOTE: several catalog models were probed and rejected — they return EMPTY
+        # `content` because they emit into a separate reasoning channel our extractor
+        # does not read (minimaxai/minimax-m2.7, nvidia/llama-3.3-nemotron-super-49b-v1.5,
+        # stepfun-ai/step-3.7-flash, nvidia/nvidia-nemotron-nano-9b-v2). Do not add them
+        # to the general path without handling the reasoning-channel response shape.
         # --- Safety / Content Moderation (verified) ---
         # Used to gate risky actions (send/email/post) and screen generated
         # content before delivery. See ADR for the safety gate.
@@ -160,16 +181,9 @@ class NvidiaProvider:
             rate_limit_rpm=20,
         ),
         # --- Coding ---
-        ModelInfo(
-            provider="nvidia",
-            model_id="qwen/qwen3-coder-480b-a35b-instruct",
-            capabilities=[ModelCapability.CODING, ModelCapability.REASONING],
-            max_tokens=8192,
-            supports_streaming=True,
-            cost_per_1k_tokens=0.0,
-            priority=10,
-            rate_limit_rpm=20,
-        ),
+        # NOTE: qwen/qwen3-coder-480b-a35b-instruct was removed — the free NIM
+        # endpoint returns HTTP 410 Gone. Coding is covered by gpt-oss-120b above
+        # (which carries ModelCapability.CODING).
         # --- Fast/Light ---
         ModelInfo(
             provider="nvidia",

@@ -15,7 +15,16 @@ manually on a real machine:
 from __future__ import annotations
 
 import os
+import sys
 import time
+from pathlib import Path
+
+# Bootstrap: make the project root importable when run directly, without needing
+# PYTHONPATH set (project root is three levels up from this file).
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
 from typing import Any, Callable, List, Optional, Tuple
 
 from scripts.kernel_validation.evidence import ValidationEvidence

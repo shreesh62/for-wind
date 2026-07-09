@@ -78,11 +78,27 @@ amendments.
    single isolated kernel-default-flip commit with the documented rollback. *Rationale: unblock the
    architecture we already built before adding more.*
 
+**Phase 0.5 — Measurement foundation (competence-driven development) — DONE (M14):**
+0.5. **M14 Capability Benchmarks & Competence Ratchet** — measurable, evidence-scored acceptance tests
+   for browser/desktop/research/coding/long-horizon; a persisted per-domain baseline + a regression
+   gate; the mandatory `docs/reviews/AFTER_MILESTONE_REVIEW_TEMPLATE.md`. *Rationale (per governance
+   decision): every subsequent milestone must improve a MEASURED capability, verified by real-world
+   benchmarks, before continuing — so the measurement framework must exist first.* Built additive
+   (1245 tests); real baselines are captured by the maintainer on a real machine (sandbox fabricates
+   none). **Note the numbering: the World Model v2 milestone below is now M15, shifted by the M14
+   insertion; the ordinal labels here are indicative, not literal spec ids.**
+
 **Phase 1 — Foundations (richer reality + resources):**
-1. **M14 World Model v2** (freshness/TTL/provenance/staleness). *Rationale: everything downstream
-   reasons over beliefs; make them trustworthy and explainable first.*
-2. **M18 Resource Manager v2** (economics + dynamic reallocation). *Rationale: independent of M14; a
-   utility term Deliberation v2 needs; can proceed in parallel.*
+1. **World Model v2** (freshness/TTL/provenance/staleness). *Rationale: everything downstream
+   reasons over beliefs; make them trustworthy and explainable first. Target domain: research +
+   long_horizon competence.*
+2. **Resource Manager v2** (economics + dynamic reallocation). *Rationale: independent of World Model
+   v2; a utility term Deliberation v2 needs; can proceed in parallel.*
+
+**Governance (binding for every milestone from here on):** after each milestone, complete the
+after-milestone review — run the capability benchmarks on a real machine, produce an architecture
+review, and confirm the competence ratchet PASSES (target domain improved or held) before starting the
+next milestone. A ratchet FAIL blocks continuation.
 
 **Phase 2 — Smarter environment + decisions:**
 3. **M15 Environment Intelligence** (fingerprints + capability invalidation). *Depends on M14.*

@@ -19,7 +19,26 @@ deciding readiness against explicit criteria.
   `requires_live` and are **skipped** in the sandbox (`FRIDAY_DRY_RUN=1`); they must be run by the
   maintainer on a real machine.
 
-## 2. How to run the harness (real machine)
+## 1a. Capability benchmarks — quick start (real machine)
+
+The capability-benchmark scorecard has a self-contained runnable entry point (no `PYTHONPATH` needed):
+
+```powershell
+# From the project root. IMPORTANT: FRIDAY_DRY_RUN must be UNSET to measure real
+# competence — if it is "1", all live benchmarks are skipped (nothing is scored).
+Remove-Item Env:\FRIDAY_DRY_RUN -ErrorAction SilentlyContinue
+python scripts/kernel_validation/run_capability_benchmarks.py            # measure + print scorecard
+python scripts/kernel_validation/run_capability_benchmarks.py --record   # also persist as the baseline
+```
+
+Requires a model provider (`NVIDIA_API_KEY` and/or `GROQ_API_KEY`, via `.env` or the SecretVault) and,
+for browser/desktop domains, a real Chrome/desktop. Domains with no measurable run are reported
+UNMEASURED (never fabricated). Use `--record` only once you accept the scores as the new baseline.
+
+> **Gotcha:** if the scorecard shows every domain as UNMEASURED / "no", check that `FRIDAY_DRY_RUN`
+> is not set in your shell and that at least one model provider key is available.
+
+## 2. How to run the full end-to-end harness (real machine)
 
 ```bash
 # 1. Ensure a real environment (NOT dry-run) with credentials + Chrome available.

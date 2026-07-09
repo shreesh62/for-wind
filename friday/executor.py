@@ -634,9 +634,10 @@ class GoalExecutor:
                 self._model_router.complete(
                     prompt,
                     capability=ModelCapability.REASONING,
-                    # Explicit capable model that reliably returns content fast
-                    # (the default 49B reasoning model can return empty/slow).
-                    model="meta/llama-3.3-70b-instruct",
+                    # Responsive content model. The former meta/llama-3.3-70b now
+                    # hangs to timeout on the free NIM tier; gpt-oss-120b returns
+                    # well-structured prose in ~1-2s.
+                    model="openai/gpt-oss-120b",
                     max_tokens=1200,
                     temperature=0.4,
                 )
