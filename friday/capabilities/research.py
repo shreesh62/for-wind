@@ -25,10 +25,13 @@ It composes from: browser.search_web + browser.navigate + browser.read_text
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from friday.verification.evidence_law import ExecutionEvidence
 from friday.verification.screenshot_evidence import is_blocked_page, capture_screenshot
+
+if TYPE_CHECKING:
+    from friday.world.belief import Belief
 
 
 @dataclass
@@ -41,6 +44,8 @@ class ResearchResult:
     gathered_text: str = ""
     blocked: bool = False
     error: str = ""
+    # M16 additive — beliefs produced from gathered findings, for kernel/world ingest.
+    beliefs: List["Belief"] = field(default_factory=list)
 
     @property
     def success(self) -> bool:
@@ -71,8 +76,14 @@ def research(
     result = ResearchResult(query=query)
 
     if not browser_controller or not getattr(browser_controller, "available", False):
-        result.error = "No browser available for research"
-        return result
+        # M16: no browser -> browserless gather (dry-run safe inside gather()).
+        from friday.capabilities.web_search import gather
+        return gather(
+            query,
+            evidence,
+            max_sources=max_sources,
+            max_chars_per_source=max_chars_per_source,
+        )
 
     # 1. SEARCH
     search_result = browser_controller.search_web(query)
@@ -101,6 +112,12 @@ def research(
     links = search_result.get("links", [])
     urls_to_read = _select_best_links(links, max_sources)
 
+    # DOM-less controllers (desktop/OCR) return no usable result links. Discover
+    # real source URLs via the reliable browserless search, then operate the real
+    # browser to open+read them. Generic (Axiom 15): no per-site logic.
+    if not urls_to_read:
+        urls_to_read = _discover_urls_browserless(query, max_sources)
+
     for url in urls_to_read:
         if not url or url in result.source_urls:
             continue
@@ -120,12 +137,13 @@ def research(
         if is_blocked_page(page_text, landed_url):
             continue  # skip blocked pages, try the next one
 
-        # Record as REAL evidence
+        # Record as REAL evidence — a real navigation to a content page happened.
         result.source_urls.append(landed_url)
         result.sources_read += 1
         result.gathered_text += f"[Source: {landed_url}]\n{page_text.strip()}\n\n"
         evidence.add_gathered_info(page_text, source=landed_url)
         evidence.add_source_url(landed_url)
+        evidence.add_navigation(landed_url)
 
     # Screenshot after research
     shot = capture_screenshot(label="research_complete")
@@ -151,6 +169,23 @@ def _decode_ddg_redirect(href: str) -> str:
         except Exception:
             pass
     return href
+
+
+def _discover_urls_browserless(query: str, limit: int) -> List[str]:
+    """Discover real source URLs via the browserless HTTP search.
+
+    Used when the live browser controller cannot extract result links (a DOM-less
+    desktop/OCR controller). Returns concrete http(s) URLs (dry-run safe: the
+    browserless search performs no network I/O under FRIDAY_DRY_RUN). Never raises.
+    """
+    try:
+        from friday.capabilities.web_search import http_search
+        outcome = http_search(query, max_results=max(limit * 3, 6))
+        hits = getattr(outcome, "hits", None) or []
+        links = [{"href": getattr(h, "url", "")} for h in hits]
+        return _select_best_links(links, limit)
+    except Exception:  # noqa: BLE001 — discovery is best-effort
+        return []
 
 
 def _select_best_links(links: List[Dict[str, str]], limit: int) -> List[str]:

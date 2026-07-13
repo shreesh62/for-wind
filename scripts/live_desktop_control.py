@@ -25,15 +25,15 @@ load_dotenv()
 
 
 def main() -> int:
-    from friday.actions.desktop_chrome import DesktopChromeController
+    from friday.actions.desktop_browser import DesktopBrowserController
 
     print("=" * 70)
-    print("LIVE DESKTOP CONTROL - operate your normal open Chrome (no CDP)")
+    print("LIVE DESKTOP CONTROL - operate your active browser window (no CDP)")
     print("=" * 70)
 
-    c = DesktopChromeController()
+    c = DesktopBrowserController()
     if not c.available:
-        print("[FAIL] No Chrome window found. Open Chrome (signed in) first.")
+        print("[FAIL] Desktop control unavailable (pyautogui missing).")
         return 1
 
     if not c.start():

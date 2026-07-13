@@ -32,12 +32,41 @@ class TestGoalNeedsSession:
         assert goal_needs_user_session("") is False
 
 
+class TestDefaultIsDesktopFirst:
+    """M23: with the CDP optimization disabled (default), every goal resolves to
+    the canonical desktop pipeline regardless of CDP reachability."""
+
+    def test_default_disabled_is_desktop_even_when_cdp_reachable(self):
+        s = resolve_browser_strategy(
+            "anything",
+            cdp_reachable_fn=lambda port: True,
+            chrome_running_fn=lambda port: True,
+            cdp_enabled_fn=lambda: False,
+        )
+        assert s.mode == BrowserMode.DESKTOP_CONTROL
+        assert s.uses_desktop
+
+    def test_login_goal_default_is_desktop(self):
+        s = resolve_browser_strategy(
+            "reply to my latest instagram dm",
+            cdp_reachable_fn=lambda port: False,
+            chrome_running_fn=lambda port: False,
+            cdp_enabled_fn=lambda: False,
+        )
+        assert s.mode == BrowserMode.DESKTOP_CONTROL
+        assert s.needs_user_session is True
+
+
 class TestStrategyMatrix:
+    """When the CDP optimization is explicitly enabled, the historical matrix
+    (reuse/launch/dedicated/desktop) applies."""
+
     def test_cdp_reachable_reuses(self):
         s = resolve_browser_strategy(
             "anything",
             cdp_reachable_fn=lambda port: True,
             chrome_running_fn=lambda port: True,
+            cdp_enabled_fn=lambda: True,
         )
         assert s.mode == BrowserMode.CDP_REUSE
         assert s.uses_cdp
@@ -47,6 +76,7 @@ class TestStrategyMatrix:
             "check my instagram dms",
             cdp_reachable_fn=lambda port: False,
             chrome_running_fn=lambda port: False,
+            cdp_enabled_fn=lambda: True,
         )
         assert s.mode == BrowserMode.CDP_LAUNCH
         assert s.needs_user_session is True
@@ -56,6 +86,7 @@ class TestStrategyMatrix:
             "reply to my latest instagram dm",
             cdp_reachable_fn=lambda port: False,
             chrome_running_fn=lambda port: True,
+            cdp_enabled_fn=lambda: True,
         )
         assert s.mode == BrowserMode.DESKTOP_CONTROL
         assert s.uses_desktop
@@ -66,6 +97,7 @@ class TestStrategyMatrix:
             "research best gaming laptops and summarize",
             cdp_reachable_fn=lambda port: False,
             chrome_running_fn=lambda port: True,
+            cdp_enabled_fn=lambda: True,
         )
         assert s.mode == BrowserMode.CDP_DEDICATED
         assert s.needs_user_session is False
@@ -77,7 +109,8 @@ class TestStrategyMatrix:
             ("my dm", False, True), ("research x", False, True),
         ]:
             s = resolve_browser_strategy(
-                goal, cdp_reachable_fn=lambda p: cdp, chrome_running_fn=lambda p: running
+                goal, cdp_reachable_fn=lambda p: cdp, chrome_running_fn=lambda p: running,
+                cdp_enabled_fn=lambda: True,
             )
             assert s.reason
             assert isinstance(s.mode, BrowserMode)

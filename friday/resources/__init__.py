@@ -9,6 +9,14 @@ allocated, never assumed (the 7th law, Ch 45.x).
 from friday.resources.registry import ResourceRegistry
 from friday.resources.scheduler import Allocation, ResourceManager
 from friday.resources.types import Resource, ResourceKind
+from friday.resources.economics import (
+    BudgetStatus,
+    ReallocationResult,
+    ResourceBudget,
+    ResourcePolicy,
+    ResourceRequest,
+    ResourceReservation,
+)
 
 __all__ = [
     "Resource",
@@ -16,4 +24,10 @@ __all__ = [
     "ResourceRegistry",
     "ResourceManager",
     "Allocation",
+    "ResourceBudget",
+    "BudgetStatus",
+    "ResourceRequest",
+    "ResourcePolicy",
+    "ResourceReservation",
+    "ReallocationResult",
 ]

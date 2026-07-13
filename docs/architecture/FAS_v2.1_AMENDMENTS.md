@@ -205,3 +205,45 @@ All amendments preserve: kernel-mediated communication (Ch 52 — subsystems tal
 authoritative instance of Kernel/World Model/Goal Graph/Competence Model; evidence over assertion
 (Axiom 5 / the 4th law); generality over specialization (Axiom 15). No amendment introduces
 application-specific logic or a hardcoded workflow.
+
+
+---
+
+## A2.13 Web Environment Runtime — Browser as a Generic Desktop Environment  `[EXPAND Ch 23/29/30]`
+
+**Code state:** M23 — primary path built. Universal perception fusion
+(`friday/perception/active_window.py`), generic controller
+(`friday/actions/desktop_browser.py::DesktopBrowserController`), desktop-first
+strategy (`friday/actions/browser_strategy.py`), CDP gated by `FRIDAY_ENABLE_CDP`.
+
+**Rename (normative):** the environment class formerly called the **Browser
+Runtime** is renamed the **Web Environment Runtime** — a web browser is one member
+of the general set of desktop environments, not a special case.
+
+**Normative additions:**
+- **§A2.13.1 Browser is a desktop application.** FRIDAY SHALL operate Chrome, Edge,
+  Firefox, Brave, Arc, Electron apps, and future browsers through the SAME general
+  desktop-cognition pipeline used for every desktop application: perceive (Ch 12) →
+  reason over World Objects → act via the Motor System (Ch 31) → verify by World-Model
+  change (Ch 32). No application-, browser-, site-, or window-title-specific logic
+  (Axiom 15 / Ch 63).
+- **§A2.13.2 Optional optimization interfaces.** Browser-specific automation (CDP,
+  Playwright, Selenium, DevTools Protocol, extensions) is an OPTIONAL optimization
+  resource, never an architectural dependency. The desktop pipeline SHALL remain
+  fully functional and equally correct with these disabled. CDP acceleration is
+  enabled only via `FRIDAY_ENABLE_CDP`; the same switch is the rollback control.
+- **§A2.13.3 Browser independence.** For any browser goal, the correctness outcome
+  (verified success + evidence kinds) SHALL be identical whether the CDP optimization
+  is enabled or disabled; only measured performance may differ.
+- **§A2.13.4 Universal perception.** Every task SHALL build a complete WorldState for
+  the active window by fusing the ranked perception stack (Accessibility/UIA → native
+  semantic → OCR → Computer Vision → raw pixels). The planner/deliberator/executor
+  reason only over World Objects and never depend on which source produced an
+  observation.
+- **§A2.13.5 Least-invasive motor.** The Motor System SHALL prefer the least-invasive
+  reliable interaction: Keyboard → Accessibility Actions → Mouse → Pixel fallback.
+- **§A2.13.6 Verified success.** Success SHALL be established only by an observed change
+  in the World Model, never inferred from having dispatched an input.
+
+**Invariant:** browsers are merely one class of environments FRIDAY already operates;
+optimizing for arbitrary desktop environments subsumes optimizing for any browser.

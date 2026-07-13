@@ -64,11 +64,19 @@ class TestResearchCapability:
         assert evidence.has(EvidenceKind.SOURCE_URL)
 
     def test_no_browser_returns_honest_failure(self):
+        # M16 contract change (Req 3.1): the no-browser path no longer returns an
+        # "no browser" error — it now delegates to the browserless gatherer. Under
+        # the suite's FRIDAY_DRY_RUN=1 the gatherer performs NO network call and
+        # returns a blocked result recording NO evidence. The PRESERVED intent — no
+        # browser must never yield fabricated GATHERED_INFO — is still asserted here.
         evidence = ExecutionEvidence()
         result = research("anything", None, evidence)
         assert result.success is False
-        assert "no browser" in result.error.lower()
+        # Honesty guarantee preserved: no fabricated gathered evidence.
         assert not evidence.has(EvidenceKind.GATHERED_INFO)
+        # Blocked (no network) under dry-run, with a descriptive, non-empty error.
+        assert result.blocked is True
+        assert result.error
 
     def test_blocked_page_skipped_gracefully(self):
         browser = FakeBrowser(

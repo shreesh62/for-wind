@@ -95,12 +95,27 @@ class GoalExecutor:
         browser_controller=None,
         file_tool=None,
         delivery_gate=None,
+        state_cache=None,
+        exploration_engine=None,
+        environment_provider=None,
     ) -> None:
         import os
         self._model_router = model_router
         self._browser = browser_controller
         self._dry_run = os.environ.get("FRIDAY_DRY_RUN", "0") == "1"
         self._delivery_gate = delivery_gate
+        # Awareness UIA state cache (production path) — feeds the Accessibility tier
+        # of Universal Perception. None on the standalone benchmark runner.
+        self._state_cache = state_cache
+        # M23 Req 6 — Exploration on low confidence. When a target cannot be
+        # resolved confidently, the executor invokes this generic ExplorationEngine
+        # over an abstract EnvironmentContract (from environment_provider) instead of
+        # performing a blind action. Both default to None: when unwired the executor
+        # still NEVER guesses — it fails cleanly. Real safe-experiments are therefore
+        # opt-in (inject a live environment_provider) so the live real-action path is
+        # explicit, while the mechanism itself is present and unit-verified.
+        self._exploration_engine = exploration_engine
+        self._environment_provider = environment_provider
         from friday.actions.file_tool import FileTool
         self._file_tool = file_tool or FileTool()
 
@@ -263,7 +278,44 @@ class GoalExecutor:
                 return f"Opened {url} (unconfirmed, no evidence recorded)"
             return f"Already opened {url} (skipping duplicate)"
         else:
+            # SEARCH -> NAVIGATE CHAINING: a "navigate/open page" step with no
+            # resolvable URL (e.g. an LLM planner placeholder like "<extracted
+            # URL>") should navigate to a REAL url already gathered by a prior
+            # search/research step — recording NAVIGATION — instead of trying to
+            # launch the placeholder as a desktop app. General (Axiom 15): it uses
+            # whatever sources were gathered, with no site-specific logic.
+            if self._browser and self._browser.available:
+                from friday.verification.evidence_law import EvidenceKind
+                gathered_urls = [
+                    a.detail
+                    for a in ctx.evidence.of_kind(EvidenceKind.SOURCE_URL)
+                    if a.detail
+                ]
+                next_url = next(
+                    (u for u in gathered_urls if u not in ctx.navigated_urls), None
+                )
+                if next_url:
+                    ctx.navigated_urls.append(next_url)  # guard against re-nav loops
+                    result = self._browser.navigate(next_url)
+                    if result.get("ok"):
+                        landed = result.get("url", next_url)
+                        ctx.evidence.add_navigation(landed)  # EVIDENCE: confirmed nav
+                        from friday.verification.screenshot_evidence import (
+                            capture_screenshot,
+                        )
+                        shot = capture_screenshot(label="after_navigate")
+                        if shot.is_real:
+                            ctx.evidence.add_screenshot(shot.path, shot.size, "after_navigate")
+                        return f"Navigated to gathered source {landed}"
+                    return f"Navigation to gathered source failed: {result.get('error','')}"
+
             from friday.actions.system import SystemActions
+            from friday.verification.evidence_law import looks_like_placeholder
+            # HARD verification (M23): a placeholder target ("<<extracted URL>>",
+            # "<topic>") is NOT a launchable app — fail loudly, record nothing.
+            if looks_like_placeholder(target):
+                return (f"Navigation skipped: unresolved placeholder target "
+                        f"'{target[:40]}' (no real URL was produced)")
             r = SystemActions().launch_app(target)
             if r.is_success:
                 ctx.evidence.add_navigation(f"launched:{target}")
@@ -465,6 +517,13 @@ class GoalExecutor:
         evidence. This is what makes GATHER requirements honestly satisfiable.
         """
         from friday.capabilities.research import research
+        from friday.verification.evidence_law import looks_like_placeholder
+
+        # HARD verification (M23): never research an unfilled template placeholder
+        # (e.g. "<<topic>>", "a given topic"). Acting on it produces junk evidence.
+        if looks_like_placeholder(query):
+            return (f"Research skipped: unresolved placeholder target "
+                    f"'{query[:40]}' — the goal was not instantiated")
 
         result = research(
             query=query,
@@ -507,10 +566,25 @@ class GoalExecutor:
             ws = self._build_world_state()
             t = Target(text=target)
             result = self._run_async(P.click(t, ws))
-            if result.is_success:
-                ctx.evidence.add_navigation(f"clicked:{target}")
-                return f"Clicked '{target}' (via {result.metadata.get('adapter', 'unknown')})"
-            return f"Click failed: {result.error}"
+            if not result.is_success:
+                # M23 Req 6: the resolver could not confidently resolve the target.
+                # Explore (observe -> hypothesize -> safe-experiment -> verify ->
+                # update World Model) instead of a blind action — never guess.
+                if getattr(result, "error_category", "") == "target_not_found":
+                    explored = self._explore_on_low_confidence(target, ctx)
+                    if explored is not None:
+                        return explored
+                return f"Click failed: {result.error}"
+            # M23 verified-success (Req 7): on the live path with a REAL WorldState,
+            # success requires an OBSERVED change in the World Model — never inferred
+            # from dispatch alone. In dry-run/tests the adapter result stands.
+            if not self._dry_run and self._worldstate_is_real(ws):
+                after = self._build_world_state()
+                if not self._observed_change(ws, after):
+                    return (f"Clicked '{target}' but no observable World-Model "
+                            f"change (unverified)")
+            ctx.evidence.add_navigation(f"clicked:{target}")
+            return f"Clicked '{target}' (via {result.metadata.get('adapter', 'unknown')})"
         except Exception as exc:
             return f"Click failed: {exc}"
 
@@ -529,11 +603,90 @@ class GoalExecutor:
 
             ws = self._build_world_state()
             result = self._run_async(P.type_text(target, ws))
-            if result.is_success:
-                return f"Typed text (via {result.metadata.get('adapter', 'unknown')})"
-            return f"Type failed: {result.error}"
+            if not result.is_success:
+                # M23 Req 6: unresolved target -> explore, never blind-type.
+                if getattr(result, "error_category", "") == "target_not_found":
+                    explored = self._explore_on_low_confidence(target, ctx)
+                    if explored is not None:
+                        return explored
+                return f"Type failed: {result.error}"
+            # M23 verified-success (Req 7): observed change required on the live path.
+            if not self._dry_run and self._worldstate_is_real(ws):
+                after = self._build_world_state()
+                if not self._observed_change(ws, after):
+                    return "Typed text but no observable World-Model change (unverified)"
+            return f"Typed text (via {result.metadata.get('adapter', 'unknown')})"
         except Exception as exc:
             return f"Type failed: {exc}"
+
+    def _explore_on_low_confidence(
+        self, target: str, ctx: ExecutionContext
+    ) -> Optional[str]:
+        """M23 Req 6 — explore an unresolved target instead of a blind action.
+
+        Invoked when the resolver cannot resolve a target above confidence (the
+        primitive returns ``target_not_found``). Drives the generic
+        ``ExplorationEngine`` over an abstract ``EnvironmentContract`` supplied by
+        ``environment_provider`` — Observe → hypothesize → risk-ordered safe
+        experiment → verify → update the World Model. The engine only runs
+        confidence/risk-permitted experiments, so this is never a blind action, and
+        it uses ONLY the abstract contract surface (no app/browser heuristics —
+        Axiom 15).
+
+        Returns a status string when exploration ran (or attempted), or ``None``
+        when no exploration path is wired — in which case the caller reports the
+        clean resolution failure (still no guess). Never raises.
+        """
+        engine = self._exploration_engine
+        provider = self._environment_provider
+        if engine is None or provider is None:
+            return None
+        try:
+            environment = provider()
+        except Exception:  # noqa: BLE001 - provider is best-effort
+            environment = None
+        if environment is None:
+            return None
+        try:
+            outcome = engine.explore(environment)
+        except Exception as exc:  # noqa: BLE001 - exploration must never crash a step
+            note = f"Exploration failed for unresolved target '{target}': {exc}"
+            ctx.step_log.append(f"[explore] {note}")
+            return note
+        note = (
+            f"Explored environment for unresolved target '{target}': "
+            f"{getattr(outcome, 'budget_spent', 0)} safe experiment(s), "
+            f"confidence {getattr(outcome, 'confidence', 0.0):.2f}"
+        )
+        ctx.step_log.append(f"[explore] {note}")
+        return note
+
+    @staticmethod
+    def _worldstate_is_real(ws) -> bool:
+        """True when a snapshot carries actual perception (not an empty/dry-run WS).
+
+        Used to gate M23 verified-success: change-verification only applies when we
+        actually perceived the environment; an empty WorldState (e.g. dry-run) falls
+        back to the adapter's own result.
+        """
+        return bool(
+            ws.ui_elements or ws.ocr_regions or ws.browser_elements
+            or ws.screenshot_hash
+        )
+
+    @staticmethod
+    def _observed_change(before, after) -> bool:
+        """Whether the World Model changed between two snapshots (Req 7).
+
+        Success is verified by an observed change (URL/element/text/focus/window/
+        pixel-hash), never inferred from having dispatched an input.
+        """
+        d = after.diff_from(before)
+        return bool(
+            d.get("hash_changed") or d.get("url_changed")
+            or d.get("screenshot_changed") or d.get("element_count_changed")
+            or d.get("focus_changed") or d.get("window_changed")
+        )
 
     def _build_world_state(self):
         """Build a WorldState from the current browser state.
@@ -545,8 +698,25 @@ class GoalExecutor:
         """
         from friday.perception.world_state import WorldStateBuilder
         from friday.perception.types import BrowserElement, BoundingBox
+        from friday.perception.active_window import populate_active_window
 
         builder = WorldStateBuilder()
+
+        # M23 Universal Perception: fuse the active window's desktop stack
+        # (Accessibility/UIA -> OCR -> pixels) so ANY window — a browser or any
+        # other app — is perceivable without a browser-specific path. Skipped
+        # under dry-run to keep unit tests free of real screen capture; the
+        # optional browser DOM below is fused as an additional ranked source.
+        if not self._dry_run:
+            try:
+                desktop = None
+                if self._state_cache is not None:
+                    from friday.perception.desktop import DesktopPerception
+                    desktop = DesktopPerception(state_cache=self._state_cache)
+                populate_active_window(builder, desktop=desktop)
+            except Exception:
+                pass
+
         if self._browser and self._browser.available:
             url = self._browser.current_url() if hasattr(self._browser, "current_url") else ""
             title = ""

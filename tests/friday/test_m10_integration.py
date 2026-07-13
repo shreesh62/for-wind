@@ -160,16 +160,16 @@ def test_research_document_deliver_end_to_end() -> None:
 
         # 2. Simulate gathered research on the evidence bundle.
         evidence = ExecutionEvidence()
-        evidence.add_source_url("alpha.gov/a")
-        evidence.add_source_url("beta.org/b")
-        evidence.add_gathered_info("some gathered text", source="alpha.gov/a")
+        evidence.add_source_url("https://alpha.gov/a")
+        evidence.add_source_url("https://beta.org/b")
+        evidence.add_gathered_info("some gathered text", source="https://alpha.gov/a")
 
         # 3. Build a semantic document and cite it against the gathered sources.
         doc = _build_document()
         cited_doc = DocumentDomain(registry).cite(doc, evidence)
         assert len(cited_doc.citations) == 2
         cited_urls = {c.source_url for c in cited_doc.citations}
-        assert cited_urls == {"alpha.gov/a", "beta.org/b"}
+        assert cited_urls == {"https://alpha.gov/a", "https://beta.org/b"}
 
         # 4. Export the cited document via the create_file stub.
         export_outcome = await DocumentDomain(registry).export(

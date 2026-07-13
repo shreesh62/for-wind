@@ -5,11 +5,15 @@ and returns the first adapter that can handle the target AND successfully
 resolves the element. On re-routing after failure, callers pass an `exclude`
 list to skip previously-failed adapters.
 
-Resolution order (Resolution_Preference):
-  1. BrowserAdapter         (priority 100)
-  2. DesktopAdapter         (priority 80)
-  3. DesktopActionsAdapter  (priority 60)
-  4. VisionAdapter          (priority 30)
+Resolution order (Resolution_Preference) — this IS the M23 Motor Preference
+order "least-invasive reliable interaction first" (Keyboard → Accessibility →
+Mouse → Pixel): keyboard primitives (type/press/hotkey) are available on every
+adapter and are chosen for text/shortcut actions; for element actuation the
+priority tiers rank Accessibility above raw Mouse above Pixel:
+  1. BrowserAdapter         (priority 100)  # DOM (CDP plugin only, when enabled)
+  2. DesktopAdapter         (priority 80)   # Accessibility / UI Automation
+  3. DesktopActionsAdapter  (priority 60)   # Mouse / OS-level coordinates
+  4. VisionAdapter          (priority 30)   # Pixel / OCR fallback (last resort)
 """
 
 from __future__ import annotations

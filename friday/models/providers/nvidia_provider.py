@@ -4,9 +4,9 @@ NVIDIA NIM provides free inference for many models. The registry below lists onl
 models VERIFIED responsive on the free tier (latency-probed); catalog membership
 alone is not enough — some listed models hang, return HTTP 410/404, or emit empty
 content via a separate reasoning channel. Representative verified models:
-- Reasoning/coding/prose: openai/gpt-oss-120b, mistralai/mistral-medium-3.5-128b
-- Fast/light: openai/gpt-oss-20b
-- Coding: qwen/qwen3.5-397b-a17b
+- Primary general (reasoning/coding/prose, clean+fast): qwen/qwen3.5-397b-a17b
+- General failover: mistralai/mistral-medium-3.5-128b
+- Reasoning models (failover only; empty content on small budgets): openai/gpt-oss-120b, openai/gpt-oss-20b
 - Vision: meta/llama-3.2-90b-vision-instruct
 - Safety: meta/llama-guard-4-12b
 - Embedding: nvidia/nv-embed-v1
@@ -38,12 +38,20 @@ class NvidiaConfig:
 
     api_key: str = ""
     base_url: str = NVIDIA_API_BASE
-    # gpt-oss-120b is the responsive default: on the free NIM tier it answers in
-    # ~1-2s with clean output. The former default (meta/llama-3.3-70b-instruct)
-    # now hangs to timeout on the free tier (verified 2024), so it must not be the
-    # default or a routing target.
-    default_model: str = "openai/gpt-oss-120b"
-    max_retries: int = 2
+    # qwen3.5-397b-a17b is the responsive default: on the free NIM tier it answers
+    # in ~1-2s with CLEAN content in `message.content`.
+    #
+    # NOTE (verified via latency probe): the gpt-oss family are *reasoning* models —
+    # they emit chain-of-thought into `message.reasoning_content` FIRST, which is
+    # billed against `max_tokens`. On the small token budgets the Operator loop uses,
+    # reasoning consumes the whole budget and `message.content` comes back EMPTY
+    # (finish_reason="length"). Empty content is not an exception, so the router
+    # cannot fail over — the Operator just loops until the benchmark times out. They
+    # are therefore demoted to failover priority and never lead a capability.
+    default_model: str = "qwen/qwen3.5-397b-a17b"
+    # 3 attempts (2 retries) absorbs the free tier's sporadic 5xx / rate-limit blips
+    # without materially slowing genuine failures (successful calls return in ~2-4s).
+    max_retries: int = 3
     timeout: float = 60.0
 
 
@@ -64,7 +72,47 @@ class NvidiaProvider:
         # The gpt-oss models below are the responsive general reasoning/coding tier
         # (~1-2s). gpt-oss-120b is the top general model (reasoning + coding + prose);
         # gpt-oss-20b is the fast lightweight option.
-        # gpt-oss-120b — strong reasoning + coding + prose, ~1.7s, clean output.
+        # qwen3.5-397b-a17b — large sparse MoE (17B active), ~1.1-1.3s, CLEAN content
+        # (no reasoning-channel trap). This is the PRIMARY general model: it leads
+        # every text capability so the router never selects a gpt-oss reasoning model
+        # (which returns empty content on small budgets — see NvidiaConfig note).
+        ModelInfo(
+            provider="nvidia",
+            model_id="qwen/qwen3.5-397b-a17b",
+            capabilities=[
+                ModelCapability.REASONING,
+                ModelCapability.CODING,
+                ModelCapability.CONVERSATION,
+                ModelCapability.SUMMARIZATION,
+                ModelCapability.CLASSIFICATION,
+            ],
+            max_tokens=8192,
+            supports_streaming=True,
+            cost_per_1k_tokens=0.0,
+            priority=12,
+            rate_limit_rpm=20,
+        ),
+        # mistral-medium-3.5-128b — clean output, reliable general FAILOVER below
+        # qwen. (Latency varies on the free tier: ~1-20s; kept as failover, not
+        # primary, so its occasional slowness never gates the Operator loop.)
+        ModelInfo(
+            provider="nvidia",
+            model_id="mistralai/mistral-medium-3.5-128b",
+            capabilities=[
+                ModelCapability.REASONING,
+                ModelCapability.CONVERSATION,
+                ModelCapability.SUMMARIZATION,
+            ],
+            max_tokens=8192,
+            supports_streaming=True,
+            cost_per_1k_tokens=0.0,
+            priority=11,
+            rate_limit_rpm=30,
+        ),
+        # gpt-oss-120b — strong reasoning + coding, but a REASONING model that returns
+        # empty content on small token budgets (see NvidiaConfig note). Demoted to
+        # failover priority so it never leads; the complete() empty-content guard
+        # bumps the budget and retries if it is ever selected directly.
         ModelInfo(
             provider="nvidia",
             model_id="openai/gpt-oss-120b",
@@ -78,10 +126,11 @@ class NvidiaProvider:
             max_tokens=8192,
             supports_streaming=True,
             cost_per_1k_tokens=0.0,
-            priority=10,
+            priority=6,
             rate_limit_rpm=30,
         ),
-        # gpt-oss-20b — fast lightweight reasoning/classification (~1.7s).
+        # gpt-oss-20b — fast lightweight reasoning model; same reasoning-channel
+        # caveat as gpt-oss-120b. Failover only.
         ModelInfo(
             provider="nvidia",
             model_id="openai/gpt-oss-20b",
@@ -94,40 +143,8 @@ class NvidiaProvider:
             max_tokens=8192,
             supports_streaming=True,
             cost_per_1k_tokens=0.0,
-            priority=9,
+            priority=5,
             rate_limit_rpm=40,
-        ),
-        # mistral-medium-3.5-128b — very fast (~1.0s), clean output. A reasoning /
-        # content FAILOVER below the gpt-oss primaries: the free tier intermittently
-        # returns 503 "all workers busy", so a second healthy general model matters.
-        ModelInfo(
-            provider="nvidia",
-            model_id="mistralai/mistral-medium-3.5-128b",
-            capabilities=[
-                ModelCapability.REASONING,
-                ModelCapability.CONVERSATION,
-                ModelCapability.SUMMARIZATION,
-            ],
-            max_tokens=8192,
-            supports_streaming=True,
-            cost_per_1k_tokens=0.0,
-            priority=8,
-            rate_limit_rpm=30,
-        ),
-        # qwen3.5-397b-a17b — large sparse MoE (17B active), ~1.1s, clean output.
-        # Strong dedicated CODING model (failover below gpt-oss-120b for coding).
-        ModelInfo(
-            provider="nvidia",
-            model_id="qwen/qwen3.5-397b-a17b",
-            capabilities=[
-                ModelCapability.CODING,
-                ModelCapability.REASONING,
-            ],
-            max_tokens=8192,
-            supports_streaming=True,
-            cost_per_1k_tokens=0.0,
-            priority=7,
-            rate_limit_rpm=20,
         ),
         # NOTE: several catalog models were probed and rejected — they return EMPTY
         # `content` because they emit into a separate reasoning channel our extractor
@@ -292,12 +309,23 @@ class NvidiaProvider:
                 ],
             }
 
+        # Reasoning models (gpt-oss family) emit chain-of-thought into a separate
+        # `reasoning_content` channel that is billed against max_tokens. On a small
+        # budget the reasoning consumes it all and `content` returns empty. Give
+        # such models headroom up-front so the final answer still fits.
+        is_reasoning_model = "gpt-oss" in (model_id or "")
+        effective_max_tokens = max(max_tokens, 2048) if is_reasoning_model else max_tokens
+
         payload = {
             "model": model_id,
             "messages": messages,
             "temperature": temperature,
-            "max_tokens": max_tokens,
+            "max_tokens": effective_max_tokens,
         }
+        # Backstop: if a reasoning model still returns empty content because the
+        # budget was exhausted (finish_reason="length"), bump once and retry so we
+        # never hand the caller an empty string (which the router cannot fail over).
+        budget_bumped = False
 
         headers = {
             "Authorization": f"Bearer {api_key}",
@@ -324,6 +352,19 @@ class NvidiaProvider:
                         continue
                     raise RuntimeError("Rate limited by NVIDIA NIM API")
 
+                if response.status_code >= 500:
+                    # Transient server-side errors are common on the free NIM tier
+                    # (e.g. sporadic 500 "Internal Server Error", 503 "workers busy").
+                    # Retry with backoff instead of failing the whole request.
+                    error_body = response.text[:200]
+                    if attempt < self._config.max_retries:
+                        import asyncio
+                        await asyncio.sleep(1.0 * attempt)
+                        continue
+                    raise RuntimeError(
+                        f"NVIDIA API returned {response.status_code}: {error_body}"
+                    )
+
                 if response.status_code != 200:
                     error_body = response.text[:200]
                     raise RuntimeError(
@@ -335,7 +376,22 @@ class NvidiaProvider:
                 if not choices:
                     raise RuntimeError("No choices returned from NVIDIA API")
 
-                text = (choices[0].get("message", {}).get("content", "") or "").strip()
+                message = choices[0].get("message", {})
+                text = (message.get("content", "") or "").strip()
+                finish_reason = choices[0].get("finish_reason")
+
+                # Empty content from a reasoning model whose budget was consumed by
+                # the reasoning channel: bump the budget once and retry (stay on NVIDIA).
+                if (
+                    not text
+                    and finish_reason == "length"
+                    and not budget_bumped
+                    and (message.get("reasoning_content") or is_reasoning_model)
+                ):
+                    budget_bumped = True
+                    payload["max_tokens"] = min(8192, max(effective_max_tokens * 3, 4096))
+                    continue
+
                 usage = data.get("usage", {})
                 tokens_used = usage.get("total_tokens", 0)
 

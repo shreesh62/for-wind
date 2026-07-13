@@ -9,9 +9,9 @@ returns can be handed to GoalExecutor or WebAgent unchanged.
 Modes:
   CDP_REUSE / CDP_LAUNCH / CDP_DEDICATED -> BrowserController over CDP
       (launches the right profile or a dedicated debug profile first)
-  DESKTOP_CONTROL                        -> DesktopChromeController
-      (operates the user's already-open Chrome via OCR + vision + keyboard;
-       used when the signed-in profile blocks CDP, e.g. Google Sync)
+  DESKTOP_CONTROL                        -> DesktopBrowserController
+      (operates the active browser window generically via the fused perception
+       stack + keyboard/mouse; browser-agnostic, no CDP required)
 
 Never raises — returns (controller_or_None, strategy). The controller is
 already started() when returned successfully.
@@ -44,21 +44,25 @@ def build_browser_for_goal(
     # All CDP modes: ensure the debug port is live, then attach.
     controller = _build_cdp_controller(strategy, port=port,
                                        require_real_chrome=require_real_chrome)
-    if controller is None and strategy.needs_user_session:
-        # CDP could not be established for a session-needing goal — fall back
-        # to operating the visible Chrome like a human (honest last resort).
+    if controller is None:
+        # M23: CDP is only an optimization — if it can't be established, fall
+        # back to the canonical desktop pipeline (no loss of correctness).
         controller = _build_desktop_controller()
     return controller, strategy
 
 
 def _build_desktop_controller():
-    """Build + focus a DesktopChromeController if a Chrome window exists."""
+    """Build a generic DesktopBrowserController (operates the active window).
+
+    M23: browser-agnostic desktop control via the fused perception stack — no
+    Chrome/window-title assumption.
+    """
     try:
-        from friday.actions.desktop_chrome import DesktopChromeController
-        c = DesktopChromeController()
+        from friday.actions.desktop_browser import DesktopBrowserController
+        c = DesktopBrowserController()
         if not c.available:
             return None
-        c.start()  # focus the window so keystrokes land
+        c.start()
         return c
     except Exception:
         return None

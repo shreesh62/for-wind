@@ -189,6 +189,9 @@ class RequirementsDiscovery:
                 blocking=True,
             ))
 
+        # M17: guarantee a PRODUCE requirement for synthesis / gather+save goals.
+        reqs = self._ensure_produce_requirement(goal, reqs)
+
         return reqs
 
     def _parse(self, text: str) -> List[Requirement]:
@@ -217,12 +220,19 @@ class RequirementsDiscovery:
         goal_lower = goal.lower()
         if any(kw in goal_lower for kw in ["research", "find", "search", "look up"]):
             reqs.insert(0, Requirement(description="Relevant information must be gathered"))
-        if any(kw in goal_lower for kw in ["write", "create", "generate", "report", "summary"]):
+        if any(kw in goal_lower for kw in
+               ["write", "create", "generate", "report", "summary",
+                # M17 synthesis verbs/nouns (data extension, not per-topic branching):
+                "produce", "summariz", "document", "paper", "cite", "citation",
+                "essay", "brief", "compose", "draft"]):
             reqs.append(Requirement(description="Content must be produced"))
         if any(kw in goal_lower for kw in ["save", "file", "document"]):
             reqs.append(Requirement(description="Output must be saved to a file"))
         if any(kw in goal_lower for kw in ["email", "send", "message"]):
             reqs.append(Requirement(description="Output must be delivered to the recipient"))
+
+        # M17: guarantee a PRODUCE requirement for synthesis / gather+save goals.
+        reqs = self._ensure_produce_requirement(goal, reqs)
 
         return RequirementSet(
             goal=goal,
@@ -230,3 +240,17 @@ class RequirementsDiscovery:
             reasoning="Fallback requirements (LLM unavailable)",
             from_llm=False,
         )
+
+    def _ensure_produce_requirement(self, goal: str, reqs: List[Requirement]) -> List[Requirement]:
+        """M17: inject a PRODUCE requirement when a goal implies synthesis (a synthesis
+        verb) or has a gather+save shape, and none exists yet."""
+        from friday.verification.evidence_law import classify_requirement, RequirementKind
+        g = goal.lower()
+        if RequirementKind.PRODUCE in {classify_requirement(r.description) for r in reqs}:
+            return reqs
+        synthesis_verb = any(k in g for k in ["produce","summariz","document","paper","cite","citation","essay","brief"])
+        implies_gather = any(k in g for k in ["research","find","search","look up","gather"])
+        implies_save = any(k in g for k in ["save","file","document",".txt",".md",".docx",".csv",".xlsx","spreadsheet","report"])
+        if synthesis_verb or (implies_gather and implies_save):
+            reqs.append(Requirement(description="A written summary must be synthesized and composed", blocking=True))
+        return reqs

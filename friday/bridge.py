@@ -332,23 +332,23 @@ class FridayBridge:
         controller = None
         if strategy.uses_cdp:
             controller = self._get_browser_controller(strategy=strategy)
-            # If CDP control was wanted but unavailable AND the goal needs the
-            # user's session, fall back to desktop control of the open Chrome.
-            if controller is None and strategy.needs_user_session:
+            # M23: CDP is an optimization only. If it is unavailable, fall back
+            # to the canonical desktop pipeline (no loss of correctness).
+            if controller is None:
                 strategy = strategy.__class__(
                     mode=BrowserMode.DESKTOP_CONTROL,
-                    reason="CDP unavailable — switching to desktop control of "
-                           "the visible Chrome to use your logged-in session",
-                    needs_user_session=True,
+                    reason="CDP optimization unavailable — using the desktop "
+                           "pipeline (browser as a generic desktop app)",
+                    needs_user_session=strategy.needs_user_session,
                     profile_display_name=strategy.profile_display_name,
                 )
 
-        # DESKTOP_CONTROL: operate the already-open Chrome like a human
-        # (focus window + keyboard + screen OCR), using the user's real session.
+        # DESKTOP_CONTROL: operate the active browser window like a human
+        # (keyboard + mouse over the fused perception stack), browser-agnostic.
         if strategy.uses_desktop:
             try:
-                from friday.actions.desktop_chrome import DesktopChromeController
-                dctrl = DesktopChromeController()
+                from friday.actions.desktop_browser import DesktopBrowserController
+                dctrl = DesktopBrowserController()
                 if dctrl.available and dctrl.start():
                     controller = dctrl
             except Exception as exc:
@@ -359,13 +359,14 @@ class FridayBridge:
             browser_controller=controller,
             max_iterations=2,
             browser_strategy=strategy,
+            state_cache=self._state_cache,
         )
         outcome = operator.run(text)
 
         status = "Completed" if outcome.completed else "Partial"
         msg = f"{status}: {outcome.summary}"
         if strategy.uses_desktop:
-            msg += f"\n\n(Operated Chrome via desktop control: {strategy.reason})"
+            msg += f"\n\n(Operated the browser via desktop control: {strategy.reason})"
         if outcome.created_files:
             msg += f"\n\nFiles: {', '.join(outcome.created_files)}"
         return msg
@@ -390,16 +391,19 @@ class FridayBridge:
             require_real = os.getenv("FRIDAY_REQUIRE_REAL_CHROME", "0") == "1"
 
             if require_real:
-                # Make sure the real-Chrome CDP session exists before connecting.
-                # The profile is resolved per-device from config (never hardcoded).
+                # Ensure a real-Chrome CDP session on FRIDAY's PERSISTENT dedicated
+                # profile before connecting.
+                #
+                # Why not the user's own profile? Chrome 136+ ignores
+                # --remote-debugging-port on the default User-Data dir (CDP blocked),
+                # and Chrome 127+ App-Bound Encryption means cookies copied from the
+                # live profile can't be decrypted elsewhere (a clone lands logged-out).
+                # The reliable, non-disruptive answer that works EVERY time is a
+                # dedicated FRIDAY profile the user logs into once; its logins persist
+                # across runs, CDP always attaches (non-default dir, never locked), and
+                # the user's daily-driver Chrome is never touched.
                 from friday.actions.chrome_launcher import ensure_chrome_debug
-                from friday.config.browser_config import resolve_browser_choice
-                choice = resolve_browser_choice(use_dedicated_if_unset=True)
-                launch = ensure_chrome_debug(
-                    port=port,
-                    user_data_dir=choice.user_data_dir,
-                    profile_directory=choice.profile_directory,
-                )
+                launch = ensure_chrome_debug(port=port, force_dedicated=True)
                 if not launch.ok:
                     # Honest failure — do not fake a session.
                     self._last_browser_error = launch.error

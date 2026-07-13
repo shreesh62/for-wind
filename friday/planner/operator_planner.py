@@ -230,13 +230,22 @@ class OperatorPlanner:
                          ["research", "find", "search", "look up", "what", "who", "how"])
         needs_content = any(kw in text_lower for kw in
                             ["write", "create", "generate", "summary", "report", "compose", "draft",
-                             "spreadsheet", "table", "list", "compare", "comparison"])
+                             "spreadsheet", "table", "list", "compare", "comparison",
+                             # M17 synthesis verbs/nouns (data extension, not per-topic branching):
+                             "produce", "summariz", "document", "paper", "cite", "citation",
+                             "essay", "brief"])
         needs_file = any(kw in text_lower for kw in
                          ["save", "file", "document", ".txt", ".docx", ".md",
                           "spreadsheet", ".csv", ".xlsx", "excel", "table"])
         needs_send = any(kw in text_lower for kw in ["email", "send", "message", "dm"])
         needs_nav = any(kw in text_lower for kw in
                         ["open", "go to", "navigate", "instagram", "youtube", "gmail"])
+
+        # M17 PRIMARY invariant (Axiom 15, general goal-shape rule): a plan that both
+        # gathers information and saves an output MUST synthesize between them — you
+        # cannot save "a document summarizing X" without first producing the summary.
+        if needs_info and needs_file:
+            needs_content = True
 
         if needs_info:
             # Search the TOPIC, not the whole instruction sentence.

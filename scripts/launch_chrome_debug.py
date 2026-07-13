@@ -1,19 +1,20 @@
-"""One-command launcher: start the user's real Chrome on the CDP debug port.
+"""One-command launcher: bring up FRIDAY's dedicated Chrome on the CDP debug port.
 
 Usage (from repo root):
     python scripts/launch_chrome_debug.py
 
-After this prints OK, FRIDAY can connect to the real (logged-in) Chrome via
-BrowserController(require_real_chrome=True).
+After this prints OK, FRIDAY can connect via BrowserController(require_real_chrome=True).
 
-If Chrome is ALREADY open without the debug flag, close it fully first
-(check the tray), then run this again.
+This uses FRIDAY's PERSISTENT dedicated profile (not your daily-driver Chrome):
+Chrome 136+ blocks remote debugging on the default profile dir and Chrome 127+
+App-Bound Encryption prevents cloning your existing logins. Sign into your sites
+once in the dedicated profile via `python scripts/friday_browser_login.py`; those
+logins then persist for every run. Your normal Chrome is never touched.
 """
 
 import sys
 
 from friday.actions.chrome_launcher import ensure_chrome_debug, cdp_reachable
-from friday.config.browser_config import resolve_browser_choice
 
 
 def main() -> int:
@@ -23,18 +24,13 @@ def main() -> int:
         print(f"[OK] CDP already reachable on {port}. FRIDAY can use real Chrome.")
         return 0
 
-    choice = resolve_browser_choice(use_dedicated_if_unset=True)
-    print(f"Profile choice  : {choice.display_name} (source={choice.source})")
-    if choice.source == "dedicated":
-        print("  No profile configured — using FRIDAY's dedicated debug profile.")
-        print("  To use your own profile: python scripts/select_chrome_profile.py")
-
-    print("Launching Chrome with the debug port ...")
-    result = ensure_chrome_debug(
-        port=port,
-        user_data_dir=choice.user_data_dir,
-        profile_directory=choice.profile_directory,
-    )
+    # Reliable path (Chrome 127+/136+): drive FRIDAY's PERSISTENT dedicated
+    # profile. CDP is blocked on the default User-Data dir and App-Bound
+    # Encryption stops cookie cloning, so the user's live profile can't be
+    # attached to. The dedicated profile always attaches and keeps its own
+    # logins (sign in once via scripts/friday_browser_login.py).
+    print("Launching FRIDAY's dedicated Chrome profile with the debug port ...")
+    result = ensure_chrome_debug(port=port, force_dedicated=True)
 
     print(f"  chrome_path   : {result.chrome_path or '(not found)'}")
     print(f"  user_data_dir : {result.user_data_dir or '(default)'}")
@@ -43,15 +39,9 @@ def main() -> int:
     print(f"  launched      : {result.launched}")
 
     if result.ok:
-        print(f"[OK] CDP reachable on {port}. FRIDAY can now operate real Chrome.")
-        if result.used_dedicated_profile and choice.source == "configured":
-            print()
-            print(f"NOTE: You chose the '{choice.display_name}' profile, but your main")
-            print("      Chrome is already open, so Chrome locked that profile and")
-            print("      FRIDAY used a dedicated profile instead (no logins yet).")
-            print(f"      To use '{choice.display_name}' WITH your logins:")
-            print("        1. Fully close Chrome (check the system tray).")
-            print("        2. Run this script again.")
+        print(f"[OK] CDP reachable on {port}. FRIDAY can now operate its Chrome.")
+        print("     First time? Sign into your sites once:")
+        print("       python scripts/friday_browser_login.py")
         return 0
 
     print(f"[FAIL] {result.error}")

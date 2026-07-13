@@ -74,11 +74,16 @@ class Operator:
         browser_controller=None,
         max_iterations: int = 3,
         browser_strategy=None,
+        state_cache=None,
     ) -> None:
         self._model_router = model_router
         self._browser = browser_controller
         self._max_iterations = max_iterations
         self._browser_strategy = browser_strategy
+        # Awareness UIA state cache (production path). When present, the executor's
+        # Universal Perception fills the Accessibility/UIA tier from it; when absent
+        # (e.g. the standalone benchmark runner) perception degrades to OCR+pixels.
+        self._state_cache = state_cache
 
         # Lazy imports to keep construction light
         from friday.planner.requirements import RequirementsDiscovery
@@ -105,6 +110,7 @@ class Operator:
         self._executor = GoalExecutor(
             model_router=model_router,
             browser_controller=browser_controller,
+            state_cache=state_cache,
         )
         self._observer = EnvironmentObserver()
 

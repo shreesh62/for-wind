@@ -74,12 +74,20 @@ class DesktopPerception:
             return []
 
         try:
-            # The state cache may provide UIA elements via get_uia_elements()
+            # The state cache may provide UIA elements via get_uia_elements(); the
+            # real awareness StateCache instead exposes them on the current window
+            # context (`get_window().elements`, each carrying a `bounding_rect`).
+            # Read whichever is available so the Accessibility tier is actually
+            # populated on the live path.
             raw_elements = None
             if hasattr(self._state_cache, 'get_uia_elements'):
                 raw_elements = self._state_cache.get_uia_elements()
             elif hasattr(self._state_cache, '_uia_elements'):
                 raw_elements = self._state_cache._uia_elements
+
+            if not raw_elements and hasattr(self._state_cache, 'get_window'):
+                window = self._state_cache.get_window()
+                raw_elements = getattr(window, 'elements', None) if window else None
 
             if not raw_elements:
                 return []
@@ -128,7 +136,8 @@ class DesktopPerception:
             if isinstance(raw, dict):
                 text = raw.get('text', '') or raw.get('name', '') or ''
                 control_type = raw.get('control_type', '') or raw.get('type', '') or ''
-                bbox_data = raw.get('bbox', None) or raw.get('bounding_box', None)
+                bbox_data = (raw.get('bbox', None) or raw.get('bounding_box', None)
+                             or raw.get('bounding_rect', None))
 
                 if bbox_data and len(bbox_data) == 4:
                     bbox = BoundingBox(
@@ -157,7 +166,8 @@ class DesktopPerception:
                 text = getattr(raw, 'text', '') or getattr(raw, 'name', '') or ''
                 control_type = getattr(raw, 'control_type', '') or getattr(raw, 'type', '') or ''
 
-                bbox_data = getattr(raw, 'bounding_box', None) or getattr(raw, 'bbox', None)
+                bbox_data = (getattr(raw, 'bounding_box', None) or getattr(raw, 'bbox', None)
+                             or getattr(raw, 'bounding_rect', None))
                 if bbox_data and len(bbox_data) == 4:
                     bbox = BoundingBox(
                         x=int(bbox_data[0]),

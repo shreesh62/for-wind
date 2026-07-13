@@ -23,15 +23,15 @@ load_dotenv()
 
 
 def main():
-    from friday.actions.desktop_chrome import DesktopChromeController
+    from friday.actions.desktop_browser import DesktopBrowserController
 
     print("=" * 60)
-    print("LIVE DESKTOP AGENT - tasking on your real Chrome via OCR")
+    print("LIVE DESKTOP AGENT - tasking on your active browser via fused perception")
     print("=" * 60)
 
-    c = DesktopChromeController()
+    c = DesktopBrowserController()
     if not c.available:
-        print("[FAIL] No Chrome window. Open Chrome signed in first.")
+        print("[FAIL] Desktop control unavailable (pyautogui missing).")
         return 1
     c.start()
     print("[OK] focused your Chrome window")

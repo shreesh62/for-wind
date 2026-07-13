@@ -133,8 +133,108 @@ def long_horizon_suite() -> Tuple[CapabilityBenchmark, ...]:
     )
 
 
+def web_independence_suite() -> Tuple[CapabilityBenchmark, ...]:
+    """M23 — prove a browser is operated as a generic desktop app, CDP-independent.
+
+    Domain-general goals (capability-named, never a site — Axiom 15). The TARGET
+    browser (Chrome/Edge/Firefox/Brave/Electron) is a HARNESS parameter, not part
+    of the goal text: the same generic goals run against each browser to prove
+    that correctness is browser-invariant. Executed with the CDP optimization
+    DISABLED so the desktop pipeline is the sole execution path.
+
+    This suite is intentionally NOT part of ``all_domain_suites()`` — it is a
+    separate, explicitly-invoked suite so it never perturbs the five-domain
+    competence scorecard/ratchet. Scores are reported honestly (measured/
+    unmeasured) and recorded only to the gitignored local baseline.
+    """
+    return (
+        CapabilityBenchmark(
+            id="web_independence.launch",
+            domain="web_independence",
+            goal_text="Open a web browser and confirm it is the foreground environment.",
+            required_evidence=("NAVIGATION",),
+            acceptance="The target browser was launched / focused (confirmed reach).",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.navigate",
+            domain="web_independence",
+            goal_text="Open a public information page about a given topic and read its contents.",
+            required_evidence=("NAVIGATION", "GATHERED_INFO"),
+            acceptance="A real navigation occurred AND real page text was read.",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.search",
+            domain="web_independence",
+            goal_text="Search for a topic and read a result page about it.",
+            required_evidence=("GATHERED_INFO", "SOURCE_URL"),
+            acceptance="Gathered info AND a source URL recorded (generated text alone fails).",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.login_flow",
+            domain="web_independence",
+            goal_text="Reach an account area that requires being signed in and confirm the signed-in state.",
+            required_evidence=("NAVIGATION", "GATHERED_INFO"),
+            acceptance="Navigation to the authenticated area AND observed signed-in page state.",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.file_upload",
+            domain="web_independence",
+            goal_text="Attach a local file to a page's file input and confirm it was accepted.",
+            required_evidence=("NAVIGATION", "SCREENSHOT"),
+            acceptance="Observed the file selected/accepted by the page (visual confirmation).",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.download_verify",
+            domain="web_independence",
+            goal_text="Download a file from a page and verify it exists on disk.",
+            required_evidence=("FILE_ARTIFACT",),
+            acceptance="A real downloaded file with byte size > 0 exists on disk.",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.multi_tab",
+            domain="web_independence",
+            goal_text="Open a second page in a new tab and read content from it, then return to the first.",
+            required_evidence=("NAVIGATION", "GATHERED_INFO"),
+            acceptance="Operated across at least two tabs and read content from another tab.",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.dynamic_interaction",
+            domain="web_independence",
+            goal_text="Interact with a dynamic control on a page and read the content it reveals.",
+            required_evidence=("NAVIGATION", "GATHERED_INFO"),
+            acceptance="A dynamic (JS-driven) update was triggered and its new content read.",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.infinite_scroll",
+            domain="web_independence",
+            goal_text="Scroll a long page to reveal additional content and read it.",
+            required_evidence=("GATHERED_INFO", "SCREENSHOT"),
+            acceptance="Content revealed only after scrolling was read (observed change).",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.unexpected_dialog",
+            domain="web_independence",
+            goal_text="Handle an unexpected dialog that appears and continue the task.",
+            required_evidence=("NAVIGATION", "SCREENSHOT"),
+            acceptance="A dialog was dismissed/accepted and the task continued (observed).",
+        ),
+        CapabilityBenchmark(
+            id="web_independence.crash_recovery",
+            domain="web_independence",
+            goal_text="Recover after the browser becomes unavailable and re-establish the page.",
+            required_evidence=("NAVIGATION",),
+            acceptance="After a browser loss, a fresh navigation re-established the environment.",
+        ),
+    )
+
+
 def all_domain_suites() -> Dict[str, Tuple[CapabilityBenchmark, ...]]:
-    """Return every domain suite keyed by domain name."""
+    """Return every domain suite keyed by domain name.
+
+    NOTE: ``web_independence`` (M23) is deliberately excluded — it is a separate,
+    explicitly-invoked suite (see ``web_independence_suite``) so it never perturbs
+    the five-domain competence scorecard/ratchet.
+    """
     return {
         "browser": browser_suite(),
         "desktop": desktop_suite(),

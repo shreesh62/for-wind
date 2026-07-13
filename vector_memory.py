@@ -25,10 +25,18 @@ if _ENABLE_EMBEDDINGS:
 else:
     SentenceTransformer = None  # type: ignore
 
-# Path to store memory index and logs
-INDEX_FILE = "memory.index"
-MEMORY_JSON = "memory.json"
-LOG_FILE = "interaction_log.json"
+# Path to store memory index and logs.
+# Honor FRIDAY_STATE_DIR so runtime state can be redirected out of the repo tree
+# (e.g. tests point it at a temp dir for hermeticity). Unset => current behavior
+# (bare names in the CWD), so production defaults are unchanged.
+def _state_path(name: str) -> str:
+    state_dir = os.getenv("FRIDAY_STATE_DIR", "")
+    return os.path.join(state_dir, name) if state_dir else name
+
+
+INDEX_FILE = _state_path("memory.index")
+MEMORY_JSON = _state_path("memory.json")
+LOG_FILE = _state_path("interaction_log.json")
 
 embedding_model = None
 EMBED_DIM = 0

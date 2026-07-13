@@ -26,13 +26,32 @@ Decision matrix:
 This module only DECIDES. Execution uses existing components:
   - CDP_*       -> BrowserController (Playwright over CDP)
   - DESKTOP_*   -> Universal Action Layer desktop/vision adapters
+
+M23 (Browser as a Generic Desktop Environment): the DESKTOP pipeline is the
+canonical, primary path. CDP is an OPTIONAL optimization, enabled only when
+FRIDAY_ENABLE_CDP is truthy. With the flag off (default), every goal resolves to
+DESKTOP_CONTROL and the browser is operated as a generic desktop application —
+no CDP/Playwright dependency for correctness.
 """
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
+
+
+def cdp_optimization_enabled() -> bool:
+    """Whether the optional CDP acceleration plugin is enabled (M23).
+
+    Default OFF: the desktop pipeline is canonical. Set FRIDAY_ENABLE_CDP=1 to
+    let the strategy resolver prefer CDP when it is available. This same switch
+    is the milestone's rollback control (re-enables CDP-first behavior).
+    """
+    return os.environ.get("FRIDAY_ENABLE_CDP", "0").strip().lower() in (
+        "1", "true", "yes", "on",
+    )
 
 
 class BrowserMode(str, Enum):
@@ -93,13 +112,18 @@ def resolve_browser_strategy(
     *,
     cdp_reachable_fn=None,
     chrome_running_fn=None,
+    cdp_enabled_fn=None,
 ) -> BrowserStrategy:
     """Decide how FRIDAY should operate the browser for this goal.
 
     Args:
         goal_text: the goal, used to judge whether the user's session is needed.
         port: CDP debug port.
-        cdp_reachable_fn / chrome_running_fn: injectable for testing.
+        cdp_reachable_fn / chrome_running_fn / cdp_enabled_fn: injectable for testing.
+
+    M23: unless the CDP optimization is enabled (FRIDAY_ENABLE_CDP), the result is
+    always DESKTOP_CONTROL — the desktop pipeline is the primary path. When CDP is
+    enabled, the historical decision matrix (reuse/launch/dedicated/desktop) applies.
 
     Never raises. Returns a BrowserStrategy.
     """
@@ -110,10 +134,23 @@ def resolve_browser_strategy(
 
     cdp_reachable_fn = cdp_reachable_fn or _cdp
     chrome_running_fn = chrome_running_fn or _running
+    cdp_enabled_fn = cdp_enabled_fn or cdp_optimization_enabled
 
     needs_session = goal_needs_user_session(goal_text)
     choice = resolve_browser_choice(use_dedicated_if_unset=True)
 
+    # M23: the desktop pipeline is canonical. CDP is opt-in — when it is not
+    # enabled, always operate the browser as a generic desktop application.
+    if not cdp_enabled_fn():
+        return BrowserStrategy(
+            mode=BrowserMode.DESKTOP_CONTROL,
+            reason="Desktop pipeline is the primary path; CDP optimization "
+                   "disabled (set FRIDAY_ENABLE_CDP=1 to enable CDP acceleration)",
+            needs_user_session=needs_session,
+            profile_display_name=choice.display_name,
+        )
+
+    # --- CDP optimization enabled: historical decision matrix ---
     # 1. A debug session is already up — just reuse it (best case).
     if cdp_reachable_fn(port):
         return BrowserStrategy(

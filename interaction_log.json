@@ -2368,5 +2368,105 @@
     "timestamp": "2026-06-18T22:19:52.785067",
     "user_input": "open it again",
     "assistant_response": "I cannot perceive the current state. Awareness system may be unavailable."
+  },
+  {
+    "timestamp": "2026-07-10T23:39:00.092816",
+    "user_input": "open a browser website",
+    "assistant_response": "Open Browser / Websites isn’t enabled yet. We’ll add this soon."
+  },
+  {
+    "timestamp": "2026-07-10T23:39:00.105491",
+    "user_input": "what's the weather in Thane",
+    "assistant_response": "Weather for Thane: 25C."
+  },
+  {
+    "timestamp": "2026-07-10T23:39:00.322866",
+    "user_input": "repeat that",
+    "assistant_response": "REPEATED."
+  },
+  {
+    "timestamp": "2026-07-10T23:39:00.334896",
+    "user_input": "open it again",
+    "assistant_response": "I cannot perceive the current state. Awareness system may be unavailable."
+  },
+  {
+    "timestamp": "2026-07-10T23:39:46.609020",
+    "user_input": "open a browser website",
+    "assistant_response": "Open Browser / Websites isn’t enabled yet. We’ll add this soon."
+  },
+  {
+    "timestamp": "2026-07-10T23:39:46.625772",
+    "user_input": "what's the weather in Thane",
+    "assistant_response": "Weather for Thane: 25C."
+  },
+  {
+    "timestamp": "2026-07-10T23:40:17.184632",
+    "user_input": "repeat that",
+    "assistant_response": "REPEATED."
+  },
+  {
+    "timestamp": "2026-07-10T23:40:17.192571",
+    "user_input": "open it again",
+    "assistant_response": "I cannot perceive the current state. Awareness system may be unavailable."
+  },
+  {
+    "timestamp": "2026-07-10T23:40:17.440528",
+    "user_input": "repeat that",
+    "assistant_response": "REPEATED."
+  },
+  {
+    "timestamp": "2026-07-10T23:40:17.451389",
+    "user_input": "open it again",
+    "assistant_response": "I cannot perceive the current state. Awareness system may be unavailable."
+  },
+  {
+    "timestamp": "2026-07-10T23:40:40.357012",
+    "user_input": "repeat that",
+    "assistant_response": "REPEATED."
+  },
+  {
+    "timestamp": "2026-07-10T23:40:40.364167",
+    "user_input": "open it again",
+    "assistant_response": "I cannot perceive the current state. Awareness system may be unavailable."
+  },
+  {
+    "timestamp": "2026-07-10T23:45:01.840330",
+    "user_input": "repeat that",
+    "assistant_response": "REPEATED."
+  },
+  {
+    "timestamp": "2026-07-10T23:45:01.845680",
+    "user_input": "open it again",
+    "assistant_response": "OPENED_LAST_SITE."
+  },
+  {
+    "timestamp": "2026-07-10T23:45:01.853528",
+    "user_input": "undo that",
+    "assistant_response": "UNDONE."
+  },
+  {
+    "timestamp": "2026-07-10T23:45:01.858700",
+    "user_input": "cancel",
+    "assistant_response": "Understood. Cancelled. As always."
+  },
+  {
+    "timestamp": "2026-07-11T02:21:26.188694",
+    "user_input": "repeat that",
+    "assistant_response": "REPEATED."
+  },
+  {
+    "timestamp": "2026-07-11T02:21:26.210300",
+    "user_input": "open it again",
+    "assistant_response": "OPENED_LAST_SITE."
+  },
+  {
+    "timestamp": "2026-07-11T02:21:26.230436",
+    "user_input": "undo that",
+    "assistant_response": "UNDONE."
+  },
+  {
+    "timestamp": "2026-07-11T02:21:26.244511",
+    "user_input": "cancel",
+    "assistant_response": "Understood. Cancelled. As always."
   }
 ]

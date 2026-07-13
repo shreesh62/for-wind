@@ -313,7 +313,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`);
         }
-        await fetchStatus();
+        await pollStatus();
       } catch (error) {
         console.error("Persona update failed", error);
       }

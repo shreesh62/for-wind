@@ -93,12 +93,20 @@ def test_benchmark_passes_only_with_required_evidence():
     # add_gathered_info with a source also records nothing for SOURCE_URL kind here:
     assert score_benchmark(bench, partial) is False
 
-    # Both required kinds present → PASS.
+    # Both required kinds present → PASS. (M23 hard verification: a source must be
+    # a concrete URL, not a bare host — real research records real http(s) URLs.)
     full = _evidence_with(
+        lambda e: e.add_gathered_info("real text", source="s"),
+        lambda e: e.add_source_url("https://host.example/x"),
+    )
+    assert score_benchmark(bench, full) is True
+
+    # A bare host / non-URL "source" must NOT satisfy a SOURCE_URL requirement.
+    fake_source = _evidence_with(
         lambda e: e.add_gathered_info("real text", source="s"),
         lambda e: e.add_source_url("host.example/x"),
     )
-    assert score_benchmark(bench, full) is True
+    assert score_benchmark(bench, fake_source) is False
 
 
 def test_unknown_evidence_kind_fails_safe():

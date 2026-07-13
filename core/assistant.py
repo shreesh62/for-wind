@@ -224,28 +224,6 @@ class AssistantOrchestrator:
             awareness_state=self.awareness_state,
         )
 
-        # PHASE 7: COGNITIVE LOOP AS SINGLE SOURCE OF TRUTH
-        cognitive_mode = os.getenv("COGNITIVE_MODE", "0") == "1"
-        
-        if cognitive_mode and outcome.route == "automation":
-            # HARD REQUIREMENT: CognitiveLoop must be initialized
-            if not self._cognitive_loop:
-                raise RuntimeError("COGNITIVE_MODE=1 but CognitiveLoop is not initialized")
-            
-            # Execute through cognitive loop - NO FALLBACK, NO TRY/EXCEPT
-            result = self._cognitive_loop.execute_goal(normalized_command)
-            self._last_tool_trace.append("cognitive_loop: executed")
-            
-            if result:
-                final = self._apply_personality(result)
-                self.memory.add_turn(command, final)
-                return CommandResult(final_response=final)
-            
-            # Result is None - cognitive loop couldn't handle it
-            final = "Cognitive execution returned no result."
-            self.memory.add_turn(command, final)
-            return CommandResult(final_response=final, handled=False)
-
         if _CANCEL_PATTERN.search(command) or _CANCEL_PATTERN.search(normalized_command):
             msg = None
             try:
@@ -304,6 +282,34 @@ class AssistantOrchestrator:
             final = self._apply_personality(msg or "I couldn't open that website yet.")
             self.memory.add_turn(command, final)
             return CommandResult(final_response=final)
+
+        # PHASE 7: COGNITIVE LOOP AS SINGLE SOURCE OF TRUTH.
+        # Placed AFTER the explicit Phase-6 follow-up handlers (cancel / undo /
+        # repeat / "open it again") so those conversational continuations route to
+        # their handlers first. Under COGNITIVE_MODE=1 the cognitive loop would
+        # otherwise intercept any follow-up classified as "automation" (the M18
+        # audit's reproducible defect: "open it again" returned "I cannot perceive
+        # the current state" instead of routing to open_last_website).
+        cognitive_mode = os.getenv("COGNITIVE_MODE", "0") == "1"
+
+        if cognitive_mode and outcome.route == "automation":
+            # HARD REQUIREMENT: CognitiveLoop must be initialized
+            if not self._cognitive_loop:
+                raise RuntimeError("COGNITIVE_MODE=1 but CognitiveLoop is not initialized")
+
+            # Execute through cognitive loop - NO FALLBACK, NO TRY/EXCEPT
+            result = self._cognitive_loop.execute_goal(normalized_command)
+            self._last_tool_trace.append("cognitive_loop: executed")
+
+            if result:
+                final = self._apply_personality(result)
+                self.memory.add_turn(command, final)
+                return CommandResult(final_response=final)
+
+            # Result is None - cognitive loop couldn't handle it
+            final = "Cognitive execution returned no result."
+            self.memory.add_turn(command, final)
+            return CommandResult(final_response=final, handled=False)
 
         if _SCREEN_QUERY_PATTERN.search(command) is not None:
             ocr_line = None

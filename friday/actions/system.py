@@ -9,11 +9,16 @@ Windows-focused for v1. Uses subprocess, pyautogui, and win32 APIs.
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import time
 from typing import Dict, List, Optional
 
 from friday.actions.result import ActionResult, ActionEvidence, ActionTimer
+
+
+def _is_dry_run() -> bool:
+    return os.environ.get("FRIDAY_DRY_RUN", "0") == "1"
 
 
 # Common Windows app launch commands
@@ -58,38 +63,59 @@ class SystemActions:
             app_lower = app_name.lower().strip()
             command = _APP_COMMANDS.get(app_lower, app_lower)
 
-            try:
-                # Use shell=True for Windows app resolution via PATH/registry
-                process = subprocess.Popen(
-                    command,
-                    shell=True,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
+            # DRY-RUN GUARD (defense-in-depth): the lowest-level actuator itself
+            # must never perform a real launch under dry-run, so a direct caller
+            # cannot bypass the executor's dry-run guard. Returns a simulated
+            # success with no side effect and no process spawned.
+            if _is_dry_run():
+                return ActionResult.success(
+                    action="launch_app",
+                    target=app_name,
+                    message=f"[DRY-RUN] Would launch {app_name}",
+                    evidence=ActionEvidence(
+                        state_changed=False,
+                        raw={"dry_run": True, "command": command},
+                    ),
+                    started_at=timer.started_at,
+                    duration_ms=timer.duration_ms,
                 )
-                # Give it a moment to start
-                time.sleep(0.5)
 
-                # Check if process is still running (didn't immediately fail)
-                poll = process.poll()
-                if poll is not None and poll != 0:
-                    return ActionResult.failed(
-                        action="launch_app",
-                        error=f"Process exited with code {poll}",
-                        target=app_name,
-                        error_category="launch_failed",
-                        repair_hints=["check_app_installed", "try_full_path"],
-                        started_at=timer.started_at,
-                        duration_ms=timer.duration_ms,
-                    )
+            try:
+                # SECURITY: never invoke a shell. `shell=True` with an interpolated
+                # app string is a command-injection vector (e.g. "notepad & echo x"
+                # would run two commands). Instead the app string is treated as a
+                # SINGLE program/target so shell metacharacters cannot spawn a second
+                # command:
+                #   1. protocol/URI targets (e.g. "ms-settings:") -> ShellExecute;
+                #   2. a real executable resolved on PATH -> argv list, shell=False;
+                #   3. otherwise -> ShellExecute (Windows App Paths registry), which
+                #      does NOT parse a command line, so injection is impossible.
+                process = self._spawn(command)
+
+                if process is not None:
+                    # Give it a moment to start, then check it didn't immediately fail.
+                    time.sleep(0.5)
+                    poll = process.poll()
+                    if poll is not None and poll != 0:
+                        return ActionResult.failed(
+                            action="launch_app",
+                            error=f"Process exited with code {poll}",
+                            target=app_name,
+                            error_category="launch_failed",
+                            repair_hints=["check_app_installed", "try_full_path"],
+                            started_at=timer.started_at,
+                            duration_ms=timer.duration_ms,
+                        )
+                    raw = {"command": command, "pid": process.pid}
+                else:
+                    # Launched via ShellExecute (no process handle available).
+                    raw = {"command": command, "launcher": "shell_execute"}
 
                 return ActionResult.success(
                     action="launch_app",
                     target=app_name,
                     message=f"Launched {app_name}",
-                    evidence=ActionEvidence(
-                        state_changed=True,
-                        raw={"command": command, "pid": process.pid},
-                    ),
+                    evidence=ActionEvidence(state_changed=True, raw=raw),
                     started_at=timer.started_at,
                     duration_ms=timer.duration_ms,
                 )
@@ -113,6 +139,41 @@ class SystemActions:
                     started_at=timer.started_at,
                     duration_ms=timer.duration_ms,
                 )
+
+    def _spawn(self, command: str) -> Optional[subprocess.Popen]:
+        """Launch ``command`` WITHOUT a shell (no command-injection surface).
+
+        The command is always treated as a single program/target, never a shell
+        command line, so metacharacters (``&``, ``|``, ``;``, ``&&``) cannot spawn
+        a second process. Resolution order:
+
+        1. Protocol/URI target (e.g. ``ms-settings:``) -> ``os.startfile`` (Windows
+           ShellExecute). Returns ``None`` (no process handle).
+        2. Executable resolvable on PATH -> ``subprocess.Popen([path], shell=False)``.
+           Returns the ``Popen`` so the caller can poll for immediate failure.
+        3. Fallback -> ``os.startfile`` (resolves App Paths registry entries such as
+           ``spotify``/``msedge``). ShellExecute does not parse a command line, so a
+           string containing shell metacharacters is treated as one literal target
+           and simply fails to resolve (``FileNotFoundError``) — it cannot inject.
+        """
+        # 1. Protocol/URI (e.g. "ms-settings:", "mailto:", "https://...").
+        if command.endswith(":") or "://" in command:
+            os.startfile(command)  # type: ignore[attr-defined]  # Windows-only
+            return None
+
+        # 2. Real executable on PATH -> argv list, no shell.
+        resolved = shutil.which(command)
+        if resolved:
+            return subprocess.Popen(
+                [resolved],
+                shell=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+
+        # 3. Fallback: ShellExecute via App Paths registry (still no shell parsing).
+        os.startfile(command)  # type: ignore[attr-defined]  # Windows-only
+        return None
 
     def open_file(self, file_path: str) -> ActionResult:
         """Open a file with its default application."""

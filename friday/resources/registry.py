@@ -7,6 +7,7 @@ it never invents resources or assumes one is available.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import Dict, List, Optional
 
 from friday.resources.types import Resource, ResourceKind
@@ -34,3 +35,16 @@ class ResourceRegistry:
     def by_kind(self, kind: ResourceKind) -> List[Resource]:
         """Return all registered resources of the given kind."""
         return [r for r in self._resources.values() if r.kind == kind]
+
+    def all(self) -> List[Resource]:
+        """Return a stable snapshot of every known resource."""
+        return list(self._resources.values())
+
+    def update(self, resource_id: str, **changes: object) -> Optional[Resource]:
+        """Replace descriptor fields through the registry mutation boundary."""
+        resource = self._resources.get(resource_id)
+        if resource is None:
+            return None
+        updated = replace(resource, **changes)
+        self._resources[resource_id] = updated
+        return updated

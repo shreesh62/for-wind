@@ -21,9 +21,50 @@ Design:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Optional
+
+
+# --- Hard verification (M23: strong, non-fabricable evidence) -----------------
+# Unfilled template/placeholder tokens that must NEVER count as real evidence or
+# be acted upon (e.g. "<<topic>>", "<extracted URL>", "{{query}}", "[topic]").
+# Structured tokens only (angle/brace/bracket wrappers) + a few unambiguous
+# placeholder phrases — deliberately NOT natural-language words like "topic", so
+# real queries are never misclassified. Detected only on SHORT identifier strings.
+_PLACEHOLDER_RE = re.compile(
+    r"<<.*?>>|\{\{.*?\}\}|<[a-zA-Z][^>]{0,60}>|^\[[^\]]{1,60}\]$|^\{[^}]{1,60}\}$"
+)
+_PLACEHOLDER_PHRASES = (
+    "extracted url", "the url of", "placeholder", "insert url", "insert the",
+    "<topic>", "<url>", "<query>", "todo:",
+)
+
+
+def looks_like_placeholder(text: Optional[str]) -> bool:
+    """True if ``text`` is an unfilled template/placeholder (never real evidence).
+
+    Applies only to SHORT identifier-like strings (targets, URLs, nav details) so
+    genuine long page text or documents are never misclassified.
+    """
+    if not text:
+        return False
+    t = text.strip()
+    if not t or len(t) > 200:
+        return False
+    if _PLACEHOLDER_RE.search(t):
+        return True
+    tl = t.lower()
+    return any(p in tl for p in _PLACEHOLDER_PHRASES)
+
+
+def _looks_like_url(text: Optional[str]) -> bool:
+    """True if ``text`` is a concrete URL (http/https/file), not a placeholder."""
+    if not text:
+        return False
+    t = text.strip().lower()
+    return t.startswith(("http://", "https://", "file://")) and not looks_like_placeholder(t)
 
 
 class RequirementKind(str, Enum):
@@ -60,12 +101,27 @@ class EvidenceArtifact:
 
     @property
     def is_real(self) -> bool:
-        """An artifact is real only if it carries non-trivial proof."""
+        """An artifact is real only if it carries non-trivial, non-placeholder proof.
+
+        HARD verification (M23):
+        - files/screenshots: real bytes on disk (> 0).
+        - gathered/generated text: at least a minimum substance (no 1-char "reads").
+        - source URLs: a concrete http(s) URL, never a placeholder.
+        - navigation/delivery: a non-empty, non-placeholder detail.
+        """
+        detail = (self.detail or "").strip()
+
         if self.kind in (EvidenceKind.FILE_ARTIFACT, EvidenceKind.GATHERED_INFO,
-                          EvidenceKind.GENERATED_CONTENT, EvidenceKind.SCREENSHOT):
+                         EvidenceKind.GENERATED_CONTENT, EvidenceKind.SCREENSHOT):
+            # Real bytes / real text (non-empty). Content quality is enforced at
+            # the action layer (placeholder targets never produce these).
             return self.value > 0
-        # URL / navigation / delivery require a non-empty detail
-        return bool(self.detail.strip())
+        if self.kind == EvidenceKind.SOURCE_URL:
+            # A source must be a concrete URL that was actually opened/read —
+            # never a bare host, a description, or a placeholder.
+            return _looks_like_url(detail)
+        # NAVIGATION / DELIVERY_CONFIRMATION: non-empty, non-placeholder detail.
+        return bool(detail) and not looks_like_placeholder(detail)
 
 
 @dataclass

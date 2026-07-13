@@ -135,7 +135,9 @@ def test_property_10_citations_reference_only_real_gathered_sources(
 
     # Synthetic, scheme-less hosts — never a real site name, never a URL scheme.
     evidence = ExecutionEvidence()
-    urls = [f"{label}.test/x" for label in labels]
+    # M23 hard verification: a source must be a concrete URL (real research
+    # records http(s) URLs), so cited sources are real http URLs here.
+    urls = [f"https://{label}.test/x" for label in labels]
     for url in urls:
         evidence.add_source_url(url)
 
