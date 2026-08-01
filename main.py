@@ -292,6 +292,9 @@ class JarvisAssistant:
                     state_cache=self.awareness_controller.state_cache,
                     llm_callable=query_groq,
                     model_router=model_router,
+                    # Without this the Operator has no continuity between goals:
+                    # preferences and prior facts were re-derived every run.
+                    memory=friday_memory,
                 )
                 self.friday_memory = friday_memory
                 print("[🧠] FRIDAY Bridge active (NVIDIA-primary routing)")
@@ -449,41 +452,76 @@ class JarvisAssistant:
                 self.telemetry.log("command_completed", {"handled": True, "category": "stop"})
                 return
 
-            with self._command_lock:
+            # --- FRIDAY Bridge routing (new architecture) ---
+            # Mirrors execute_text_command: when USE_FRIDAY_BRIDGE is enabled the
+            # bridge handles the command; any bridge failure falls through to the
+            # legacy orchestrator below. wake_word is deliberately not forced to
+            # "jarvis" here — that would pin every voice command to conversational
+            # JARVIS mode and bypass FRIDAY agent routing entirely.
+            bridge_outcome = None
+            if self.friday_bridge:
                 try:
-                    result = self.orchestrator.process_command(pending)
-                except KeyboardInterrupt as exc:
-                    msg = "Okay. Cancelled that." 
-                    print(f"[⚠️] Command processing interrupted: {exc}")
-                    try:
-                        traceback.print_exc()
-                    except Exception:
-                        pass
-                    try:
-                        self.telemetry.log("command_interrupted", {"error": str(exc)[:200]})
-                    except Exception:
-                        pass
-                    self._speak_and_emit(pending, msg)
-                    self.awaiting_wake_word = not DISABLE_WAKE_WORD
-                    return
+                    bridge_outcome = self.friday_bridge.process(pending)
                 except Exception as exc:
-                    msg = f"Sorry, I hit an error while processing that. ({exc})"
-                    print(f"[⚠️] Command processing failed: {exc}")
+                    print(f"[⚠️] FRIDAY Bridge failed, using legacy path: {exc}")
                     try:
-                        self.telemetry.log("command_error", {"error": str(exc)[:200]})
+                        self.telemetry.log("friday_bridge_error", {"error": str(exc)[:200]})
                     except Exception:
                         pass
-                    self._speak_and_emit(pending, msg)
-                    self.awaiting_wake_word = not DISABLE_WAKE_WORD
-                    return
-            final_response = result.final_response
+                    bridge_outcome = None
+
+            if bridge_outcome is not None:
+                final_response = bridge_outcome.response
+                handled = bridge_outcome.handled
+                try:
+                    self.telemetry.log(
+                        "friday_bridge_completed",
+                        {
+                            "mode": bridge_outcome.mode.value,
+                            "complexity": int(bridge_outcome.complexity),
+                            "handled": handled,
+                        },
+                    )
+                except Exception:
+                    pass
+            else:
+                with self._command_lock:
+                    try:
+                        result = self.orchestrator.process_command(pending)
+                    except KeyboardInterrupt as exc:
+                        msg = "Okay. Cancelled that."
+                        print(f"[⚠️] Command processing interrupted: {exc}")
+                        try:
+                            traceback.print_exc()
+                        except Exception:
+                            pass
+                        try:
+                            self.telemetry.log("command_interrupted", {"error": str(exc)[:200]})
+                        except Exception:
+                            pass
+                        self._speak_and_emit(pending, msg)
+                        self.awaiting_wake_word = not DISABLE_WAKE_WORD
+                        return
+                    except Exception as exc:
+                        msg = f"Sorry, I hit an error while processing that. ({exc})"
+                        print(f"[⚠️] Command processing failed: {exc}")
+                        try:
+                            self.telemetry.log("command_error", {"error": str(exc)[:200]})
+                        except Exception:
+                            pass
+                        self._speak_and_emit(pending, msg)
+                        self.awaiting_wake_word = not DISABLE_WAKE_WORD
+                        return
+                final_response = result.final_response
+                handled = result.handled
+
             print(f"[🎭] JARVIS Final: {final_response}")
 
             self._speak_and_emit(pending, final_response)
             self.telemetry.log(
                 "command_completed",
                 {
-                    "handled": result.handled,
+                    "handled": handled,
                     "response_length": len(final_response),
                 },
             )

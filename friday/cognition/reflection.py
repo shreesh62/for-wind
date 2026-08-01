@@ -34,6 +34,45 @@ class ReflectionScale(str, Enum):
     SESSION = "session"  # per session
 
 
+class ReflectionLayer(str, Enum):
+    """FAS §A2.10.1 — the five normative reflection layers, ordered by scope.
+
+    The layers run from the narrowest scope (a single action) to the widest (the
+    architecture itself):
+
+        IMMEDIATE → SESSION → LONG_TERM → SKILL → ARCHITECTURAL
+
+    This is the M20 layer taxonomy layered additively on top of the existing
+    :class:`ReflectionScale`; it does NOT change any ``ReflectionEngine`` output.
+
+    Mapping to the existing engine's scales (Req 1.2):
+
+    - The engine's per-action / micro reflection (``ReflectionScale.MICRO``) is the
+      ``IMMEDIATE`` layer.
+    - The engine's per-task / per-goal / per-session reflection
+      (``ReflectionScale.TASK`` / ``GOAL`` / ``SESSION``) is the ``SESSION`` layer.
+    - ``LONG_TERM``, ``SKILL`` and ``ARCHITECTURAL`` are the three new higher
+      consumer layers (M20) that aggregate the ``reflection.completed`` stream.
+
+    A ``str`` enum (like :class:`ReflectionScale`) so ``.value`` is JSON-safe for
+    events/logging. Use :attr:`ordinal` to compare scope (Req 1.3).
+    """
+
+    IMMEDIATE = "immediate"          # per action (existing micro scale)
+    SESSION = "session"              # per goal/session (existing task/goal/session)
+    LONG_TERM = "long_term"          # across sessions (M20 consumer)
+    SKILL = "skill"                  # per capability (M20 consumer, feeds §A2.5)
+    ARCHITECTURAL = "architectural"  # meta / whole-architecture (M20 consumer)
+
+    @property
+    def ordinal(self) -> int:
+        """0-based index in declaration order (immediate=0 → architectural=4).
+
+        Lets callers compare a layer's scope: a lower ordinal is a narrower scope.
+        """
+        return list(type(self).__members__.values()).index(self)
+
+
 @dataclass(frozen=True)
 class FiveQuestions:
     """Ch 13.5 — the five reflection questions, as booleans/scores."""

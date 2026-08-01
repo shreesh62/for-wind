@@ -4,12 +4,32 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import threading
 import time
 import ipaddress
 from collections import deque
 from pathlib import Path
 from typing import Optional
+
+# /open is a narrow-purpose endpoint: it may enqueue "open <url>" and nothing
+# else. Its inputs are interpolated into a natural-language command that an LLM
+# planner then acts on, so an unvalidated value could smuggle extra instructions
+# ("example.com and then delete my documents") into the planner. These patterns
+# keep the endpoint's authority equal to its name.
+_URL_RE = re.compile(
+    r"^(?:https?://)?"                          # optional scheme
+    r"(?:"
+    r"localhost"                                # localhost
+    r"|\d{1,3}(?:\.\d{1,3}){3}"                 # IPv4 literal
+    r"|[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"    # first host label
+    r"(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*"  # more labels
+    r"\.[A-Za-z]{2,}"                           # TLD
+    r")"
+    r"(?::\d{1,5})?"                            # optional port
+    r"(?:[/?#][^\s]*)?$"                        # optional path/query/fragment
+)
+_BROWSER_ALLOWLIST = frozenset({"chrome", "edge", "firefox", "brave", "default"})
 
 try:  # pragma: no cover - optional dependency
     from fastapi import FastAPI, HTTPException, Depends, Header, Request
@@ -239,10 +259,21 @@ def create_app(
         url = (payload.url or "").strip()
         if not url:
             raise HTTPException(status_code=422, detail="URL cannot be empty.")
-        # Enqueue a natural-language command that planner will route
+        # Both values are interpolated into a natural-language command for the LLM
+        # planner, so they are validated as a URL and a known browser rather than
+        # accepted as free text. Otherwise this endpoint would grant arbitrary
+        # planner instructions under the name "open a website".
+        if len(url) > 2048 or not _URL_RE.match(url):
+            raise HTTPException(status_code=422, detail="Not a valid URL.")
         text = f"open {url}"
         if payload.browser:
-            text += f" in {payload.browser}"
+            browser = payload.browser.strip().lower()
+            if browser not in _BROWSER_ALLOWLIST:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Unsupported browser. Choose one of: {sorted(_BROWSER_ALLOWLIST)}",
+                )
+            text += f" in {browser}"
         command_queue.put(text)
         return {"queued": True, "text": text}
 

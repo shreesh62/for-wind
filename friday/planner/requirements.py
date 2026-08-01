@@ -82,63 +82,86 @@ class RequirementsDiscovery:
     """
 
     SYSTEM_PROMPT = (
-        "You are the requirements-reasoning engine of a general computer operator AI. "
-        "Given a user's goal, determine WHAT MUST BE TRUE for the goal to be considered complete. "
-        "Do NOT think about applications, software, or buttons. "
-        "Think about completion conditions and information/output requirements. "
-        "Each requirement is a state that must hold when the goal is done.\n\n"
-        "Think like this: 'For this goal to be complete, the following must be true...'\n\n"
-        "Respond ONLY with a JSON array of requirement strings, ordered by dependency. "
-        "Be precise and complete but not redundant. 3-8 requirements typically.\n\n"
-        "Example goal: 'Research the best laptop under 80k and create a comparison report'\n"
-        'Response: ["Information about laptops under 80k must be gathered from sources", '
-        '"Specifications and prices must be extracted for comparison", '
-        '"At least 2-3 options must be compared on key criteria", '
-        '"A structured comparison report must be synthesized", '
-        '"The report must be saved as a document file"]'
+        "You are the requirements-reasoning engine of an AI computer operator. "
+        "Given a user's goal, determine WHAT MUST BE TRUE for the goal to be complete.\n\n"
+        "RULES:\n"
+        "- Requirements are COMPLETION CONDITIONS: observable facts that hold when done.\n"
+        "- NEVER mention applications, tools, editors, IDEs, buttons, or UI steps.\n"
+        "- NEVER include prerequisites the user already has (installed software, "
+        "accounts, an open window). The operator handles HOW; you define WHAT.\n"
+        "- Focus on: information gathered, content produced, files saved, actions "
+        "verified.\n"
+        "- 3-6 requirements is ideal. Fewer is better if fewer suffice.\n\n"
+        "Think: 'When this goal is complete, the following are verifiably true...'\n\n"
+        "Respond ONLY with a JSON array of requirement strings, ordered by dependency.\n\n"
+        "Example goal: 'Write a short note about Python and save it'\n"
+        'Response: ["A concise note about Python is composed", '
+        '"The note is saved to a file on disk"]\n\n'
+        "Example goal: 'Research the best laptop under 80k and create a comparison'\n"
+        'Response: ["Information about laptops under 80k is gathered from sources", '
+        '"At least 2-3 options are compared on key criteria", '
+        '"A structured comparison report is synthesized", '
+        '"The report is saved as a document file"]'
     )
 
     def __init__(self, model_router=None) -> None:
         self._router = model_router
 
-    def discover(self, goal: str) -> RequirementSet:
+    def discover(self, goal: str, memory_context: str = "") -> RequirementSet:
         """Discover requirements for a goal (sync wrapper).
 
         Safe across contexts: if an event loop is already running (e.g. inside
         async code), run the coroutine in a separate thread; otherwise use
         asyncio.run directly. Avoids the blocking-shutdown deadlock the old
         context-manager pattern caused on timeout.
+
+        ``memory_context`` is optional recalled context (preferences, prior facts).
+        Defaulted to "" so every existing caller is unaffected.
         """
         try:
             asyncio.get_running_loop()
         except RuntimeError:
             # No running loop — safe to use asyncio.run directly.
-            return asyncio.run(self.discover_async(goal))
+            return asyncio.run(self.discover_async(goal, memory_context))
 
         # A loop is running — offload to a worker thread that owns its own loop.
         pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
         try:
-            future = pool.submit(asyncio.run, self.discover_async(goal))
+            future = pool.submit(
+                asyncio.run, self.discover_async(goal, memory_context)
+            )
             return future.result(timeout=60)
         except Exception:
             return self._fallback(goal)
         finally:
             pool.shutdown(wait=False)
 
-    async def discover_async(self, goal: str) -> RequirementSet:
-        """Discover requirements using LLM reasoning."""
+    async def discover_async(
+        self, goal: str, memory_context: str = ""
+    ) -> RequirementSet:
+        """Discover requirements using LLM reasoning.
+
+        Recalled ``memory_context`` is supplied as context the model may use to
+        interpret the goal (e.g. a known preference for a file format). It informs
+        interpretation only — requirements are still derived from the goal.
+        """
         if not self._router:
             return self._fallback(goal)
 
         try:
             from friday.models.router import ModelCapability
+            user_prompt = f"Goal: {goal}"
+            if memory_context and memory_context.strip():
+                user_prompt = (
+                    f"Known context about this user (may inform how the goal is "
+                    f"interpreted; do NOT invent requirements from it):\n"
+                    f"{memory_context.strip()[:1500]}\n\n{user_prompt}"
+                )
             response = await self._router.complete(
-                f"Goal: {goal}",
+                user_prompt,
                 capability=ModelCapability.CLASSIFICATION,
-                # Fast, accurate structured decomposition. gpt-oss-120b answers in
-                # ~1-2s with clean JSON. (The former qwen3-next-80b now hangs to
-                # timeout on the free NIM tier.)
-                model="openai/gpt-oss-120b",
+                # Let the ModelRouter select by capability priority (primary:
+                # qwen3.5-397b — fast ~1s, clean JSON). No hardcoded model pin.
                 max_tokens=350,
                 temperature=0.2,
                 system_prompt=self.SYSTEM_PROMPT,

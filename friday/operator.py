@@ -22,9 +22,12 @@ about requirements and verifies completion, then self-corrects.
 
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -75,11 +78,26 @@ class Operator:
         max_iterations: int = 3,
         browser_strategy=None,
         state_cache=None,
+        kernel=None,
+        memory=None,
     ) -> None:
         self._model_router = model_router
         self._browser = browser_controller
         self._max_iterations = max_iterations
         self._browser_strategy = browser_strategy
+        # Memory (duck-typed, optional). Without it the operator has no continuity
+        # between tasks: preferences and prior facts are re-derived every run. Any
+        # object exposing get_context(query) -> obj.to_prompt_string() works; the
+        # production wiring passes FridayMemory. Every use is best-effort so memory
+        # can never break execution (Reflection proposes; Memory decides).
+        self._memory = memory
+        # M24 — verification-event producer. When a kernel is injected, requirement
+        # verdicts are published as `verification.completed` events, activating the
+        # (otherwise dormant) recovery/competence/reflection subscribers. Absent a
+        # kernel this is inert: no events, behavior identical to pre-M24.
+        self._kernel = kernel
+        from friday.verification.publisher import VerificationEventPublisher
+        self._verdict_publisher = VerificationEventPublisher(kernel=kernel)
         # Awareness UIA state cache (production path). When present, the executor's
         # Universal Perception fills the Accessibility/UIA tier from it; when absent
         # (e.g. the standalone benchmark runner) perception degrades to OCR+pixels.
@@ -111,6 +129,9 @@ class Operator:
             model_router=model_router,
             browser_controller=browser_controller,
             state_cache=state_cache,
+            # Same registry the planner selects from, so a tool the planner can
+            # choose is a tool the executor can actually run.
+            registry=self._registry,
         )
         self._observer = EnvironmentObserver()
 
@@ -132,11 +153,30 @@ class Operator:
         # is the 60-90s bottleneck. Fire both in parallel for the first iteration.
         import concurrent.futures as _cf
         env_state_pre = self._observer.snapshot()
+
+        # RECALL — bring prior context (preferences, facts, recent turns) into both
+        # requirements discovery and planning. Without this the agent restarts from
+        # zero on every goal.
+        memory_context = self._recall_context(goal)
+        if memory_context:
+            trace.append(f"Recalled {len(memory_context)} chars of memory context")
+        else:
+            trace.append("No memory context available (no memory wired or nothing recalled)")
+        self._begin_goal(goal)
+
         with _cf.ThreadPoolExecutor(max_workers=2) as _pool:
-            _fut_req = _pool.submit(self._discovery.discover, goal)
-            _fut_plan = _pool.submit(self._planner.plan, goal, env_state_pre)
-            req_set = _fut_req.result()
-            _prefetched_plan = _fut_plan.result()
+            _fut_req = _pool.submit(self._discovery.discover, goal, memory_context)
+            _fut_plan = _pool.submit(
+                self._planner.plan, goal, env_state_pre, memory_context
+            )
+            try:
+                req_set = _fut_req.result(timeout=60)
+            except Exception:
+                req_set = self._discovery._fallback(goal)
+            try:
+                _prefetched_plan = _fut_plan.result(timeout=60)
+            except Exception:
+                _prefetched_plan = None
 
         trace.append(f"Discovered {len(req_set.requirements)} requirements "
                      f"({'LLM' if req_set.from_llm else 'fallback'}) "
@@ -162,7 +202,9 @@ class Operator:
             if iteration == 0 and _prefetched_plan is not None:
                 plan = _prefetched_plan
             else:
-                plan = self._planner.plan(goal, env_state=env_state)
+                plan = self._planner.plan(
+                    goal, env_state=env_state, memory_context=memory_context
+                )
             trace.append(f"Iteration {iterations}: planned {plan.total_steps} steps "
                          f"({plan.skipped_steps} skipped)")
 
@@ -250,7 +292,7 @@ class Operator:
         # Deduplicate created files (iterations may recreate the same file)
         unique_files = list(dict.fromkeys(all_created_files))
 
-        return OperatorOutcome(
+        outcome = OperatorOutcome(
             goal=goal,
             completed=req_set.all_satisfied,
             summary=self._build_summary(goal, req_set, unique_files, final_content),
@@ -262,6 +304,68 @@ class Operator:
             trace=trace,
             evidence=getattr(exec_result, "evidence", None),
         )
+
+        # RECORD — close the loop so the next goal can recall this one.
+        self._remember_outcome(outcome)
+        return outcome
+
+    # --- memory seams (all best-effort: memory never breaks execution) --------
+
+    def _recall_context(self, goal: str) -> str:
+        """Recalled context for ``goal`` as a prompt string ("" when unavailable).
+
+        Duck-typed against FridayMemory: ``get_context(query)`` returning an object
+        with ``to_prompt_string()``. A memory failure degrades to no context (and is
+        traced by the caller) rather than failing the goal.
+        """
+        memory = self._memory
+        if memory is None:
+            return ""
+        try:
+            context = memory.get_context(goal)
+            render = getattr(context, "to_prompt_string", None)
+            text = render() if callable(render) else str(context or "")
+            return text.strip()
+        except Exception as exc:  # noqa: BLE001 — recall is advisory, never fatal
+            logger.warning("memory recall failed for goal %r: %r", goal[:60], exc)
+            return ""
+
+    def _begin_goal(self, goal: str) -> None:
+        """Mark ``goal`` active in working memory, when memory supports it."""
+        memory = self._memory
+        if memory is None:
+            return
+        setter = getattr(memory, "set_active_goal", None)
+        if not callable(setter):
+            return
+        try:
+            setter(goal)
+        except Exception as exc:  # noqa: BLE001 — bookkeeping, never fatal
+            logger.warning("could not set active goal in memory: %r", exc)
+
+    def _remember_outcome(self, outcome: "OperatorOutcome") -> None:
+        """Record the completed goal so later goals can build on it."""
+        memory = self._memory
+        if memory is None:
+            return
+        # Reuse the kernel's fail-safe recording adapter rather than duplicating its
+        # duck-typed fallback chain.
+        from friday.kernel.memory_sink import MemorySink
+
+        try:
+            MemorySink(memory).record_episode({
+                "goal": outcome.goal,
+                "summary": outcome.summary,
+                "completed": bool(outcome.completed),
+                "created_files": list(outcome.created_files),
+                "requirements_met": outcome.requirements_met,
+                "requirements_total": outcome.requirements_total,
+            })
+            complete = getattr(memory, "complete_goal", None)
+            if outcome.completed and callable(complete):
+                complete()
+        except Exception as exc:  # noqa: BLE001 — recording must never fail a goal
+            logger.warning("could not record goal outcome in memory: %r", exc)
 
     def _repair_unmet(self, unmet, exec_result, goal, trace) -> bool:
         """Diagnose each unmet requirement and run a TARGETED repair (M4).
@@ -330,6 +434,17 @@ class Operator:
             if not verdict.satisfied:
                 # Record the honest reason for being unmet.
                 req.evidence = f"UNMET: {verdict.reason}"
+
+            # M24 — publish the verdict so the recovery/competence/reflection loop
+            # can react. Inert (no-op) when no kernel is attached; never raises.
+            self._verdict_publisher.publish_verdict(
+                goal_id=getattr(req_set, "goal_id", "") or getattr(req_set, "goal", ""),
+                requirement=req.description,
+                satisfied=bool(verdict.satisfied),
+                evidence=evidence,
+                reversible=True,
+                blocked=getattr(exec_result, "blocked", False),
+            )
 
     def _build_summary(self, goal, req_set, files, content) -> str:
         """Build a human-readable outcome summary."""

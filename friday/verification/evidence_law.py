@@ -234,6 +234,13 @@ def classify_requirement(description: str) -> RequirementKind:
                               "go to", "launch"]):
         return RequirementKind.NAVIGATE
 
+    # Interaction / UI operations (click, type, submit, login) — require evidence
+    # that the specific action was taken, not just that the page was reached
+    if any(kw in d for kw in ["click", "press", "tap", "type", "enter",
+                              "log in", "login", "sign in", "log out", "logout",
+                              "submit", "select", "toggle", "check", "uncheck"]):
+        return RequirementKind.NAVIGATE  # needs confirmed navigation/interaction evidence
+
     return RequirementKind.GENERIC
 
 

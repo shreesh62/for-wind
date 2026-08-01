@@ -133,3 +133,28 @@ exploration are already implemented and tested — v2.1 elevates them to normati
 **This document set is the deliverable of M13 Part 2.** Implementation of M14+ begins only after you
 review and approve: (a) the FAS v2.1 amendments, (b) this traceability matrix, and (c) this roadmap /
 recommended order. Until then, no v2.1 subsystem is built and no default is changed.
+
+
+---
+
+## 7. Post-v2.1 — Learned Choice & Preference Resolution (M25)
+
+**Status:** planned. All foundations built (Preference Memory M21, Retrieval Router M19,
+Deliberation M16, Cognitive State M22, Reflection/Learning M20/M17, Failure Memory M21,
+World Model M15, Event Bus). This is the first post-v2.1 milestone.
+
+**Dependency:** all v2.1 subsystems (now Built). Additionally depends on the model-resilience
+fix (below) so the live pipeline doesn't hang on degraded models during preference learning.
+
+**Scope:** implement the `DecisionPoint` concept + Preference Resolution Pipeline as a new
+deliberation-layer capability that coordinates the existing subsystems. No new persistence
+mechanism (reuses Preference Memory); no application-specific logic; event-driven +
+replay-safe; integrates with the Retrieval Router, Cognitive State Manager, and Deliberation
+utility. See FAS amendment A2.15.
+
+**Recommended order:**
+1. Fix model-resilience (replace hardcoded `gpt-oss-120b` with router-based selection +
+   timeout failover) — unblocks the live validation pass and is a prerequisite for any
+   capability that exercises the live Operator.
+2. Implement M25 (Learned Choice & Preference Resolution).
+3. Re-run the real-machine validation pass + the browser/desktop GUI session.

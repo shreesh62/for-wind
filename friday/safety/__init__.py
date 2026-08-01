@@ -14,6 +14,11 @@ from friday.safety.permission import (
     PermissionVerdict,
     TrustZone,
 )
+from friday.safety.action_gate import (
+    ActionGate,
+    GateDecision,
+    classify_capability,
+)
 from friday.safety.policy import SafetyPolicy
 from friday.safety.vault import SecretVault
 
@@ -26,4 +31,7 @@ __all__ = [
     "TrustZone",
     "SafetyPolicy",
     "SecretVault",
+    "ActionGate",
+    "GateDecision",
+    "classify_capability",
 ]

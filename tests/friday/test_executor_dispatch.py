@@ -112,10 +112,18 @@ def test_edit_file_without_prior_file_is_noop_message(tmp_dir):
 
 
 def test_run_command_is_gated():
+    """RUN_COMMAND must not execute without approval.
+
+    This is now enforced by the Ch 35 permission gate *before* dispatch rather
+    than by a stub handler returning a message, so the assertion checks the
+    behavior (withheld, nothing dispatched) instead of the old wording.
+    """
     ex = _executor()
     ctx = ExecutionContext(goal="run")
     out = ex._execute_step(_step(ToolCapability.RUN_COMMAND, "ls"), ctx)
-    assert "gated for safety" in out
+    assert "WITHHELD" in out
+    assert ctx.withheld, "a withheld step must be recorded on the context"
+    assert ctx.gate_decisions and not ctx.gate_decisions[-1].allowed
 
 
 def test_verify_result_returns_check_message():

@@ -136,12 +136,39 @@ class BrowserController:
             else:
                 self._context = await self._browser.new_context()
 
-            # Reuse an existing page or create one
-            if self._context.pages:
-                self._page = self._context.pages[0]
-            else:
-                self._page = await self._context.new_page()
+            # REUSE an existing page — this is critical. The user is already
+            # logged into sites in their existing tabs. Opening a NEW page loses
+            # all session cookies/state for that context. Pick the most recent
+            # non-blank page, or the first available one.
+            pages = self._context.pages
+            active_page = None
+            for p in reversed(pages):
+                url = p.url
+                if url and url != "about:blank" and not url.startswith("chrome://"):
+                    active_page = p
+                    break
+            if active_page is None and pages:
+                active_page = pages[-1]
+            if active_page is None:
+                active_page = await self._context.new_page()
+            self._page = active_page
             self._connection_mode = "cdp"
+
+            # Stealth: remove automation signals that trigger captchas.
+            # When Playwright connects over CDP to a user's real Chrome, the
+            # browser itself is NOT launched by Playwright (so no webdriver flag),
+            # but Playwright's page hooks can still leave detectable traces.
+            # Patch the most common detection vectors.
+            try:
+                await self._page.evaluate("""() => {
+                    // Remove webdriver flag
+                    Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                    // Remove Playwright-specific markers
+                    delete window.__playwright;
+                    delete window.__pwInitialized;
+                }""")
+            except Exception:
+                pass  # Some pages restrict eval; stealth is best-effort
         except Exception as exc:
             if self._require_real_chrome:
                 # Do NOT fake it. Surface the real reason loudly.
@@ -188,26 +215,51 @@ class BrowserController:
             pass
 
     def _submit(self, coro) -> Any:
-        """Submit a coroutine to the dedicated loop and wait for result."""
+        """Submit a coroutine to the dedicated loop and wait for result.
+
+        Every synchronous operation funnels through here, so this is also where an
+        operational failure is recorded on ``last_error``. Previously ``_error`` was
+        only ever set during ``start()``, so after the browser died mid-session
+        ``last_error`` stayed ``None`` and the failure was visible only in the
+        returned dict — a caller that ignored return values saw nothing wrong.
+        The exception is still raised; this only makes the failure observable.
+        """
         if not self._loop:
-            raise RuntimeError("Browser controller not started")
+            self._error = "Browser controller not started"
+            raise RuntimeError(self._error)
         fut: Future = asyncio.run_coroutine_threadsafe(coro, self._loop)
-        return fut.result(timeout=60)
+        try:
+            result = fut.result(timeout=30)
+        except Exception as exc:
+            self._error = f"{type(exc).__name__}: {exc}"
+            raise
+        self._error = None  # a successful operation clears a stale error
+        return result
 
     # --- Public synchronous operations (run on the persistent loop) ---
 
     def navigate(self, url: str) -> Dict[str, Any]:
         """Navigate to a URL. Returns {url, title, ok}.
 
-        Waits for DOM content, then best-effort waits for network to go idle
-        (SPAs/XHR-heavy pages) with a short bound so we never hang.
+        Waits for DOM content loaded, then waits for interactive elements to
+        actually appear (SPAs like Instagram/React take 2-4s to hydrate after
+        domcontentloaded fires). Without this, observe_interactive() returns
+        empty on any modern React/Angular/Vue app.
         """
         async def _nav():
-            await self._page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            try:
-                await self._page.wait_for_load_state("networkidle", timeout=5000)
-            except Exception:
-                await self._page.wait_for_timeout(1000)
+            await self._page.goto(url, wait_until="domcontentloaded", timeout=15000)
+            # Wait for the page to become interactive — SPAs hydrate AFTER
+            # domcontentloaded. Poll for clickable elements to appear.
+            for _ in range(8):  # up to 4s total (8 × 500ms)
+                await self._page.wait_for_timeout(500)
+                try:
+                    count = await self._page.evaluate(
+                        "document.querySelectorAll('a,button,input,textarea,[role=button]').length"
+                    )
+                    if count >= 3:
+                        break
+                except Exception:
+                    break
             return {"url": self._page.url, "title": await self._page.title(), "ok": True}
         try:
             return self._submit(_nav())

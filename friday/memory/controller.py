@@ -132,6 +132,27 @@ class FridayMemory:
             except Exception:
                 pass
 
+    def record_episode(self, episode: Dict[str, Any]) -> None:
+        """Record a completed-goal episode from a plain dict.
+
+        This is the recording seam used by the Operator and by the kernel's
+        ``MemorySink`` (which probes for ``record_episode`` first). Keeping it dict-
+        based means neither caller has to import the ``Episode`` type.
+        """
+        payload = dict(episode or {})
+        goal = str(payload.get("goal", "") or "")
+        summary = str(payload.get("summary", "") or "")
+        created = payload.get("created_files") or []
+        if created:
+            summary = f"{summary} | files: {', '.join(str(f) for f in created)}"
+        self.episodic.record(Episode(
+            user_text=goal,
+            assistant_response=summary,
+            mode="friday",
+            action_type="goal",
+            action_success=bool(payload.get("completed", False)),
+        ))
+
     def record_pattern(self, pattern: ActionPattern) -> None:
         """Record a successful action pattern to procedural memory."""
         self.procedural.record_success(pattern)
@@ -227,3 +248,93 @@ class FridayMemory:
     def reset_session(self) -> None:
         """Reset working memory (new session, keep persistent data)."""
         self.working.reset()
+
+
+def build_retrieval_router(
+    memory: "FridayMemory",
+    *,
+    failure_memory: Optional[Any] = None,
+    capability_memory: Optional[Any] = None,
+    preference_memory: Optional[Any] = None,
+    weights: Optional[Dict[str, float]] = None,
+) -> "RetrievalRouter":
+    """Build a Retrieval Router pre-registered with a ``FridayMemory``'s tiers.
+
+    Additive helper (M19 / A2.7, Design C3). Registers the *backing* ``MemoryStore``
+    of each persistent tier — the tier wrappers (EpisodicMemory / SemanticMemory /
+    ProceduralMemory) do not themselves expose the uniform
+    ``retrieve(query, top_k) -> List[MemoryEntry]`` surface, but their ``._store``
+    (a ``JSONFileStore``) does. When supplied, ``failure_memory`` (a ``FailureMemory``,
+    which exposes ``retrieve`` directly) is registered under ``MemoryTier.FAILURE``.
+
+    This helper does NOT change any existing ``FridayMemory`` method behavior
+    (Requirement 7.1). Tier selection stays data-driven (Axiom 15): there is no
+    per-tier special-casing beyond the name/tier mapping below, and any source that
+    is missing or does not expose a callable ``retrieve`` is simply skipped rather
+    than crashing the build — keeping the factory robust to internal changes.
+
+    Args:
+        memory: The ``FridayMemory`` instance whose persistent tiers to register.
+        failure_memory: Optional ``FailureMemory`` to register under the FAILURE tier.
+        capability_memory: Optional ``CapabilityMemory`` to register under the
+            CAPABILITY tier (it exposes ``retrieve`` directly, like ``failure_memory``).
+        preference_memory: Optional ``PreferenceMemory`` to register under the
+            PREFERENCE tier (it exposes ``retrieve`` directly, like ``failure_memory``).
+        weights: Optional mapping of source-name (str) -> weight (float), overriding
+            the default weight of 1.0 for that source.
+
+    Returns:
+        A ``RetrievalRouter`` with the available sources registered.
+    """
+    # Local imports keep controller.py's module-level imports unchanged and avoid any
+    # possibility of an import cycle (retrieval_router imports only interfaces today).
+    from friday.memory.retrieval_router import RetrievalRouter
+    from friday.memory.interfaces import MemoryTier
+
+    weights = weights or {}
+    router = RetrievalRouter()
+
+    # (registered-name, owning tier, tier wrapper attribute on FridayMemory).
+    # The backing store is `<wrapper>._store`; FailureMemory is handled separately
+    # below because it exposes `retrieve` itself (no `._store` indirection).
+    persistent_tiers = (
+        ("episodic", MemoryTier.EPISODIC, "episodic"),
+        ("semantic", MemoryTier.SEMANTIC, "semantic"),
+        ("procedural", MemoryTier.PROCEDURAL, "procedural"),
+    )
+
+    for name, tier, attr in persistent_tiers:
+        wrapper = getattr(memory, attr, None)
+        store = getattr(wrapper, "_store", None) if wrapper is not None else None
+        # Guard before registering: register_source raises TypeError on an invalid
+        # source, so skip anything missing the uniform retrieve surface.
+        if callable(getattr(store, "retrieve", None)):
+            router.register_source(
+                name, tier, store, weight=float(weights.get(name, 1.0))
+            )
+
+    if failure_memory is not None and callable(getattr(failure_memory, "retrieve", None)):
+        router.register_source(
+            "failure",
+            MemoryTier.FAILURE,
+            failure_memory,
+            weight=float(weights.get("failure", 1.0)),
+        )
+
+    if capability_memory is not None and callable(getattr(capability_memory, "retrieve", None)):
+        router.register_source(
+            "capability",
+            MemoryTier.CAPABILITY,
+            capability_memory,
+            weight=float(weights.get("capability", 1.0)),
+        )
+
+    if preference_memory is not None and callable(getattr(preference_memory, "retrieve", None)):
+        router.register_source(
+            "preference",
+            MemoryTier.PREFERENCE,
+            preference_memory,
+            weight=float(weights.get("preference", 1.0)),
+        )
+
+    return router

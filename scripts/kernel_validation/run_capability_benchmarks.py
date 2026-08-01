@@ -189,6 +189,25 @@ def _parse_timeout(default: float = 180.0) -> float:
     return default
 
 
+# Apps that benchmarks may launch and that should be cleaned up after each run so
+# they don't accumulate on the user's desktop across a multi-domain session.
+_BENCHMARK_LAUNCHED_APPS = ("CalculatorApp.exe", "calc.exe", "notepad.exe")
+
+
+def _cleanup_launched_apps() -> None:
+    """Best-effort: kill any benchmark-launched apps still running."""
+    import subprocess as _sp
+
+    for exe in _BENCHMARK_LAUNCHED_APPS:
+        try:
+            _sp.run(
+                ["taskkill", "/F", "/IM", exe],
+                stdout=_sp.DEVNULL, stderr=_sp.DEVNULL, timeout=5,
+            )
+        except Exception:  # noqa: BLE001 — cleanup is best-effort
+            pass
+
+
 def run_domain(
     domain: str,
     benchmarks: Tuple[CapabilityBenchmark, ...],
@@ -249,6 +268,10 @@ def run_domain(
                 pool.shutdown(wait=False)
                 pool = None
         results.append((b, passed))
+        # Clean up: benchmarks may launch desktop apps (calculator, etc.) that
+        # persist after the benchmark finishes. Kill known benchmark-launched apps
+        # so they don't pile up across the run and confuse the user.
+        _cleanup_launched_apps()
     if not measured_any:
         return None
     return score_domain(tuple(results))

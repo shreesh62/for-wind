@@ -74,6 +74,9 @@ class ToolCapability(str, Enum):
     DOWNLOAD_FILE = "download_file"
     UPLOAD_FILE = "upload_file"
 
+    # Agentic browser operation — the WebAgent observe→decide→act loop
+    OPERATE_WEBSITE = "operate_website"
+
 
 @dataclass
 class Tool:
@@ -368,6 +371,18 @@ def build_default_registry() -> ToolRegistry:
         capabilities=[ToolCapability.VERIFY_GOAL],
         environment="any",
         priority=10,
+    ))
+
+    # -- Agentic Website Operation --
+    registry.register(Tool(
+        name="web.operate",
+        description="Agentically operate a website: observe the page, decide what to "
+                    "click/type/scroll, act, and repeat until the goal is done. "
+                    "Use for login, logout, posting, navigating menus, any multi-step "
+                    "website interaction.",
+        capabilities=[ToolCapability.OPERATE_WEBSITE],
+        environment="browser",
+        priority=9,
     ))
 
     return registry

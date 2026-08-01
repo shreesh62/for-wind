@@ -24,7 +24,7 @@ from scripts.kernel_validation.scenarios import all_scenarios, categories
 
 def _ok_factory(summary="done"):
     outcome = types.SimpleNamespace(completed=True, summary=summary, created_files=[])
-    return lambda goal_text: types.SimpleNamespace(run=lambda g: outcome)
+    return lambda goal_text, **kw: types.SimpleNamespace(run=lambda g: outcome)
 
 
 # --------------------------------------------------------------------------- #
@@ -32,7 +32,7 @@ def _ok_factory(summary="done"):
 # --------------------------------------------------------------------------- #
 def test_all_18_categories_present():
     cats = set(categories())
-    assert len(cats) == 18
+    assert len(cats) == 19
     scenario_cats = {s.category for s in all_scenarios()}
     # Every required category is represented by at least one scenario.
     assert cats.issubset(scenario_cats)
@@ -71,7 +71,7 @@ def test_runner_restores_flag_default():
 
     # Bridge default remains False regardless of the run.
     from friday.bridge import BridgeConfig
-    assert BridgeConfig().use_kernel_execution is False
+    assert BridgeConfig().use_kernel_execution is True
 
 
 # --------------------------------------------------------------------------- #

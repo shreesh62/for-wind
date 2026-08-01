@@ -397,7 +397,7 @@ def gather(
         return result
 
     # 2. Search.
-    outcome = http_search(query, timeout=timeout, max_results=max(max_sources * 3, 10))
+    outcome = http_search(query, timeout=timeout, max_results=max(max_sources * 2, 6))
     if not outcome.ok or not outcome.hits:
         result.error = outcome.error or "no results"
         return result

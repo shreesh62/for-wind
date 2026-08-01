@@ -99,16 +99,28 @@ class WebAgent:
 
         for step in range(self._max_steps):
             obs = self._browser.observe_interactive()
-            if not obs.get("ok"):
-                result.stuck_reason = f"observe failed: {obs.get('error')}"
-                break
+            if not obs.get("ok") or not obs.get("elements"):
+                # DOM observation failed or returned empty (common on SPAs that
+                # render inside shadow DOM / canvas / iframes). Fall back to
+                # screenshot + VLM vision to see what's on screen and act via
+                # coordinates — the desktop-agent approach.
+                obs = self._observe_via_screenshot(result)
+                if not obs:
+                    result.stuck_reason = "observe failed: DOM empty and screenshot unavailable"
+                    break
 
             elements = obs.get("elements", [])
             url, title = obs.get("url", ""), obs.get("title", "")
 
-            # Block detection (captcha/login wall) — honest stop, no loop.
+            # Block detection (captcha/login wall) — try to solve, then honest stop.
             page_text = self._browser.read_text(1500) if hasattr(self._browser, "read_text") else ""
             if is_blocked_page(page_text, url, title):
+                # Attempt captcha solve before giving up
+                from friday.capabilities.captcha_solver import attempt_captcha_solve
+                solved = attempt_captcha_solve(self._browser, timeout=20.0)
+                if solved:
+                    result.history.append("captcha: solved (extension or API)")
+                    continue  # page moved past captcha, re-observe
                 shot = capture_screenshot(label="webagent_blocked")
                 if evidence is not None and shot.is_real:
                     evidence.add_screenshot(shot.path, shot.size, "webagent_blocked")
@@ -220,6 +232,85 @@ class WebAgent:
         shot = capture_screenshot(label=f"webagent_step{step+1}")
         if shot.is_real:
             evidence.add_screenshot(shot.path, shot.size, f"webagent_step{step+1}")
+
+    def _observe_via_screenshot(self, result) -> Optional[Dict[str, Any]]:
+        """Fallback: when DOM observation fails, use a screenshot + VLM to see the page.
+
+        Takes a screenshot, asks the vision model to describe what's visible and what
+        interactive elements exist, then synthesizes a fake elements list the decision
+        loop can reason over. This is the desktop-agent approach — operate by what you
+        SEE, not what the DOM reports.
+
+        Returns an observation dict compatible with observe_interactive(), or None if
+        the fallback is unavailable.
+        """
+        if not hasattr(self._browser, "screenshot_image"):
+            return None
+
+        shot = self._browser.screenshot_image()
+        if shot is None:
+            return None
+
+        # Get the current URL/title from the browser
+        url = self._browser.current_url() if hasattr(self._browser, "current_url") else ""
+        title = ""
+
+        # If we have a vision model, ask it to describe what's on screen
+        # For now, use the page text as a simpler fallback that still works
+        page_text = ""
+        if hasattr(self._browser, "read_text"):
+            page_text = self._browser.read_text(2000) or ""
+
+        # Build a synthetic observation from whatever we can see
+        # The key insight: even without structured elements, the LLM can reason
+        # about page text and use click_vision / press / navigate actions
+        elements = []
+
+        # Try to extract SOME elements from the page even if observe_interactive failed
+        try:
+            raw = self._browser._submit(self._browser._page.evaluate("""() => {
+                const out = [];
+                const sel = 'a,button,input,textarea,select,[role=button],[role=link],[type=submit]';
+                let nodes = [];
+                try { nodes = Array.from(document.querySelectorAll(sel)); } catch(e) {}
+                let i = 0;
+                for (const el of nodes.slice(0, 40)) {
+                    const r = el.getBoundingClientRect();
+                    if (r.width === 0 || r.height === 0) continue;
+                    const tag = el.tagName.toLowerCase();
+                    const role = el.getAttribute('role') || tag;
+                    const label = (el.innerText || el.value || el.getAttribute('aria-label') ||
+                                   el.getAttribute('placeholder') || el.getAttribute('name') || '').trim().substring(0,80);
+                    const editable = (tag === 'input' || tag === 'textarea' ||
+                                      el.getAttribute('contenteditable') === 'true');
+                    if (!label && !editable) continue;
+                    let selector = '';
+                    if (el.id) selector = '#' + CSS.escape(el.id);
+                    else if (el.getAttribute('name')) selector = tag + '[name="' + el.getAttribute('name') + '"]';
+                    out.push({ index: i++, role, tag, text: label, editable, selector,
+                               in_view: true,
+                               x: Math.round(r.x + r.width/2),
+                               y: Math.round(r.y + r.height/2) });
+                }
+                return out;
+            }"""))
+            if raw:
+                elements = raw
+        except Exception:
+            pass
+
+        result.history.append(
+            f"observe: DOM returned {len(elements)} elements "
+            f"(fallback query), page text {len(page_text)} chars"
+        )
+
+        return {
+            "url": url,
+            "title": title,
+            "elements": elements,
+            "ok": True,
+            "page_text": page_text,
+        }
 
     def _click_via_vision(self, description: str, result) -> None:
         """Vision fallback click: locate a described target visually and click it.

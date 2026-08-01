@@ -323,6 +323,13 @@ class LearningEngine:
                     "improvement": validation.improvement,
                     "baseline": baseline,
                     "observed": observed,
+                    # Additive identity (M17): the (capability, environment) the
+                    # SkillEvolutionPipeline keys on, so real learning events — not
+                    # just synthetic ones — carry the skill identity. JSON-safe
+                    # strings; "" when genuinely unavailable. Extra keys only;
+                    # existing consumers are unaffected.
+                    "capability": str(experience.capability),
+                    "environment": str(experience.environment),
                 },
             )
             material = f"{experience.capability}\x00{experience.environment}"
@@ -349,6 +356,12 @@ class LearningEngine:
                 {
                     "principle_id": validation.principle_id,
                     "reason": validation.reason,
+                    # Additive identity (M17): same (capability, environment) key the
+                    # pipeline uses, so a rejected skill can be disqualified by real
+                    # events too. JSON-safe strings; "" when unavailable. Extra keys
+                    # only; existing consumers are unaffected.
+                    "capability": str(experience.capability),
+                    "environment": str(experience.environment),
                 },
             )
 

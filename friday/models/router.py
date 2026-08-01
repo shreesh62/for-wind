@@ -13,10 +13,13 @@ The router:
 
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Protocol
+
+logger = logging.getLogger(__name__)
 
 
 class ModelCapability(str, Enum):
@@ -46,6 +49,16 @@ class ModelInfo:
     priority: int = 0  # Higher = preferred
     rate_limit_rpm: int = 60
     rate_limit_tpm: int = 100000
+    # Per-capability priority overrides. A single global priority cannot express
+    # "best for reasoning, but do not lead classification": a small fast model
+    # should win the high-frequency, low-difficulty capabilities without displacing
+    # a larger model on synthesis. Falls back to `priority` for any capability not
+    # listed, so existing models keep their exact ordering.
+    capability_priority: Dict[ModelCapability, int] = field(default_factory=dict)
+
+    def priority_for(self, capability: ModelCapability) -> int:
+        """Effective priority of this model for ``capability``."""
+        return self.capability_priority.get(capability, self.priority)
 
 
 @dataclass
@@ -131,6 +144,11 @@ class ModelRouter:
         self._usage_log: List[UsageRecord] = []
         self._rate_trackers: Dict[str, List[float]] = {}  # provider -> timestamps
         self._fallback_order: List[str] = []
+        # "provider/model_id" -> reason, for models a provider reports as gone or
+        # structurally unusable. Skipped on later requests so a retired id is not
+        # re-attempted on every single call.
+        self._unavailable_models: Dict[str, str] = {}
+        self._failure_strikes: Dict[str, int] = {}
 
     def register_provider(self, provider: ModelProvider) -> None:
         """Register a model provider."""
@@ -154,7 +172,9 @@ class ModelRouter:
             for model in provider.models:
                 if capability in model.capabilities:
                     models.append(model)
-        models.sort(key=lambda m: m.priority, reverse=True)
+        # Same ranking `complete()` actually uses, so this reporting surface cannot
+        # disagree with real selection.
+        models.sort(key=lambda m: m.priority_for(capability), reverse=True)
         return models
 
     async def complete(
@@ -195,49 +215,60 @@ class ModelRouter:
             if self._is_rate_limited(provider_name):
                 continue
 
-            # Select the best model for this capability from this provider
-            # (unless an explicit model was requested)
-            selected_model = model
-            if not selected_model:
-                selected_model = self._best_model_for(p, capability)
+            # Candidate models for this capability, best priority first. An
+            # explicitly requested model is the only candidate (the caller asked
+            # for it by name, so silently substituting another would be wrong).
+            if model:
+                candidate_models = [model]
+            else:
+                candidate_models = self._models_for(p, capability) or [None]
 
-            try:
-                response = await p.complete(
-                    prompt,
-                    model=selected_model,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    system_prompt=system_prompt,
-                    **kwargs,
-                )
-                latency = (time.perf_counter() - start) * 1000
+            for candidate in candidate_models:
+                try:
+                    response = await p.complete(
+                        prompt,
+                        model=candidate,
+                        max_tokens=max_tokens,
+                        temperature=temperature,
+                        system_prompt=system_prompt,
+                        **kwargs,
+                    )
+                    latency = (time.perf_counter() - start) * 1000
 
-                self._record_usage(UsageRecord(
-                    timestamp=time.time(),
-                    provider=provider_name,
-                    model_id=response.model_used,
-                    capability=capability.value,
-                    tokens_in=0,
-                    tokens_out=response.tokens_used,
-                    latency_ms=latency,
-                    success=True,
-                ))
+                    self._record_usage(UsageRecord(
+                        timestamp=time.time(),
+                        provider=provider_name,
+                        model_id=response.model_used,
+                        capability=capability.value,
+                        tokens_in=0,
+                        tokens_out=response.tokens_used,
+                        latency_ms=latency,
+                        success=True,
+                    ))
 
-                response.latency_ms = latency
-                return response
+                    response.latency_ms = latency
+                    return response
 
-            except Exception as exc:
-                last_error = str(exc)
-                self._record_usage(UsageRecord(
-                    timestamp=time.time(),
-                    provider=provider_name,
-                    model_id=model or "unknown",
-                    capability=capability.value,
-                    latency_ms=(time.perf_counter() - start) * 1000,
-                    success=False,
-                    error=last_error,
-                ))
-                continue
+                except Exception as exc:
+                    # Record per-model so a retired/unavailable model id is visible
+                    # in usage stats, then try this provider's next candidate before
+                    # giving up on the provider entirely.
+                    last_error = str(exc)
+                    self._record_usage(UsageRecord(
+                        timestamp=time.time(),
+                        provider=provider_name,
+                        model_id=candidate or "unknown",
+                        capability=capability.value,
+                        latency_ms=(time.perf_counter() - start) * 1000,
+                        success=False,
+                        error=last_error,
+                    ))
+                    logger.warning(
+                        "model %s failed for capability=%s (%s); trying next candidate",
+                        candidate, capability.value, exc,
+                    )
+                    self._note_model_failure(provider_name, candidate or "", last_error)
+                    continue
 
         # All providers failed
         raise RuntimeError(
@@ -276,13 +307,84 @@ class ModelRouter:
 
     def _best_model_for(self, provider: ModelProvider, capability: ModelCapability) -> Optional[str]:
         """Pick the highest-priority model from a provider for a capability."""
-        candidates = [
-            m for m in provider.models if capability in m.capabilities
+        ranked = self._models_for(provider, capability)
+        return ranked[0] if ranked else None
+
+    def _models_for(
+        self, provider: ModelProvider, capability: ModelCapability
+    ) -> List[str]:
+        """All of ``provider``'s models for ``capability``, best priority first.
+
+        Returning the full ranked list (not just the best) is what lets
+        :meth:`complete` fail over *within* a provider. Previously only the single
+        highest-priority model was attempted, so one retired model id made every
+        request fail even though the same provider offered working alternatives.
+
+        Models already found permanently unavailable this process are skipped, but
+        never *all* of them: if every candidate has been marked, the ranked list is
+        returned unchanged so the request still attempts something and reports a
+        real error rather than a silent "no models" condition.
+        """
+        candidates = [m for m in provider.models if capability in m.capabilities]
+        candidates.sort(
+            key=lambda m: (
+                m.priority_for(capability)
+                if hasattr(m, "priority_for")
+                else m.priority
+            ),
+            reverse=True,
+        )
+        ranked = [m.model_id for m in candidates]
+        live = [
+            mid for mid in ranked
+            if f"{provider.name}/{mid}" not in self._unavailable_models
         ]
-        if not candidates:
-            return None
-        best = max(candidates, key=lambda m: m.priority)
-        return best.model_id
+        return live or ranked
+
+    # Response codes that mean "this model id will not work", as opposed to a
+    # transient outage: gone/retired ids, and a request shape the model rejects
+    # structurally. Marked per-process so it self-heals on restart rather than
+    # hardcoding a dead-model list that would rot.
+    _PERMANENT_MARKERS = ("404", "410", "not found", "gone", "400")
+    # Any other failure is forgiven once — it may be transient — but a model that
+    # keeps failing is unhealthy and re-attempting it on every request wastes real
+    # time. Providers commonly retry internally before raising (so one router-level
+    # failure can already represent several attempts) and may not preserve the
+    # underlying reason, which is why this is deliberately reason-agnostic.
+    _FAILURE_STRIKES = 2
+
+    def _note_model_failure(self, provider_name: str, model_id: str, error: str) -> None:
+        """Mark a model unavailable when it looks permanently or repeatedly broken."""
+        if not model_id or model_id == "unknown":
+            return
+        key = f"{provider_name}/{model_id}"
+        if key in self._unavailable_models:
+            return
+        lowered = (error or "").lower()
+
+        if any(marker in lowered for marker in self._PERMANENT_MARKERS):
+            reason = error[:200]
+        else:
+            strikes = self._failure_strikes.get(key, 0) + 1
+            self._failure_strikes[key] = strikes
+            if strikes < self._FAILURE_STRIKES:
+                return
+            reason = f"failed {strikes} times: {error[:150]}"
+
+        self._unavailable_models[key] = reason
+        logger.warning(
+            "model %s marked unavailable for this process (%s); it will be skipped",
+            key, reason[:120],
+        )
+
+    @property
+    def unavailable_models(self) -> Dict[str, str]:
+        """Models found permanently unavailable this process, with the reason.
+
+        Observable degradation: a caller/operator can see WHICH models dropped out
+        rather than only noticing higher latency.
+        """
+        return dict(self._unavailable_models)
 
     def _get_providers_for_capability(self, capability: ModelCapability) -> List[str]:
         """Get providers sorted by priority for a capability."""

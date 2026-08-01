@@ -47,6 +47,7 @@ Available capabilities (use ONLY these names):
 - RUN_COMMAND: Run a system command
 - DOWNLOAD_FILE: Download a file from the web
 - VERIFY_RESULT: Verify an intermediate result
+- OPERATE_WEBSITE: Agentically operate a website (observe the page, decide what to click/type/scroll, act, repeat until the goal is done). Use this for ANY multi-step website interaction like logging in, posting, navigating menus, filling forms across pages, etc. The agent sees the live page and decides autonomously — you just provide the goal.
 """
 
 
@@ -98,23 +99,42 @@ class LLMDecomposer:
     """
 
     SYSTEM_PROMPT = (
-        "You are a task decomposition engine for a computer operator AI. "
-        "Given a user's goal, break it down into a sequence of capability-based steps. "
-        "Each step must use exactly ONE capability from the list below. "
-        "Think about WHAT the goal actually requires, not what apps to open. "
-        "Focus on the INFORMATION NEEDS and ACTIONS needed to complete the goal. "
-        "Do NOT create unnecessary steps. Be efficient. "
-        "The operator can search the web, read pages, generate text, create files, "
-        "interact with apps, and verify results.\n\n"
+        "You are a task decomposition engine for an AI computer operator. "
+        "Given a goal, output the MINIMAL sequence of capability steps to achieve it.\n\n"
+        "RULES:\n"
+        "- Each step uses exactly ONE capability from the list below.\n"
+        "- NEVER duplicate work: if GENERATE_TEXT produces content, do NOT also TYPE_TEXT "
+        "that content somewhere — CREATE_FILE already writes it.\n"
+        "- NEVER add OPEN_APPLICATION or NAVIGATE_URL unless the goal EXPLICITLY names "
+        "a website or app. For file-generation goals, GENERATE_TEXT + CREATE_FILE is "
+        "sufficient.\n"
+        "- SEARCH_WEB is only needed when the goal requires information the operator "
+        "does not already have (e.g. 'research X', 'find out about Y').\n"
+        "- Fewer steps is better. 2-6 steps is typical. More than 8 is almost always "
+        "over-decomposed.\n\n"
         f"{_CAPABILITY_DESCRIPTIONS}\n\n"
         "Respond ONLY with a JSON array of steps. Each step: "
-        '{"capability": "<NAME>", "target": "<what to act on>", "description": "<what this step does>"}\n'
-        "Example for 'Send Om a birthday message on WhatsApp':\n"
+        '{"capability": "<NAME>", "target": "<what to act on>", "description": "<what this does>"}\n\n'
+        "Example — 'Write a short note about Python and save it':\n"
+        '[{"capability": "GENERATE_TEXT", "target": "a short note about Python", '
+        '"description": "Compose the note"}, '
+        '{"capability": "CREATE_FILE", "target": "python_note.txt", '
+        '"description": "Save the note to a file"}]\n\n'
+        "Example — 'Send Om a birthday message on WhatsApp':\n"
         '[{"capability": "NAVIGATE_URL", "target": "web.whatsapp.com", "description": "Open WhatsApp"}, '
-        '{"capability": "CLICK_ELEMENT", "target": "Om", "description": "Find and open chat with Om"}, '
-        '{"capability": "TYPE_TEXT", "target": "Happy birthday Om!", "description": "Type birthday message"}, '
-        '{"capability": "CLICK_ELEMENT", "target": "send button", "description": "Send the message"}, '
-        '{"capability": "VERIFY_RESULT", "target": "message sent", "description": "Verify message was sent"}]'
+        '{"capability": "OPERATE_WEBSITE", "target": "Find Om chat and send: Happy birthday Om!", '
+        '"description": "Operate WhatsApp to send the message"}]\n\n'
+        "Example — 'Open Instagram, log in if needed, and log out':\n"
+        '[{"capability": "OPERATE_WEBSITE", '
+        '"target": "Open instagram.com, log in if needed (username: X, password: Y), '
+        'then find and click logout", '
+        '"description": "Agentically operate Instagram for login and logout"}]\n\n'
+        "CRITICAL: For ANY goal that involves interacting with a website (clicking buttons, "
+        "filling forms, navigating menus, logging in/out, posting, sending messages), use "
+        "OPERATE_WEBSITE with the full sub-goal as the target. Do NOT decompose site "
+        "interactions into separate CLICK_ELEMENT/TYPE_TEXT steps — the agent cannot know "
+        "what to click without seeing the live page first. OPERATE_WEBSITE sees the page "
+        "and decides autonomously."
     )
 
     def __init__(self, model_router=None) -> None:
@@ -142,10 +162,8 @@ class LLMDecomposer:
             response = await self._router.complete(
                 prompt,
                 capability=ModelCapability.REASONING,
-                # Decomposition needs accurate capability labeling. gpt-oss-120b
-                # answers in ~1-2s with clean JSON. (The former qwen3-next-80b now
-                # hangs to timeout on the free NIM tier.)
-                model="openai/gpt-oss-120b",
+                # Let the ModelRouter select by capability priority (primary:
+                # qwen3.5-397b — fast ~1s, clean JSON). No hardcoded model pin.
                 max_tokens=600,
                 temperature=0.2,
                 system_prompt=self.SYSTEM_PROMPT,

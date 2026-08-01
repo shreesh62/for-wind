@@ -23,6 +23,8 @@ class ValidationEvidence:
     event_types: Tuple[str, ...] = ()
     latency_ms: float = 0.0
     error: str = ""
+    probe_id: str = ""              # "" when the scenario is goal-text only
+    assertions: Tuple[str, ...] = ()  # ordered probe observations
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -33,4 +35,6 @@ class ValidationEvidence:
             "event_types": list(self.event_types),
             "latency_ms": self.latency_ms,
             "error": self.error,
+            "probe_id": self.probe_id,
+            "assertions": list(self.assertions),
         }

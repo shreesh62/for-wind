@@ -23,6 +23,7 @@ class ValidationScenario:
     expectations: str = ""
     risk: str = "low"
     requires_live: bool = False
+    probe_id: str = ""
 
 
 # The 18 required validation categories (Requirement 1.5).
@@ -45,6 +46,7 @@ CATEGORIES: Tuple[str, ...] = (
     "world_model_consistency",
     "goal_graph_consistency",
     "deterministic_replay",
+    "realistic_interaction",
 )
 
 
@@ -90,18 +92,21 @@ _SCENARIOS: Tuple[ValidationScenario, ...] = (
         "Start a long research goal, interrupt it midway, then resume it.",
         expectations="Goal suspends and resumes; no lost/duplicated work.",
         requires_live=True,
+        probe_id="interrupt.pause_resume",
     ),
     ValidationScenario(
         "crash.restart_restore", "crash_recovery",
         "Begin a goal, simulate a process crash, restart, and resume from checkpoint.",
         expectations="Kernel restore replays the event log; goal state survives.",
         requires_live=True,
+        probe_id="crash.restart_restore",
     ),
     ValidationScenario(
         "browser_fail.reconnect", "browser_failure_recovery",
         "Run a browser goal, kill the browser mid-task, and recover.",
         expectations="Recovery re-establishes a controller or degrades honestly.",
         requires_live=True,
+        probe_id="browser_fail.reconnect",
     ),
     ValidationScenario(
         "unknown.explore_app", "unknown_application",
@@ -120,18 +125,21 @@ _SCENARIOS: Tuple[ValidationScenario, ...] = (
         "Attempt an irreversible action (send) that requires human confirmation.",
         expectations="Action gated pending confirmation; no send without approval.",
         requires_live=True,
+        probe_id="human.confirm_send",
     ),
     ValidationScenario(
         "replay.event_log", "event_replay",
         "Execute a goal, then replay the durable event log.",
         expectations="Replay yields the same goal lifecycle events in order.",
         requires_live=False,
+        probe_id="replay.event_log",
     ),
     ValidationScenario(
         "checkpoint.restore_state", "checkpoint_restore",
         "Checkpoint the kernel mid-goal, restore into a fresh kernel, and continue.",
         expectations="Restored goal ids/states match pre-checkpoint.",
         requires_live=False,
+        probe_id="checkpoint.restore_state",
     ),
     ValidationScenario(
         "memory.episode_consistency", "memory_consistency",
@@ -156,6 +164,44 @@ _SCENARIOS: Tuple[ValidationScenario, ...] = (
         "Run an identical goal twice and confirm identical ordered lifecycle events.",
         expectations="Two runs produce identical ordered goal.* event types.",
         requires_live=False,
+    ),
+    # ---- Realistic human-like interaction scenarios ----
+    # These exercise clicks, typing, scrolling, and navigation against the user's
+    # REAL Chrome profile (CDP). They represent what FRIDAY actually does for a user:
+    # operate signed-in sessions, compose messages, interact with UI elements.
+    # Require --cdp (real Chrome with logins) to produce meaningful evidence.
+    ValidationScenario(
+        "interact.search_click_read", "realistic_interaction",
+        "Open Google in my browser, type a search query about machine learning, "
+        "click the first result, and read the article content.",
+        expectations="Search typed, result clicked (via DOM element), page content read. "
+        "Evidence: navigation to google.com, typed text, click on a link, content gathered.",
+        requires_live=True,
+    ),
+    ValidationScenario(
+        "interact.scroll_and_extract", "realistic_interaction",
+        "Open my browser to a news site, scroll down to find more articles, "
+        "and extract the headlines of at least 3 articles.",
+        expectations="Page scrolled, headlines extracted from DOM after scroll. "
+        "Evidence: scroll action, gathered text with multiple headlines.",
+        requires_live=True,
+    ),
+    ValidationScenario(
+        "interact.form_fill", "realistic_interaction",
+        "Open a web page with a form, fill in a name and email field, "
+        "then confirm the fields are populated.",
+        expectations="Fields located via DOM, text typed into each, values confirmed. "
+        "Evidence: type_text actions on specific elements, verification of field values.",
+        requires_live=True,
+    ),
+    ValidationScenario(
+        "interact.tab_switch_compose", "realistic_interaction",
+        "Open two browser tabs — one with a reference page, one with a text editor "
+        "or compose window — switch between them and type a short note referencing "
+        "content from the first tab.",
+        expectations="Multiple tabs opened, switched, content from tab 1 used in tab 2. "
+        "Evidence: navigation to 2 URLs, tab switch, typed content.",
+        requires_live=True,
     ),
 )
 

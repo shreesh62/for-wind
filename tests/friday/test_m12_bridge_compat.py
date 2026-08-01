@@ -24,15 +24,35 @@ def _bridge(**kwargs):
 
 
 # --------------------------------------------------------------------------- #
-# Property 5 — default preserves legacy behavior
+# Property 5 — default routes through the kernel (the flip is applied)
 # --------------------------------------------------------------------------- #
-def test_property5_default_has_no_kernel_and_flag_off():
+def test_property5_default_has_kernel_execution_enabled():
+    """The BridgeConfig default is now kernel-backed execution (M13 qualified)."""
     bridge = _bridge()
-    assert bridge._kernel is None
-    assert bridge._config.use_kernel_execution is False
+    # Without an injected kernel the bridge degrades to the legacy path, but the
+    # CONFIG flag itself is True.
+    assert bridge._config.use_kernel_execution is True
 
 
-def test_property5_multistep_routes_to_legacy_by_default():
+def test_property5_multistep_routes_to_kernel_when_kernel_is_wired():
+    """With a kernel injected, multi-step goals take the kernel path."""
+    from unittest.mock import MagicMock
+    from friday.bridge import BridgeConfig, FridayBridge
+
+    kernel = MagicMock()
+    bridge = FridayBridge(
+        model_router=None,
+        config=BridgeConfig(use_kernel_execution=True),
+        kernel=kernel,
+    )
+    with patch.object(bridge, "_execute_multi_step", return_value="LEGACY") as legacy, \
+         patch.object(bridge, "_execute_via_kernel", return_value="KERNEL") as kern:
+        result = bridge._handle_friday("do a and b", {"automation": None}, ComplexityLevel.MULTI_STEP)
+    assert result == "KERNEL"
+
+
+def test_property5_multistep_degrades_to_legacy_without_kernel():
+    """Without a kernel injected, the legacy path is used even though the flag is on."""
     bridge = _bridge()
     with patch.object(bridge, "_execute_multi_step", return_value="LEGACY") as legacy, \
          patch.object(bridge, "_execute_via_kernel", return_value="KERNEL") as kern:

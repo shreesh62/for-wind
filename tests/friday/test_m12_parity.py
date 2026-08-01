@@ -103,17 +103,40 @@ def test_kernel_and_legacy_agree_on_completion_status(tmp_path):
 # --------------------------------------------------------------------------- #
 # The flip gate itself: with the default (flag off), legacy is used
 # --------------------------------------------------------------------------- #
-def test_default_flag_off_uses_legacy_not_kernel(tmp_path):
-    """Documents the current safe default: even with a kernel present, the
-    multi-step path uses legacy unless the flag is explicitly on."""
+def test_default_flag_on_uses_kernel_when_kernel_present(tmp_path):
+    """The default is now kernel execution (M13 qualified). With a kernel wired,
+    multi-step goals route through the kernel path."""
+    from friday.router.classifier import ComplexityLevel
+
+    kernel = CognitiveKernel(event_store=EventStore(str(tmp_path / "on.jsonl")))
+    kernel.register_runtime(
+        GoalExecutionRuntime(lambda g: types.SimpleNamespace(run=lambda gg: _outcome()))
+    )
+    # Default config (use_kernel_execution=True), kernel present.
+    bridge = FridayBridge(config=BridgeConfig(allow_legacy_fallback=False), kernel=kernel)
+
+    with patch.object(bridge, "_execute_multi_step", return_value="LEGACY") as legacy, \
+         patch.object(bridge, "_execute_via_kernel", return_value="KERNEL") as kern:
+        result = bridge._handle_friday("multi", {"automation": None}, ComplexityLevel.MULTI_STEP)
+
+    assert result == "KERNEL"
+    kern.assert_called_once()
+    legacy.assert_not_called()
+
+
+def test_explicit_flag_off_degrades_to_legacy(tmp_path):
+    """FRIDAY_USE_KERNEL_EXECUTION=0 remains the instant rollback mechanism."""
     from friday.router.classifier import ComplexityLevel
 
     kernel = CognitiveKernel(event_store=EventStore(str(tmp_path / "off.jsonl")))
     kernel.register_runtime(
         GoalExecutionRuntime(lambda g: types.SimpleNamespace(run=lambda gg: _outcome()))
     )
-    # Flag OFF (default), kernel present.
-    bridge = FridayBridge(config=BridgeConfig(allow_legacy_fallback=False), kernel=kernel)
+    # Explicit flag OFF — the runtime kill switch.
+    bridge = FridayBridge(
+        config=BridgeConfig(allow_legacy_fallback=False, use_kernel_execution=False),
+        kernel=kernel,
+    )
 
     with patch.object(bridge, "_execute_multi_step", return_value="LEGACY") as legacy, \
          patch.object(bridge, "_execute_via_kernel", return_value="KERNEL") as kern:

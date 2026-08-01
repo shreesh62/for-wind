@@ -63,7 +63,15 @@ def desktop_suite() -> Tuple[CapabilityBenchmark, ...]:
         CapabilityBenchmark(
             id="desktop.open_and_confirm",
             domain="desktop",
-            goal_text="Open a local application and confirm it is the foreground environment.",
+            # A CONCRETE app name, the way a user actually speaks ("open the
+            # calculator"). The previous wording — "Open a local application" — was
+            # so vague that nothing could resolve it, and it only ever passed because
+            # the executor had a last-resort fallback that launched notepad on any
+            # unresolvable target. That fallback spammed the desktop and made this
+            # benchmark measure the guess, not the capability. Naming the app here is
+            # a TEST INPUT, not app-specific logic: the system still resolves it
+            # generically through the platform's app registry (Axiom 15).
+            goal_text="Open the calculator and confirm it is the foreground window.",
             required_evidence=("NAVIGATION",),
             acceptance="A confirmed environment reach (app launched / window focused) is recorded.",
         ),

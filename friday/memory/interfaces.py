@@ -29,6 +29,9 @@ class MemoryTier(str, Enum):
     PROCEDURAL = "procedural"
     SEMANTIC = "semantic"
     USER = "user"
+    FAILURE = "failure"        # M21 slice 1 — persistent failure memory (consumes M24 failures)
+    CAPABILITY = "capability"  # M21 slice 2 — capability memory view (from competence.updated)
+    PREFERENCE = "preference"  # M21 slice 2 — persistent user preferences
 
 
 @dataclass

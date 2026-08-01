@@ -158,6 +158,12 @@ class GoalExecutionRuntime(RuntimeContract):
             record = self.execute_goal(goal_id, goal_text)
             self._executed_count += 1
 
+            # SUSPENSION CHECKPOINT — honor a cooperative interrupt before the
+            # goal's lifecycle is finalized. The unit of work is already complete
+            # here, so waiting loses nothing and repeats nothing; resuming simply
+            # continues to the lifecycle emission.
+            self._await_resume(goal_id)
+
             if record.completed:
                 self._emit(
                     "goal.completed",
@@ -176,6 +182,44 @@ class GoalExecutionRuntime(RuntimeContract):
                 )
         except Exception as exc:  # noqa: BLE001 — a handler must never break the loop
             self._degraded_reasons.append(f"on_goal_created_failed: {exc}")
+
+    def _await_resume(self, goal_id: str, timeout: float = 300.0) -> bool:
+        """Block while ``goal_id`` is suspended, up to ``timeout`` seconds.
+
+        Duck-typed against the kernel's ``is_goal_suspended``: a kernel without the
+        capability (or an error asking it) means "not suspended", so this is inert
+        rather than fragile. Returns True if a suspension was actually waited out.
+
+        The bound exists so a goal suspended and never resumed cannot pin a thread
+        forever; hitting it is recorded as a degraded reason rather than ignored.
+        """
+        kernel = self._kernel
+        if kernel is None:
+            return False
+        probe = getattr(kernel, "is_goal_suspended", None)
+        if not callable(probe):
+            return False
+
+        import time
+
+        waited = False
+        deadline = time.monotonic() + timeout
+        while True:
+            try:
+                suspended = bool(probe(goal_id))
+            except Exception as exc:  # noqa: BLE001 — cannot ask ⇒ not suspended
+                self._degraded_reasons.append(f"suspend_check_failed: {exc}")
+                return waited
+            if not suspended:
+                return waited
+            waited = True
+            if time.monotonic() >= deadline:
+                self._degraded_reasons.append(
+                    f"suspend_wait_timeout: goal {goal_id} still suspended after "
+                    f"{timeout:.0f}s"
+                )
+                return waited
+            time.sleep(0.02)
 
     def _record_episode(self, record: GoalExecutionRecord) -> None:
         """Record a completed goal via the optional sink; never raises."""

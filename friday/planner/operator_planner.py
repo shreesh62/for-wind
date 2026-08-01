@@ -119,6 +119,7 @@ class OperatorPlanner:
         self,
         goal_text: str,
         env_state: Optional[EnvironmentState] = None,
+        memory_context: str = "",
     ) -> OperatorPlan:
         """Generate a requirements-driven plan for an arbitrary goal.
 
@@ -129,6 +130,9 @@ class OperatorPlanner:
         Args:
             goal_text: What the user wants to achieve
             env_state: Current environment (what's already running/open)
+            memory_context: Optional recalled context (preferences, prior facts)
+                passed to the decomposer. Defaulted to "" so existing callers are
+                unaffected.
 
         Returns:
             OperatorPlan with capability-based steps
@@ -145,7 +149,9 @@ class OperatorPlanner:
         # PRIMARY PATH: LLM decomposes the goal into capability steps directly.
         # The LLM already reasons about requirements implicitly when decomposing.
         # (Requirements Discovery is available separately for verification.)
-        capabilities_needed = self._goal_to_capabilities(self._parser.parse(goal_text), goal_text)
+        capabilities_needed = self._goal_to_capabilities(
+            self._parser.parse(goal_text), goal_text, memory_context
+        )
 
         # For each capability, find the best tool and check if skippable
         order = 0
@@ -183,9 +189,16 @@ class OperatorPlanner:
         return plan
 
     def _goal_to_capabilities(
-        self, goal: Goal, goal_text: str = ""
+        self, goal: Goal, goal_text: str = "", memory_context: str = ""
     ) -> List[tuple]:
         """Convert a goal into required capabilities.
+
+        STRUCTURAL OVERRIDE: if the goal text clearly asks to OPERATE a website
+        (login, logout, click, post, etc.), bypass the LLM decomposer entirely and
+        emit a NAVIGATE + OPERATE_WEBSITE pair. The LLM on this tier can't reliably
+        distinguish "operate Instagram" from "research about Instagram", and wrong
+        decomposition means the WebAgent never gets invoked. This is not app-specific
+        logic — it's a generic detection of interaction-intent that works for any site.
 
         PRIMARY: LLM decomposition (reasons about what the goal requires).
         FALLBACK: generic capability inference (only when LLM unavailable).
@@ -194,11 +207,38 @@ class OperatorPlanner:
         requirements; the static path is a minimal generic fallback.
         """
         text = goal_text or goal.raw_text
+        text_lower = text.lower()
+
+        # STRUCTURAL OVERRIDE: detect interaction intent before asking the LLM.
+        # A goal that names a website AND contains interaction verbs is always an
+        # "operate this site" task, never a "research about this site" task.
+        interaction_verbs = ["log in", "login", "sign in", "log out", "logout",
+                            "sign out", "post", "click", "fill", "submit",
+                            "compose", "reply", "follow", "like", "share",
+                            "subscribe", "unsubscribe", "delete", "settings",
+                            "profile", "menu", "dm ", "send message", "send email"]
+        site_indicators = ["instagram", "youtube", "gmail", "whatsapp",
+                          "twitter", "facebook", "linkedin", "reddit",
+                          ".com", ".org", ".io", "http"]
+        has_site = any(kw in text_lower for kw in site_indicators)
+        has_interaction = any(kw in text_lower for kw in interaction_verbs)
+
+        if has_site and has_interaction:
+            # Extract a URL to navigate to first, then let the WebAgent operate.
+            from friday.actions.url_resolve import resolve_target_url
+            url = resolve_target_url(text)
+            caps = []
+            if url:
+                caps.append((ToolCapability.NAVIGATE_URL, url, f"Navigate to {url}"))
+            caps.append((ToolCapability.OPERATE_WEBSITE, text, f"Operate website: {text[:60]}"))
+            return caps
 
         # PRIMARY: LLM-powered decomposition (requirements-aware)
         if self._llm_decomposer:
             try:
-                result = self._llm_decomposer.decompose_sync(text)
+                result = self._llm_decomposer.decompose_sync(
+                    text, context=memory_context or ""
+                )
                 if result.from_llm and result.steps:
                     capabilities = []
                     for step in result.steps:
@@ -207,6 +247,24 @@ class OperatorPlanner:
                         except ValueError:
                             cap = ToolCapability.OPEN_APPLICATION
                         capabilities.append((cap, step.target, step.description))
+
+                    # OVERRIDE: if the goal is clearly a site-interaction task but
+                    # the LLM decomposed it into individual click/type steps (which
+                    # can't work without seeing the page), collapse them into a
+                    # single OPERATE_WEBSITE step. The WebAgent sees the live DOM
+                    # and decides autonomously — much more reliable than blind steps.
+                    interaction_caps = {
+                        ToolCapability.CLICK_ELEMENT, ToolCapability.TYPE_TEXT,
+                        ToolCapability.SCROLL,
+                    }
+                    has_interactions = any(c[0] in interaction_caps for c in capabilities)
+                    has_nav = any(c[0] in (ToolCapability.NAVIGATE_URL, ToolCapability.OPEN_APPLICATION) for c in capabilities)
+                    if has_interactions and has_nav and len(capabilities) >= 3:
+                        # The LLM planned blind interactions. Collapse to WebAgent.
+                        capabilities = [
+                            (ToolCapability.NAVIGATE_URL, capabilities[0][1], capabilities[0][2]),
+                            (ToolCapability.OPERATE_WEBSITE, text, f"Operate website: {text[:60]}"),
+                        ]
                     return capabilities
             except Exception:
                 pass
@@ -247,12 +305,23 @@ class OperatorPlanner:
         if needs_info and needs_file:
             needs_content = True
 
-        if needs_info:
+        # WEBSITE INTERACTION takes priority over research: a goal that says "open
+        # Instagram and log in" should OPERATE the site, not research "how to log in".
+        # Words like "find" in "find the logout button" trigger needs_info, but the
+        # intent is interaction, not information-gathering.
+        has_interaction_verbs = any(kw in text_lower for kw in
+            ["log in", "login", "sign in", "log out", "logout", "sign out",
+             "post", "click", "fill", "submit", "compose", "reply",
+             "follow", "like", "share", "subscribe", "unsubscribe", "delete",
+             "settings", "profile", "menu", "dm "])
+        if needs_nav and has_interaction_verbs:
+            caps.append((ToolCapability.OPERATE_WEBSITE, text, f"Operate website: {text[:60]}"))
+        elif needs_info:
             # Search the TOPIC, not the whole instruction sentence.
             query = extract_search_query(text)
             caps.append((ToolCapability.SEARCH_WEB, query, f"Search: {query}"))
             caps.append((ToolCapability.EXTRACT_WEB_CONTENT, "results", "Extract relevant content"))
-        if needs_nav and not needs_info:
+        elif needs_nav:
             caps.append((ToolCapability.NAVIGATE_URL, goal.target or text, f"Navigate to {goal.target or 'target'}"))
         if needs_content:
             caps.append((ToolCapability.GENERATE_TEXT, text, "Produce content"))

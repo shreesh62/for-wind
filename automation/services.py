@@ -590,13 +590,32 @@ class AutomationServices:
                 resp = AutomationResponse(False, f"Couldn't launch {app_name}: {exc}")
                 return self._finalize_action("launch_application", resp, before, self._verification(False, "exception", str(exc)))
 
-        # CLI executable path
-        cmd = ["cmd", "/c", "start", "", command]
-        if args:
-            cmd.extend(args)
+        # CLI executable path. The launcher is cmd.exe, which parses shell
+        # metacharacters in its OWN command line even under shell=False. Passing
+        # an arg list lets subprocess build that line without quoting '&', so a
+        # normal URL ("site.com/?a=1&b=2") was split at the '&' and the remainder
+        # run as a separate command — a functional bug and an injection vector.
+        # cmd treats metacharacters literally inside double quotes, so the command
+        # line is built explicitly with every part quoted. A double quote inside an
+        # argument would break that quoting, so those are rejected.
+        arg_list = [str(a) for a in (args or [])]
+        bad = [a for a in arg_list if '"' in a or any(ch in a for ch in "\r\n\x00")]
+        if bad:
+            resp = AutomationResponse(
+                False, f"Couldn't launch {app_name}: unsafe characters in arguments."
+            )
+            return self._finalize_action(
+                "launch_application", resp, before,
+                self._verification(False, "unsafe_arguments", resp.message,
+                                   {"rejected": bad}),
+            )
+
+        cmdline = f'cmd /c start "" "{command}"'
+        for arg in arg_list:
+            cmdline += f' "{arg}"'
 
         try:
-            subprocess.Popen(cmd, shell=False)
+            subprocess.Popen(cmdline, shell=False)
         except FileNotFoundError:
             resp = AutomationResponse(False, f"System could not locate {app_name} executable.")
             return self._finalize_action("launch_application", resp, before, self._verification(False, "not_found", resp.message))

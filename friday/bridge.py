@@ -25,6 +25,8 @@ Usage in main.py:
 
 from __future__ import annotations
 
+import concurrent.futures
+import logging
 import os
 import asyncio
 from dataclasses import dataclass
@@ -36,6 +38,56 @@ from friday.router.request_router import RequestRouter, RouteResult
 from friday.models.router import ModelCapability, ModelRouter
 from friday.actions.result import ActionResult
 
+logger = logging.getLogger(__name__)
+
+
+def _run_async_bounded(coro_factory: Callable[[], Any], timeout: float = 45.0):
+    """Run a coroutine synchronously under a hard timeout.
+
+    The coroutine is always executed on a dedicated worker thread with its own
+    event loop, so this is safe whether or not the caller is already inside a
+    running loop — and critically it never blocks the caller's loop thread
+    waiting on work scheduled *into* that same loop.
+
+    ``coro_factory`` is a callable rather than a coroutine so nothing is created
+    unless it is actually going to be awaited (an un-awaited coroutine would emit
+    ``RuntimeWarning``). On timeout the task is cancelled and the pool is
+    released without waiting, so ``timeout`` genuinely bounds the call — a plain
+    ``with ThreadPoolExecutor()`` block would re-block on shutdown and make the
+    timeout meaningless.
+    """
+    _loop: Optional[asyncio.AbstractEventLoop] = None
+    _task: Optional[asyncio.Task] = None
+
+    async def _guarded():
+        nonlocal _task
+        _task = asyncio.current_task()
+        return await asyncio.wait_for(coro_factory(), timeout=timeout)
+
+    def _worker():
+        nonlocal _loop
+        _loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(_loop)
+        try:
+            return _loop.run_until_complete(_guarded())
+        finally:
+            try:
+                _loop.run_until_complete(_loop.shutdown_asyncgens())
+            except Exception as exc:  # noqa: BLE001 — cleanup only, never fatal
+                logger.debug("asyncgen shutdown failed: %s", exc)
+            _loop.close()
+
+    pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    try:
+        future = pool.submit(_worker)
+        return future.result(timeout=timeout)
+    except (concurrent.futures.TimeoutError, TimeoutError):
+        if _loop is not None and _task is not None and not _task.done():
+            _loop.call_soon_threadsafe(_task.cancel)
+        raise
+    finally:
+        pool.shutdown(wait=False)
+
 
 @dataclass
 class BridgeConfig:
@@ -45,9 +97,12 @@ class BridgeConfig:
     use_nvidia_primary: bool = True
     verify_actions: bool = True
     allow_unverified: bool = False
-    # M12: opt-in kernel-backed execution for multi-step goals. Default False
-    # preserves the exact legacy Operator path (pure superset, reversible).
-    use_kernel_execution: bool = False
+    # M12: opt-in kernel-backed execution for multi-step goals. When True, the
+    # Operator is driven through the kernel's GoalExecutionRuntime (event log,
+    # suspend/resume, memory sink) instead of inline. The env flag
+    # FRIDAY_USE_KERNEL_EXECUTION=0 is an instant rollback kill switch (zero code
+    # change, no redeploy).
+    use_kernel_execution: bool = True
 
 
 @dataclass
@@ -84,6 +139,7 @@ class FridayBridge:
         model_router: Optional[ModelRouter] = None,
         config: Optional[BridgeConfig] = None,
         kernel: Optional[Any] = None,
+        memory: Optional[Any] = None,
     ) -> None:
         self._config = config or BridgeConfig(
             allow_legacy_fallback=os.getenv("ALLOW_LEGACY_FALLBACK", "1") == "1",
@@ -96,6 +152,9 @@ class FridayBridge:
         # config.use_kernel_execution is True, multi-step goals run through the
         # kernel's GoalExecutionRuntime; otherwise the legacy path is used.
         self._kernel = kernel
+        # Optional memory, forwarded to the Operator so multi-step goals recall
+        # prior context instead of starting from zero each time.
+        self._memory = memory
 
         # Initialize FRIDAY engine
         engine_config = EngineConfig(
@@ -165,46 +224,30 @@ class FridayBridge:
         Uses the model router (NVIDIA-first) for LLM calls.
         Prefers fast models for low latency. Falls back to legacy groq_llm.
         """
-        # Try model router first (NVIDIA-primary)
+        # Try model router first (NVIDIA-primary). One bounded helper covers both
+        # the "already inside an event loop" and "no loop" cases, so this no longer
+        # blocks a caller's running loop (which stalled every async request for the
+        # duration of the LLM call) and the timeout actually bounds the work.
         if self._model_router:
             try:
-                import asyncio
-                try:
-                    loop = asyncio.get_running_loop()
-                    # Already in an async context — use thread
-                    import concurrent.futures
-                    with concurrent.futures.ThreadPoolExecutor() as pool:
-                        future = pool.submit(
-                            asyncio.run,
-                            self._model_router.complete(
-                                text,
-                                capability=ModelCapability.CONVERSATION,
-                                max_tokens=512,
-                                system_prompt=(
-                                    "You are JARVIS, an intelligent AI assistant created by Shreesh. "
-                                    "Be concise, helpful, and conversational. "
-                                    "Do not perform actions — only discuss, explain, and advise."
-                                ),
-                            )
-                        )
-                        response = future.result(timeout=45)
-                except RuntimeError:
-                    # No running loop — safe to use asyncio.run
-                    response = asyncio.run(
-                        self._model_router.complete(
-                            text,
-                            capability=ModelCapability.CONVERSATION,
-                            max_tokens=512,
-                            system_prompt=(
-                                "You are JARVIS, an intelligent AI assistant created by Shreesh. "
-                                "Be concise, helpful, and conversational. "
-                                "Do not perform actions — only discuss, explain, and advise."
-                            ),
-                        )
-                    )
+                response = _run_async_bounded(
+                    lambda: self._model_router.complete(
+                        text,
+                        capability=ModelCapability.CONVERSATION,
+                        max_tokens=512,
+                        system_prompt=(
+                            "You are JARVIS, an intelligent AI assistant created by Shreesh. "
+                            "Be concise, helpful, and conversational. "
+                            "Do not perform actions — only discuss, explain, and advise."
+                        ),
+                    ),
+                    timeout=45.0,
+                )
                 return response.text
-            except Exception:
-                pass
+            except Exception as exc:  # noqa: BLE001 — degrade to the legacy path
+                # Observable degradation: the router failed, so fall through to the
+                # legacy callable below instead of silently swallowing the reason.
+                logger.warning("model router completion failed, using legacy LLM: %r", exc)
 
         # Legacy fallback
         if self._llm_callable:
@@ -360,6 +403,7 @@ class FridayBridge:
             max_iterations=2,
             browser_strategy=strategy,
             state_cache=self._state_cache,
+            memory=self._memory,
         )
         outcome = operator.run(text)
 

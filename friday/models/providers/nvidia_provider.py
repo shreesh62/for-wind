@@ -128,6 +128,15 @@ class NvidiaProvider:
             cost_per_1k_tokens=0.0,
             priority=6,
             rate_limit_rpm=30,
+            # Measured: times out (>45s) and the provider retries 3x before raising,
+            # so being tried early cost ~135s of pure waste per process. Pushed to
+            # last resort on the interactive capabilities; the runtime circuit
+            # breaker also removes it after repeated failures, but ordering avoids
+            # paying for it even once.
+            capability_priority={
+                ModelCapability.CONVERSATION: 1,
+                ModelCapability.CLASSIFICATION: 1,
+            },
         ),
         # gpt-oss-20b — fast lightweight reasoning model; same reasoning-channel
         # caveat as gpt-oss-120b. Failover only.
@@ -145,6 +154,16 @@ class NvidiaProvider:
             cost_per_1k_tokens=0.0,
             priority=5,
             rate_limit_rpm=40,
+            # LEADS CONVERSATION (measured 1.0s vs ~25s for the next working model).
+            # Conversational replies are interactive by definition, so latency is the
+            # dominant quality factor there. Second for classification behind the
+            # 4B model. Reasoning is deliberately left at the global priority: the
+            # reasoning-channel empty-content caveat above makes it a poor lead for
+            # synthesis, and failover still reaches it.
+            capability_priority={
+                ModelCapability.CONVERSATION: 18,
+                ModelCapability.CLASSIFICATION: 16,
+            },
         ),
         # NOTE: several catalog models were probed and rejected — they return EMPTY
         # `content` because they emit into a separate reasoning channel our extractor
@@ -158,6 +177,12 @@ class NvidiaProvider:
             provider="nvidia",
             model_id="meta/llama-guard-4-12b",
             capabilities=[ModelCapability.CLASSIFICATION],
+            # A moderation model, not a general classifier: it rejects a plain
+            # single-turn chat shape with HTTP 400 ("roles must alternate"). At its
+            # global priority of 10 it LED general classification and failed every
+            # request before failover. Kept registered (it is the safety-gate model,
+            # selected explicitly by name) but never the general lead.
+            capability_priority={ModelCapability.CLASSIFICATION: 0},
             max_tokens=2048,
             supports_streaming=False,
             cost_per_1k_tokens=0.0,
@@ -168,6 +193,9 @@ class NvidiaProvider:
             provider="nvidia",
             model_id="nvidia/nemotron-content-safety-reasoning-4b",
             capabilities=[ModelCapability.CLASSIFICATION],
+            # Also a moderation model, and measured HTTP 410 Gone (end of life
+            # 2026-07-15). Never lead general classification.
+            capability_priority={ModelCapability.CLASSIFICATION: 0},
             max_tokens=2048,
             supports_streaming=False,
             cost_per_1k_tokens=0.0,
@@ -179,6 +207,13 @@ class NvidiaProvider:
             provider="nvidia",
             model_id="meta/llama-3.2-90b-vision-instruct",
             capabilities=[ModelCapability.VISION, ModelCapability.REASONING],
+            # LEADS REASONING. Measured 5.3s versus ~25s for mistral-medium, and
+            # mistral-medium was the model that rate-limited out partway through the
+            # parity run, taking scenarios down with it. This is a comparable-class
+            # instruct model, so it keeps a large model on synthesis (the quality
+            # requirement) while removing the 5x per-call cost and the observed
+            # reliability risk. mistral-medium remains the immediate failover.
+            capability_priority={ModelCapability.REASONING: 13},
             max_tokens=4096,
             supports_streaming=False,
             supports_vision=True,
@@ -214,6 +249,14 @@ class NvidiaProvider:
             cost_per_1k_tokens=0.0,
             priority=3,
             rate_limit_rpm=60,
+            # LEADS CLASSIFICATION (measured 0.8s). Classification is the highest
+            # frequency capability in the Operator loop (requirements discovery,
+            # decomposition, routing) and the least difficult, so paying a large
+            # model's per-call latency for it dominated goal time for no benefit.
+            # It is an instruct model, so it has no reasoning-channel empty-content
+            # caveat. Summarization is left at the global priority — that output is
+            # user-facing prose where a 4B model is the wrong trade.
+            capability_priority={ModelCapability.CLASSIFICATION: 20},
         ),
         # --- Embedding ---
         ModelInfo(

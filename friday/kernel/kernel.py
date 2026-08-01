@@ -47,6 +47,7 @@ class CognitiveKernel:
         )
         self._runtimes: Dict[str, RuntimeContract] = {}
         self._goals: Dict[str, Dict[str, Any]] = {}
+        self._suspended_goals: set = set()
         self._capability_requests: Dict[str, Dict[str, Any]] = {}
         self._lock = threading.RLock()
         self._running = False
@@ -95,6 +96,40 @@ class CognitiveKernel:
         self._emit("goal.created", {"goal_id": goal_id, "text": goal_text})
         return goal_id
 
+    def interrupt_goal(self, goal_id: str, reason: str = "") -> bool:
+        """Suspend an in-flight goal. Returns False for an unknown/terminal goal.
+
+        Suspension is **cooperative**: it records the goal as suspended and emits
+        ``goal.suspended``, and a runtime honors it at its next suspension
+        checkpoint. Arbitrary in-progress work is not preempted mid-call — that
+        cannot be done safely — so the granularity is the runtime's checkpoint, and
+        no work is lost or repeated because the checkpoint sits between units of
+        work rather than inside one.
+        """
+        with self._lock:
+            goal = self._goals.get(goal_id)
+            if goal is None or goal.get("state") in ("completed", "failed", "abandoned"):
+                return False
+            if goal_id in self._suspended_goals:
+                return True
+            self._suspended_goals.add(goal_id)
+        self._emit("goal.suspended", {"goal_id": goal_id, "reason": reason})
+        return True
+
+    def resume_goal(self, goal_id: str) -> bool:
+        """Resume a suspended goal. Returns False when it was not suspended."""
+        with self._lock:
+            if goal_id not in self._suspended_goals:
+                return False
+            self._suspended_goals.discard(goal_id)
+        self._emit("goal.resumed", {"goal_id": goal_id})
+        return True
+
+    def is_goal_suspended(self, goal_id: str) -> bool:
+        """Whether ``goal_id`` is currently suspended (runtime checkpoint query)."""
+        with self._lock:
+            return goal_id in self._suspended_goals
+
     def submit_observation(self, observation: dict) -> None:
         self._emit("observation.received", dict(observation))
 
@@ -140,6 +175,7 @@ class CognitiveKernel:
         state, logical_time = self._checkpoints.load(path)
         with self._lock:
             self._goals = {g["id"]: dict(g) for g in state.get("goals", [])}
+            self._suspended_goals = set(state.get("suspended_goals", []))
             self._capability_requests = {
                 r["id"]: dict(r) for r in state.get("capability_requests", [])
             }
@@ -216,6 +252,24 @@ class CognitiveKernel:
                             "state": "created",
                         },
                     )
+            return
+
+        # Suspension is part of kernel-owned goal state, so it is rebuilt on replay
+        # too: restoring a crashed session must not lose the fact that a goal was
+        # suspended (which would silently resume work the user paused).
+        if event.event_type in ("goal.suspended", "goal.resumed"):
+            goal_id = event.payload.get("goal_id")
+            if not goal_id:
+                return
+            suspended = event.event_type == "goal.suspended"
+            with self._lock:
+                goal = self._goals.get(goal_id)
+                if goal is not None:
+                    goal["state"] = "suspended" if suspended else "active"
+                if suspended:
+                    self._suspended_goals.add(goal_id)
+                else:
+                    self._suspended_goals.discard(goal_id)
 
     def _tick(self) -> bool:
         logical = self._clock.tick()
@@ -235,6 +289,7 @@ class CognitiveKernel:
             return {
                 "clock": self._clock.serialize(),
                 "goals": [dict(g) for g in self._goals.values()],
+                "suspended_goals": sorted(self._suspended_goals),
                 "capability_requests": [
                     dict(r) for r in self._capability_requests.values()
                 ],

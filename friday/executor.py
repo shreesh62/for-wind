@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import asyncio
 import concurrent.futures
+import inspect
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -37,6 +38,11 @@ class ExecutionContext:
     evidence: "ExecutionEvidence" = None  # type: ignore  # real evidence artifacts
     blocked: bool = False  # set when a captcha/verification wall is hit
     navigated_urls: List[str] = field(default_factory=list)  # dedupe tab opens
+    # Ch 35 permission gate: every decision made this run, and the human-readable
+    # note for each step the gate withheld. A withheld step produces no action
+    # evidence, so these are the audit trail for what did NOT happen.
+    gate_decisions: List[Any] = field(default_factory=list)
+    withheld: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         if self.evidence is None:
@@ -98,6 +104,8 @@ class GoalExecutor:
         state_cache=None,
         exploration_engine=None,
         environment_provider=None,
+        permission_gate=None,
+        registry=None,
     ) -> None:
         import os
         self._model_router = model_router
@@ -116,6 +124,16 @@ class GoalExecutor:
         # explicit, while the mechanism itself is present and unit-verified.
         self._exploration_engine = exploration_engine
         self._environment_provider = environment_provider
+        # Ch 35 — the permission gate is consulted before EVERY dispatched step.
+        # It is constructed by default (not opt-in): a gate you have to remember to
+        # enable is a gate that withholds nothing. Pass a gate with an approval_fn
+        # to make CONFIRM-level actions approvable; otherwise they are withheld.
+        from friday.safety.action_gate import ActionGate
+        self._permission_gate = permission_gate or ActionGate()
+        # Optional ToolRegistry. When supplied, a capability with no built-in
+        # handler is dispatched to a registered tool's handler instead of silently
+        # reporting success it never achieved.
+        self._registry = registry
         from friday.actions.file_tool import FileTool
         self._file_tool = file_tool or FileTool()
 
@@ -211,6 +229,7 @@ class GoalExecutor:
             ToolCapability.SEND_MESSAGE: self._dispatch_delivery,
             ToolCapability.SEND_EMAIL: self._dispatch_delivery,
             ToolCapability.VERIFY_RESULT: self._dispatch_verify_result,
+            ToolCapability.OPERATE_WEBSITE: self._dispatch_operate_website,
         }
 
     def _execute_step(self, step, ctx: ExecutionContext) -> str:
@@ -230,11 +249,73 @@ class GoalExecutor:
         if self._dry_run and cap in self._DRY_RUN_BLOCKED:
             return f"[DRY-RUN] Would execute {cap.value}: {target}"
 
+        # Ch 35 PERMISSION GATE — asked before every dispatch, so a withheld action
+        # is genuinely not performed rather than merely disapproved of. Recorded on
+        # the context so the withholding is auditable evidence, and NO action
+        # evidence is produced for a withheld step.
+        if self._permission_gate is not None:
+            decision = self._permission_gate.authorize(
+                cap, target, confidence=getattr(step, "confidence", None)
+            )
+            ctx.gate_decisions.append(decision)
+            if not decision.allowed:
+                note = (
+                    f"WITHHELD by permission gate ({decision.decision.value}): "
+                    f"{cap.value} -> {target[:60]} — {decision.reason}"
+                )
+                ctx.withheld.append(note)
+                return note
+
         handler = self._dispatch_table().get(cap)
         if handler is not None:
             return handler(target, cap, ctx)
 
+        # REGISTRY DISPATCH: a capability with no built-in handler is executed via a
+        # registered tool's handler when one exists. Without this the planner could
+        # select a registry tool that execution had no way to run, and the step fell
+        # through to the description fallback below — reporting work that never
+        # happened. Built-ins keep precedence, so no existing path changes.
+        registry_result = self._dispatch_via_registry(cap, target, ctx)
+        if registry_result is not None:
+            return registry_result
+
         return f"Executed: {step.description}"
+
+    def _dispatch_via_registry(self, cap, target: str, ctx: ExecutionContext):
+        """Run ``cap`` through the highest-priority registered tool that has a handler.
+
+        Returns the handler's outcome message, or ``None`` when no registered tool
+        can serve the capability (the caller then keeps its previous behavior).
+        Handlers may be sync or async; an async handler is driven on the executor's
+        bounded runner. A handler error is reported, never swallowed.
+        """
+        registry = self._registry
+        if registry is None:
+            return None
+        try:
+            tools = registry.find_tools(cap)
+        except Exception as exc:  # noqa: BLE001 — a registry fault must not crash a step
+            return f"Registry lookup failed for {getattr(cap, 'value', cap)}: {exc}"
+
+        for tool in tools:
+            handler = getattr(tool, "handler", None)
+            if not callable(handler):
+                continue
+            try:
+                outcome = handler({"target": target, "goal": ctx.goal})
+                if inspect.isawaitable(outcome):
+                    outcome = self._run_async(outcome)
+            except Exception as exc:  # noqa: BLE001 — reported as a failed step
+                return f"Tool '{tool.name}' failed: {exc}"
+
+            success = getattr(outcome, "is_success", None)
+            message = str(getattr(outcome, "message", "") or outcome or "")
+            if success is False:
+                error = getattr(outcome, "error", "") or message
+                return f"Tool '{tool.name}' did not succeed: {error}"
+            return f"{tool.name}: {message}" if message else f"{tool.name} completed"
+
+        return None
 
     # --- Dispatch handlers (TD-5): each body is the exact former if/elif branch ---
 
@@ -316,7 +397,34 @@ class GoalExecutor:
             if looks_like_placeholder(target):
                 return (f"Navigation skipped: unresolved placeholder target "
                         f"'{target[:40]}' (no real URL was produced)")
-            r = SystemActions().launch_app(target)
+            sys_actions = SystemActions()
+            r = sys_actions.launch_app(target)
+            if not r.is_success:
+                # The target may be a natural-language description (e.g. "a local
+                # application") rather than an executable name. Try to resolve it by
+                # checking if any known launchable app name appears as a word in the
+                # target. Generic: uses the platform's app registry, not app-specific
+                # logic (Axiom 15 — works for any described target).
+                from friday.actions.system import _APP_COMMANDS
+                resolved = None
+                target_words = set(target.lower().split())
+                for app_key in _APP_COMMANDS:
+                    if app_key in target_words or app_key in target.lower():
+                        resolved = app_key
+                        break
+                if resolved is None:
+                    # NOTHING recognizable — report the failure honestly instead of
+                    # launching a random application. The old code opened notepad as a
+                    # "last resort" which spammed the desktop with empty editors every
+                    # time the LLM produced a vague navigate step.
+                    return (
+                        f"Navigation failed: could not resolve '{target[:50]}' to a "
+                        "launchable application or URL (no match in the platform's "
+                        "app registry and no real URL was produced)"
+                    )
+                r = sys_actions.launch_app(resolved)
+                if r.is_success:
+                    target = resolved  # for the evidence detail below
             if r.is_success:
                 ctx.evidence.add_navigation(f"launched:{target}")
             return r.message
@@ -398,6 +506,97 @@ class GoalExecutor:
 
     def _dispatch_verify_result(self, target: str, cap, ctx: ExecutionContext) -> str:
         return "Intermediate check passed"
+
+    def _ensure_chrome_foreground(self) -> None:
+        """Best-effort: bring Chrome to the foreground so the desktop controller
+        operates it (not the IDE or terminal). If Chrome isn't running, launch it
+        with the user's primary profile.
+        """
+        import subprocess
+        import time as _time
+
+        try:
+            import pyautogui
+        except ImportError:
+            return
+
+        # Check if Chrome is already running and bring it forward
+        try:
+            chrome_windows = pyautogui.getWindowsWithTitle("Chrome")
+            if chrome_windows:
+                win = chrome_windows[0]
+                if getattr(win, "isMinimized", False):
+                    win.restore()
+                win.activate()
+                _time.sleep(0.5)
+                return
+        except Exception:
+            pass
+
+        # Chrome not running — launch it with the user's profile
+        try:
+            chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+            subprocess.Popen([
+                chrome_path,
+                "--profile-directory=Profile 1",
+            ])
+            _time.sleep(3.0)
+            # Bring it forward
+            chrome_windows = pyautogui.getWindowsWithTitle("Chrome")
+            if chrome_windows:
+                chrome_windows[0].activate()
+                _time.sleep(0.5)
+        except Exception:
+            pass
+
+    def _dispatch_operate_website(self, target: str, cap, ctx: ExecutionContext) -> str:
+        """Vision-first desktop agent (like OpenClaw). Screenshot → VLM → pyautogui.
+
+        No CDP, no DOM, no automation detection. The model SEES the screen and
+        decides what to click/type. Works on ANY application, ANY website, including
+        sites that block Playwright/Selenium (Instagram, banks, etc.).
+        """
+        if not self._model_router:
+            return "Cannot operate: no model router for decision-making"
+
+        # PRIMARY: Desktop Agent (vision-first)
+        try:
+            import pyautogui  # noqa: F401
+            from friday.capabilities.desktop_agent import DesktopAgent
+
+            self._ensure_chrome_foreground()
+            agent = DesktopAgent(self._model_router, max_steps=20)
+            result = agent.run(target)
+
+            if result.achieved:
+                ctx.evidence.add_navigation("desktop-agent-completed")
+                history = " → ".join(result.history[-5:]) if result.history else ""
+                return (
+                    f"Desktop agent completed ({result.steps_taken} steps): {history}"
+                )
+            reason = result.stuck_reason or "did not achieve goal within step budget"
+            history = " → ".join(result.history[-3:]) if result.history else ""
+            return (
+                f"Desktop agent incomplete after {result.steps_taken} steps: "
+                f"{reason}. Last: {history}"
+            )
+        except ImportError:
+            pass
+
+        # FALLBACK: WebAgent over Playwright
+        if not self._browser or not getattr(self._browser, "available", False):
+            return "Cannot operate: no desktop control and no browser"
+
+        from friday.capabilities.web_agent import WebAgent
+        agent = WebAgent(self._browser, self._model_router, max_steps=25)
+        result = agent.run(target, evidence=ctx.evidence)
+        if result.achieved:
+            ctx.evidence.add_navigation(result.final_url)
+            history = " → ".join(result.history[-5:]) if result.history else ""
+            return f"Website operation completed ({result.steps_taken} steps): {history}"
+        reason = result.stuck_reason or "did not achieve goal"
+        history = " → ".join(result.history[-3:]) if result.history else ""
+        return f"Website operation incomplete ({result.steps_taken} steps): {reason}. Last: {history}"
 
     def execute_repair(self, repair_actions, goal: str, prior_result) -> bool:
         """Run a targeted repair (M4): execute only the repair actions, reusing
@@ -529,7 +728,13 @@ class GoalExecutor:
             query=query,
             browser_controller=self._browser,
             evidence=ctx.evidence,
-            max_sources=3,
+            # 2 sources is the Evidence Law minimum for a GATHER requirement (info +
+            # at least one source URL). Opening 3 navigations per research call was
+            # the single largest latency cost: each carries a 30s Playwright timeout.
+            # With multiple research calls per goal (plan + repair), that cost
+            # cascaded far past any interactive budget. 2 sources still produces
+            # diverse evidence while halving the navigation budget.
+            max_sources=2,
         )
 
         if result.blocked:
@@ -761,11 +966,63 @@ class GoalExecutor:
         event loop, so it works whether or not a loop is already running and
         can NEVER hang forever (bounded by `timeout`). On timeout/error the
         caller's except handler decides the fallback.
+
+        Cancellation hardening (Windows-safe): the worker wraps the coroutine
+        in asyncio.wait_for with the same timeout. If the *caller* times out
+        first (ThreadPoolExecutor.result), we call_soon_threadsafe to cancel
+        the task and close the loop, ensuring the coroutine is properly closed
+        and no 'RuntimeWarning: coroutine never awaited' is emitted.
         """
+        _loop: Optional[asyncio.AbstractEventLoop] = None
+        _task: Optional[asyncio.Task] = None
+
+        async def _guarded():
+            nonlocal _task
+            _task = asyncio.current_task()
+            # `coro` may be a coroutine OR a zero-arg factory returning one. A
+            # factory is preferred by callers that must not create the coroutine
+            # until it is certain to be awaited (an un-awaited coroutine emits
+            # "coroutine was never awaited" if the worker never starts, e.g. during
+            # interpreter shutdown).
+            awaitable = coro() if callable(coro) else coro
+            return await asyncio.wait_for(awaitable, timeout=timeout)
+
+        def _worker():
+            nonlocal _loop
+            _loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(_loop)
+            try:
+                return _loop.run_until_complete(_guarded())
+            finally:
+                # Ensure any pending tasks are cleaned up.
+                try:
+                    _loop.run_until_complete(_loop.shutdown_asyncgens())
+                except Exception:
+                    pass
+                _loop.close()
+
         pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
         try:
-            future = pool.submit(asyncio.run, coro)
+            future = pool.submit(_worker)
             return future.result(timeout=timeout)
+        except (concurrent.futures.TimeoutError, TimeoutError):
+            # Cancel the running task so the coroutine is properly closed.
+            if _loop is not None and _task is not None and not _task.done():
+                _loop.call_soon_threadsafe(_task.cancel)
+            raise
+        except BaseException:
+            # The worker never got as far as awaiting the coroutine (e.g. the pool
+            # could not schedule it during interpreter/executor shutdown:
+            # "cannot schedule new futures after shutdown"). `_task` is assigned
+            # inside the coroutine, so `None` proves it never started — close it
+            # explicitly or Python emits "coroutine was never awaited". A factory
+            # never created one, so there is nothing to close in that case.
+            if _task is None and not callable(coro):
+                try:
+                    coro.close()
+                except Exception:  # noqa: BLE001 — already failing; closing is best-effort
+                    pass
+            raise
         finally:
             pool.shutdown(wait=False)
 
@@ -800,14 +1057,16 @@ class GoalExecutor:
 
         try:
             from friday.models.router import ModelCapability
+            # Factory, not a coroutine: if the worker cannot start (interpreter
+            # shutting down after an abandoned timed-out benchmark), no coroutine was
+            # ever created, so nothing can be left un-awaited.
             response = self._run_async(
-                self._model_router.complete(
+                lambda: self._model_router.complete(
                     prompt,
                     capability=ModelCapability.REASONING,
-                    # Responsive content model. The former meta/llama-3.3-70b now
-                    # hangs to timeout on the free NIM tier; gpt-oss-120b returns
-                    # well-structured prose in ~1-2s.
-                    model="openai/gpt-oss-120b",
+                    # Let the ModelRouter select by capability priority (primary:
+                    # qwen3.5-397b — fast ~1s, well-structured prose). No hardcoded
+                    # model pin.
                     max_tokens=1200,
                     temperature=0.4,
                 )
